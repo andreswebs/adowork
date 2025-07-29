@@ -1,0 +1,33 @@
+
+logs
+*.log
+
+.env
+.envrc
+
+.DS_Store
+
+coverage.out
+bin/
+*.test
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dev-debug.log
+# Dependency directories
+node_modules/
+# Environment variables
+# Editor directories and files
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+
+# Task files
+# tasks.json
+# tasks/

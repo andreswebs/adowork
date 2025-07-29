@@ -1,0 +1,1266 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Initialize Go Project and Setup Dependencies",
+        "description": "Create the Go project structure following 2025 Go community standards and install required dependencies including urfave/cli v3 for command-line argument parsing",
+        "status": "done",
+        "dependencies": [],
+        "priority": "high",
+        "details": "Initialize a new Go module with 'go mod init azure-devops-cli'. Install urfave/cli v3 dependency with 'go get github.com/urfave/cli/v3' and use 'go mod tidy' for cleanup. Create simple directory structure with src/ folder containing all Go files. Implement main.go under src/ directory with urfave/cli v3 integration. The project uses a flat src/ structure for all code with src/main.go as the application entrypoint. Add version pinning in go.mod and include build/test commands following Go best practices.\n<info added on 2025-07-29T15:39:17.314Z>\nBinary Output Directory Update: The project now outputs built binaries to the bin/ directory as bin/adowork instead of the project root, following modern Go project standards for binary output organization. All build, run, and clean commands have been updated to use the bin/ directory structure. Documentation has been revised to reflect this change, providing better separation between source code and build artifacts while aligning with Go community conventions for project layout.\n</info added on 2025-07-29T15:39:17.314Z>",
+        "testStrategy": "Verify project compiles successfully with 'go build ./src'. Test that urfave/cli v3 dependency is properly imported and basic CLI structure works. Validate directory structure follows the simple src/ layout. Test build and execution commands work correctly with src/main.go as entrypoint.",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Go Module with Modern Standards",
+            "description": "Create the foundational Go project structure using go mod init and establish proper module configuration following 2025 best practices",
+            "status": "done",
+            "dependencies": [],
+            "details": "Run 'go mod init azure-devops-cli' to initialize the Go module. Create go.mod with proper version pinning and module configuration. Use 'go mod tidy' to clean up dependencies. Set up module with appropriate Go version requirement (go 1.21 or later) and prepare for dependency management.\n<info added on 2025-07-29T14:55:52.384Z>\nImplementation Plan for 'Initialize Go Module with Modern Standards':\n\n1. Create the foundational Go project structure using `go mod init`.\n2. Choose a modern, descriptive module path (e.g., github.com/your-org/azure-devops-cli).\n3. Ensure the project root is clean and follows 2025 Go best practices (no legacy files, use README.md, .gitignore, etc.).\n4. Set up initial Go module configuration (go.mod) and verify Go version is set to 1.22+.\n5. Prepare for dependency management and future subdirectories (cmd/, internal/, pkg/).\n\nNext steps:\n- Run `go mod init github.com/your-org/azure-devops-cli` in the project root.\n- Add a README.md and .gitignore if not present.\n- Confirm go.mod is created and Go version is correct.\n- Plan for urfave/cli v3 installation in the next subtask.\n\nThis plan will be refined as implementation proceeds.\n</info added on 2025-07-29T14:55:52.384Z>",
+            "testStrategy": "Verify that go.mod file is created with proper Go version and 'go mod tidy' runs without errors. Check module name is correctly set."
+          },
+          {
+            "id": 2,
+            "title": "Install urfave/cli v3 with Version Pinning",
+            "description": "Add the urfave/cli v3 library as a project dependency with proper version management and cleanup",
+            "status": "done",
+            "dependencies": [],
+            "details": "Execute 'go get github.com/urfave/cli/v3' to install the latest urfave/cli v3 dependency. Run 'go mod tidy' to clean up and organize dependencies. Verify the dependency is properly added to go.mod and go.sum files with appropriate version pinning. Ensure compatibility with Go module standards.",
+            "testStrategy": "Check that urfave/cli v3 appears in go.mod with correct version, go.sum is properly updated, and 'go mod download' completes successfully"
+          },
+          {
+            "id": 3,
+            "title": "Create Standard Directory Structure",
+            "description": "Establish Go project directory structure with src/ folder",
+            "status": "done",
+            "dependencies": [],
+            "details": "Create standard the Go project layout: src/ directory.",
+            "testStrategy": "Verify all required directories are created."
+          },
+          {
+            "id": 4,
+            "title": "Implement main.go with urfave/cli v3 Integration",
+            "description": "Create main.go file in src/ directory with proper urfave/cli v3 integration and modern Go practices",
+            "status": "done",
+            "dependencies": [],
+            "details": "Create main.go in src/ directory with package main declaration. Import github.com/urfave/cli/v3 package. Set up CLI application structure with proper configuration. Include app metadata (name, usage, version) and basic command structure. Implement proper error handling and exit codes following CLI best practices.",
+            "testStrategy": "Verify the application compiles with 'go build ./src' and runs with proper help output. Test CLI framework integration works correctly."
+          },
+          {
+            "id": 5,
+            "title": "Add Build Commands and Project Configuration",
+            "description": "Set up build commands, testing configuration, and project tooling following Go community standards for flat src/ structure",
+            "status": "done",
+            "dependencies": [],
+            "details": "Create Makefile or build scripts for common operations (build, test, clean) targeting the src/ directory. Configure proper build targets for the src/main.go application. Set up testing framework and ensure 'go test ./src' works correctly. Add any necessary project configuration files and documentation for build process. All build commands should target the flat src/ structure with src/main.go as the entrypoint.\n<info added on 2025-07-29T15:33:01.259Z>\nImplementation Plan for 'Add Build Commands and Project Configuration':\n\n1. Create a Makefile in the project root with standard Go targets:\n   - build: builds the app from src/main.go\n   - test: runs all tests in src/\n   - clean: removes build artifacts\n   - run: runs the app from src/main.go\n2. Ensure all commands work from the project root and use the flat src/ structure.\n3. Add documentation for the build process to the README.md.\n4. Confirm 'go build ./src' and 'go test ./src' work as expected.\n5. (Optional) Add .PHONY targets and comments for clarity.\n\nNext steps:\n- Implement the Makefile with the above targets.\n- Test each command to ensure correct operation.\n- Update README.md with build/test/run instructions.\n- Verify that the project can be built and run from the root using the Makefile.\n\nThis plan will be refined as implementation proceeds.\n</info added on 2025-07-29T15:33:01.259Z>\n<info added on 2025-07-29T15:38:40.632Z>\nBuild Output Location Update: The Makefile has been updated to output the built binary to the bin/ directory as bin/adowork, following modern Go project conventions. All build, run, and clean targets now use this new output location. The README documentation has been updated to reflect the new bin/ directory structure and build commands. This change aligns with Go community standards for binary output organization and provides better separation between source code and build artifacts.\n</info added on 2025-07-29T15:38:40.632Z>",
+            "testStrategy": "Test build commands work correctly with 'go build ./src', 'go test ./src' passes, and project can be built and executed from different directories using src/main.go"
+          },
+          {
+            "id": 6,
+            "title": "Verify Complete Modern Go Project Setup",
+            "description": "Perform comprehensive verification that all components integrate properly with the flat src/ structure",
+            "status": "done",
+            "dependencies": [],
+            "details": "Test complete project setup with modern Go tooling using the flat src/ layout. Verify 'go build ./src' works correctly and produces executable from src/main.go. Test that 'go mod tidy' maintains clean dependencies. Ensure project structure follows the simple src/ directory standard. Validate CLI application runs with proper help and version output from src/main.go entrypoint. Check that all imports resolve correctly and compilation is clean.\n<info added on 2025-07-29T15:39:52.041Z>\nImplementation Plan for 'Verify Complete Modern Go Project Setup':\n\n1. Run `make build` and verify that `bin/adowork` is created and up to date.\n2. Run `make test` to ensure all tests in src/ pass (expecting no test files if none exist).\n3. Run `make run` to confirm the CLI app executes from the bin/ output and displays expected output.\n4. Run `go mod tidy` in src/ to ensure dependencies are clean and up to date.\n5. Run `go mod verify` in src/ to check module integrity.\n6. Run `go run src/main.go --help` and `bin/adowork --help` to verify help/version output.\n7. Confirm there are no compilation warnings or errors and that the flat src/ structure is respected.\n8. Review README.md and Makefile for accuracy and alignment with the bin/ output convention.\n\nNext steps:\n- Execute the above commands and document results.\n- Update subtask details with findings and any issues encountered.\n- Mark subtask as done if all checks pass.\n</info added on 2025-07-29T15:39:52.041Z>",
+            "testStrategy": "Run comprehensive tests including 'go build ./src', 'go run ./src --help', 'go mod verify', and ensure zero compilation warnings or errors. Verify src/main.go serves as proper application entrypoint."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Implement Environment Variable Validation",
+        "description": "Create functionality to read and validate required environment variables (ADO_ORG, ADO_PROJECT, ADO_PAT) with proper error handling following Go best practices for 2025",
+        "status": "done",
+        "dependencies": [
+          1
+        ],
+        "priority": "high",
+        "details": "Create a dedicated Config struct with struct tags for validation. Implement loadConfig() function that reads ADO_ORG, ADO_PROJECT, and ADO_PAT from environment variables using os.Getenv(). Perform validation at application startup before CLI flag processing. Add comprehensive validation to ensure all required variables are present and non-empty. Return grouped, user-friendly error messages if any required environment variable is missing. Consider using validation libraries with struct tags for enhanced validation capabilities.",
+        "testStrategy": "Unit tests with different combinations of missing/present environment variables. Test error messages are clear, grouped, and user-friendly. Test integration with startup sequence before CLI processing. Test struct tag validation if implemented.",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define Configuration Structure with Validation Tags",
+            "description": "Create a configuration struct with struct tags to support validation libraries and follow Go best practices for 2025",
+            "status": "done",
+            "dependencies": [],
+            "details": "Define a Config struct with fields for ADO_ORG, ADO_PROJECT, and ADO_PAT as string types. Add struct tags for validation (e.g., `validate:\"required\"` or `env:\"ADO_ORG,required\"`). Include any additional fields that might be needed for Azure DevOps API connections. Create constants for the environment variable names to avoid hardcoding strings throughout the codebase. Consider using popular validation libraries like go-playground/validator or similar. This struct will serve as the foundation for all configuration-related operations.\n<info added on 2025-07-29T17:17:27.610Z>\nImplementation Plan for 'Define Configuration Structure with Validation Tags':\n\n1. Define a Config struct with fields for ADO_ORG, ADO_PROJECT, and ADO_PAT, all as string types.\n2. Add struct tags for validation, e.g., `validate:\"required\"` for each field.\n3. Create constants for the environment variable names to avoid hardcoding.\n4. Consider extensibility for future Azure DevOps config fields.\n5. Prepare for use with a validation library (e.g., go-playground/validator) but keep it compatible with standard Go validation if needed.\n\nNext steps:\n- Implement the Config struct and constants in main.go.\n- Add struct tags for validation.\n- Document the struct and tags for clarity.\n</info added on 2025-07-29T17:17:27.610Z>\n<info added on 2025-07-29T17:24:20.821Z>\nUpdated naming convention implemented: Environment variable names changed from ADO_* to ADO_* format. Config struct fields renamed to Organization, Project, and PAT for better clarity. Constants updated to EnvADOOrg, EnvADOProject, and EnvADOPAT following the new ADO_ prefix convention. All struct tags, validation references, and documentation updated to reflect the consistent ADO_ naming scheme throughout the codebase.\n</info added on 2025-07-29T17:24:20.821Z>",
+            "testStrategy": "Unit tests to verify struct fields are properly defined with correct tags. Test struct initialization with sample values. Test validation tag functionality if using validation library."
+          },
+          {
+            "id": 2,
+            "title": "Implement Environment Variable Reading",
+            "description": "Create functionality to read environment variables using os.Getenv() and populate the configuration struct",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement a function that uses os.Getenv() to read ADO_ORG, ADO_PROJECT, and ADO_PAT environment variables. Create a constructor or initialization function that populates the Config struct with these values. Handle the case where environment variables might not be set by storing empty strings initially. This function should focus solely on reading values without validation. Consider using environment variable mapping libraries if struct tags support them.\n<info added on 2025-07-29T17:19:24.565Z>\nImplementation Plan for 'Implement Environment Variable Reading':\n\n1. Implement a function `readConfigFromEnv()` that uses os.Getenv to read ADO_ORG, ADO_PROJECT, and ADO_PAT.\n2. Populate and return a Config struct with these values.\n3. Do not perform validation in this function—just reading.\n4. Prepare for future integration with validation logic.\n5. Add documentation for the function and its usage.\n\nNext steps:\n- Implement `readConfigFromEnv()` in main.go.\n- Test with different environment variable settings.\n</info added on 2025-07-29T17:19:24.565Z>",
+            "testStrategy": "Unit tests with mocked environment variables using os.Setenv() and os.Unsetenv(). Test reading existing and non-existing environment variables."
+          },
+          {
+            "id": 3,
+            "title": "Implement Comprehensive Validation Logic",
+            "description": "Create validation functions that provide grouped, user-friendly error messages following Go best practices",
+            "status": "done",
+            "dependencies": [
+              2
+            ],
+            "details": "Implement validation logic that checks each required field in the Config struct is non-empty. Create a validate() method or function that returns grouped error messages for better user experience. Use Go's error handling patterns to return descriptive, user-friendly error messages that group related issues together. Consider using validation libraries that work with struct tags for more sophisticated validation. The validation should be comprehensive and check all three required variables, providing actionable feedback to users.",
+            "testStrategy": "Unit tests with various combinations of missing, empty, and valid environment variables. Verify that validation correctly identifies missing variables and provides grouped, user-friendly error messages."
+          },
+          {
+            "id": 4,
+            "title": "Create User-Friendly Grouped Error Messages",
+            "description": "Implement error message generation that groups related issues and provides clear, actionable guidance to users",
+            "status": "done",
+            "dependencies": [
+              3
+            ],
+            "details": "Create error message generation that groups related validation failures and provides user-friendly, actionable guidance. Instead of individual error messages for each missing variable, create grouped messages that list all missing variables together with clear instructions on how to set them. Use fmt.Errorf() or custom error types to create informative error messages. Include examples of how to set environment variables in the error messages. Consider creating different error categories (missing vs empty vs invalid) and group them appropriately.",
+            "testStrategy": "Unit tests to verify error messages are grouped, clear, and user-friendly. Test that error messages provide actionable guidance and examples. Verify different error categories are properly grouped."
+          },
+          {
+            "id": 5,
+            "title": "Implement loadConfig() Function with Startup Integration",
+            "description": "Create the main loadConfig() function that integrates with application startup before CLI flag processing",
+            "status": "done",
+            "dependencies": [
+              2,
+              3,
+              4
+            ],
+            "details": "Implement the main loadConfig() function that combines environment variable reading, validation, and error handling. The function should return a populated Config struct and an error. Design the function to be called at application startup before CLI flag processing begins. Call the reading function to populate the struct, then call validation, and return appropriate grouped errors with user-friendly messages. This function serves as the main entry point for configuration loading and should handle all error cases gracefully while following Go best practices for 2025.",
+            "testStrategy": "Integration tests that cover the complete flow from environment variable reading through validation. Test successful configuration loading and various failure scenarios with appropriate grouped error messages. Test integration with startup sequence timing."
+          },
+          {
+            "id": 6,
+            "title": "Integrate Validation with Application Startup Sequence",
+            "description": "Ensure environment variable validation occurs at application startup before CLI flag processing",
+            "status": "done",
+            "dependencies": [
+              5
+            ],
+            "details": "Integrate the loadConfig() function into the application's main startup sequence, ensuring it runs before CLI flag parsing and processing. Modify the main function or application initialization to call loadConfig() early in the startup process. Handle configuration validation failures by exiting gracefully with appropriate error codes and user-friendly messages. Ensure that if environment validation fails, the application doesn't proceed to CLI processing, following Go best practices for early validation and fail-fast principles.",
+            "testStrategy": "Integration tests to verify configuration validation occurs before CLI processing. Test that application exits gracefully with proper error codes when validation fails. Test successful startup flow when all environment variables are properly set."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Setup CLI Framework with urfave/cli",
+        "description": "Configure the CLI application structure using urfave/cli v3 following v3-style command structure with cli.Command as the main entry point, required and optional flags, proper error handling, and environment validation integration",
+        "status": "done",
+        "dependencies": [
+          1
+        ],
+        "priority": "high",
+        "details": "Create CLI command using cli.Command (not cli.App) as the main entry point with urfave/cli v3 best practices. Call cmd.Run(context.Background(), os.Args) in main(). Define required flags: --type (string, alias -t) and --title (string, alias -T) with Required:true for validation. Define optional flags: --description (string, alias -d), --parent (int, alias -p), and --dry-run (bool). Configure comprehensive command metadata (name, usage, version, authors). Use cli.Exit for error handling with proper exit codes. Integrate environment validation before command execution using Action function signature func(context.Context, *cli.Command) error.",
+        "testStrategy": "Test CLI parsing with various flag combinations using urfave/cli v3 command patterns. Verify required flags cause proper cli.Exit errors when missing. Test that optional flags work correctly when provided or omitted. Validate error handling produces correct exit codes and clear messages. Test environment validation integration with cmd.Run() execution flow.",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize CLI Command Structure with urfave/cli v3 Best Practices",
+            "description": "Create the basic CLI command structure using cli.Command as the main entry point with urfave/cli v3 framework following v3-style command patterns",
+            "status": "done",
+            "dependencies": [],
+            "details": "Import github.com/urfave/cli/v3 package. Create a new CLI command using cli.Command (not cli.App) in main.go following v3 best practices. Set up the main() function to call cmd.Run(context.Background(), os.Args). Create a placeholder Action function with signature func(context.Context, *cli.Command) error that will be implemented in later subtasks. Follow urfave/cli v3 patterns for proper command initialization and error handling setup.\n<info added on 2025-07-29T17:44:40.158Z>\nImplementation plan for this subtask:\n- Import github.com/urfave/cli/v3 if not already present.\n- Ensure main.go uses cli.Command (not cli.App) as the main entry point, matching urfave/cli v3 best practices.\n- In main(), create a cli.Command instance and set up the main application entry point.\n- Call cmd.Run(context.Background(), os.Args) in main().\n- Add a placeholder Action function with signature func(context.Context, *cli.Command) error.\n- Confirm that the CLI command initializes without errors and responds to --help.\n- Do not add flags or metadata yet; those are for later subtasks.\n- This will establish the correct v3-style CLI skeleton for further development.\n</info added on 2025-07-29T17:44:40.158Z>",
+            "testStrategy": "Test that the CLI command initializes without errors using urfave/cli v3 patterns and can be invoked with --help flag"
+          },
+          {
+            "id": 2,
+            "title": "Configure Comprehensive Command Metadata",
+            "description": "Set up the CLI command metadata including name, usage description, version information, and authors directly on the cli.Command following urfave/cli v3 best practices",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "details": "Configure cmd.Name to 'azure-devops-cli'. Set cmd.Usage to describe the tool's purpose for creating Azure DevOps work items. Set cmd.Version to '1.0.0'. Add cmd.Description with detailed information about the tool's functionality and usage examples. Configure cmd.Authors with proper author information following urfave/cli v3 metadata standards. Add comprehensive metadata coverage using v3-supported fields on cli.Command.",
+            "testStrategy": "Verify all metadata appears correctly when running with --help and --version flags, including authors and description information"
+          },
+          {
+            "id": 3,
+            "title": "Define Required CLI Flags with Required:true Validation",
+            "description": "Implement the required command-line flags --type and --title using urfave/cli v3 Required:true validation in the Flags field of cli.Command",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "details": "Create cli.Flag slice in the cmd.Flags field using urfave/cli v3 patterns. Add cli.StringFlag for --type with Name: 'type', Usage: 'Work item type (e.g., Task, Bug, User Story)', Required: true, Aliases: []string{'t'} for convenience. Add cli.StringFlag for --title with Name: 'title', Usage: 'Work item title', Required: true, Aliases: []string{'T'}. Ensure proper validation messages are configured for v3 command structure.",
+            "testStrategy": "Test that CLI shows proper urfave/cli v3 error messages when required flags are missing and accepts valid values when provided"
+          },
+          {
+            "id": 4,
+            "title": "Define Optional CLI Flags with Clear Descriptions",
+            "description": "Implement the optional command-line flags --description, --parent, and --dry-run with comprehensive descriptions in the cli.Command Flags field",
+            "status": "done",
+            "dependencies": [
+              3
+            ],
+            "details": "Add cli.StringFlag for --description with Name: 'description', Usage: 'Work item description (supports markdown)', Required: false, Aliases: []string{'d'}. Add cli.IntFlag for --parent with Name: 'parent', Usage: 'Parent work item ID for hierarchical relationships', Required: false, Aliases: []string{'p'}. Add cli.BoolFlag for --dry-run with Name: 'dry-run', Usage: 'Show what would be created without making changes', Required: false. Append these to the existing cmd.Flags slice with clear, descriptive usage text.",
+            "testStrategy": "Test that optional flags work correctly when provided and have appropriate default values when omitted. Verify aliases work properly."
+          },
+          {
+            "id": 5,
+            "title": "Implement Flag Extraction and cli.Exit Error Handling",
+            "description": "Set up proper flag extraction using cmd.String(), cmd.Int(), cmd.Bool() methods and implement cli.Exit error handling with correct exit codes",
+            "status": "done",
+            "dependencies": [
+              3,
+              4
+            ],
+            "details": "Implement the Action function with signature func(context.Context, *cli.Command) error. Extract flag values using cmd.String('type'), cmd.String('title'), cmd.String('description'), cmd.Int('parent'), and cmd.Bool('dry-run'). Use cli.Exit for all user error conditions with proper exit codes (1 for general errors, 2 for usage errors). Create helper functions for safe flag extraction if needed. Add comprehensive error messages that guide users to correct usage. Follow Go CLI standards for error handling and exit codes.",
+            "testStrategy": "Test error handling produces correct exit codes using cli.Exit. Verify flag extraction works correctly for all flag types. Test that error messages are clear and actionable."
+          },
+          {
+            "id": 6,
+            "title": "Integrate Environment Validation and Add Usage Examples",
+            "description": "Integrate environment validation from Task 2 before command execution and enhance help text with usage examples following urfave/cli v3 best practices",
+            "status": "done",
+            "dependencies": [
+              2,
+              5
+            ],
+            "details": "In the Action function, call loadConfig() from Task 2 to validate environment variables before main logic execution. If environment validation fails, return cli.Exit with clear error message and non-zero exit code. Add comprehensive usage examples in cmd.Description or cmd.Usage fields. Include examples for both basic and advanced usage patterns. Optionally implement custom OnUsageError handler for better usage error messages. Follow urfave/cli v3 documentation standards for help text formatting.",
+            "testStrategy": "Test that environment validation runs before command execution and produces proper cli.Exit errors when environment variables are missing. Verify help output is comprehensive and user-friendly with usage examples. Test integration between environment validation and CLI command flow."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Implement Debug Logging System",
+        "description": "Create a debug logging system that outputs to stderr when DEBUG environment variable is set",
+        "status": "cancelled",
+        "dependencies": [
+          2
+        ],
+        "priority": "medium",
+        "details": "Create a DebugLogger struct that checks for DEBUG environment variable once at startup using os.Getenv(\"DEBUG\"). Implement debug logging functions that write to stderr using log.New(os.Stderr, \"DEBUG: \", log.LstdFlags|log.Lshortfile). Only output debug messages when DEBUG is set. Include logging for environment variable loading, API client setup, work item creation, and error handling following Go debug logging best practices as of 2025.",
+        "testStrategy": "Test logging behavior with DEBUG set and unset. Verify debug messages go to stderr and not stdout. Test that production usage (DEBUG unset) produces no debug output. Verify log.Lshortfile provides proper file context.",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Debug Logger Structure",
+            "description": "Implement the core debug logger structure that checks for DEBUG environment variable once at startup and manages debug state",
+            "status": "cancelled",
+            "dependencies": [],
+            "details": "Create a DebugLogger struct with fields for enabled state and logger instance. Implement NewDebugLogger() constructor that checks os.Getenv(\"DEBUG\") once at startup and initializes log.New(os.Stderr, \"DEBUG: \", log.LstdFlags|log.Lshortfile) if DEBUG is set. Store enabled state as boolean field to avoid repeated environment variable checks. Use log.Lshortfile flag for file context following Go best practices.",
+            "testStrategy": "Test logger creation with DEBUG set and unset. Verify enabled state is correctly determined. Verify log.Lshortfile provides proper file context in output."
+          },
+          {
+            "id": 2,
+            "title": "Implement Conditional Debug Logging Methods",
+            "description": "Add conditional debug logging methods to the logger structure that only output when DEBUG is enabled",
+            "status": "cancelled",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement Debug(), Debugf(), and Debugln() methods on DebugLogger struct. Each method should check the enabled state before writing to stderr to avoid performance overhead when debugging is disabled. Use the internal logger instance for actual output. Methods should accept variadic arguments and format strings appropriately. Ensure methods are no-op when DEBUG is not set.",
+            "testStrategy": "Test that methods only output when DEBUG is enabled. Verify output format includes DEBUG prefix, timestamps, and file context. Test performance impact when DEBUG is disabled."
+          },
+          {
+            "id": 3,
+            "title": "Add Environment Variable Loading Debug Logging",
+            "description": "Integrate debug logging into environment variable loading operations from task 2",
+            "status": "cancelled",
+            "dependencies": [
+              2
+            ],
+            "details": "Add debug logging calls to the loadConfig() function from task 2. Log when each environment variable (ADO_ORG, ADO_PROJECT, ADO_PAT) is being read. Log success/failure for each variable load. Mask sensitive PAT values in debug output by showing only first 4 characters followed by asterisks. Include validation results and any error conditions.",
+            "testStrategy": "Test debug output during config loading. Verify PAT values are properly masked in debug logs. Test logging of validation failures and success cases."
+          },
+          {
+            "id": 4,
+            "title": "Add API Client Setup Debug Logging",
+            "description": "Integrate debug logging into API client initialization and setup operations",
+            "status": "cancelled",
+            "dependencies": [
+              2
+            ],
+            "details": "Add debug logging to API client setup including HTTP client configuration, base URL construction, and authentication header preparation. Log client initialization parameters (excluding sensitive PAT data). Log when API client is ready for use. Include debug logging for any client configuration errors or warnings.",
+            "testStrategy": "Test debug output during API client setup. Verify sensitive authentication data is properly handled. Test logging of client configuration issues."
+          },
+          {
+            "id": 5,
+            "title": "Add Work Item Creation Debug Logging",
+            "description": "Integrate debug logging into work item creation operations and API calls",
+            "status": "cancelled",
+            "dependencies": [
+              2
+            ],
+            "details": "Add debug logging to work item creation functions including payload construction, HTTP request details (method, URL, headers - excluding Authorization), and response handling. Log API call timing information and response status codes. Log work item creation success with ID and URL. Ensure sensitive data like PAT tokens are not logged in full.",
+            "testStrategy": "Test debug output during work item creation. Verify sensitive data is properly handled. Test with both successful and failed API calls. Verify timing information is logged."
+          },
+          {
+            "id": 6,
+            "title": "Add Error Handling Debug Logging",
+            "description": "Integrate debug logging into error handling paths throughout the application",
+            "status": "cancelled",
+            "dependencies": [
+              2
+            ],
+            "details": "Add debug logging to error handling code paths including API failures, validation errors, and configuration issues. Log error context, stack traces where appropriate, and recovery attempts. Include debug logging for error propagation and handling decisions. Ensure error logs provide sufficient context for debugging.",
+            "testStrategy": "Test debug output during various error conditions. Verify error context is properly logged. Test that debug logs aid in troubleshooting common issues."
+          },
+          {
+            "id": 7,
+            "title": "Create Global Debug Logger Instance",
+            "description": "Create a global debug logger instance and integrate it throughout the application",
+            "status": "cancelled",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "details": "Create a global debugLogger variable initialized in main() or init() function using NewDebugLogger(). Export debug logging functions (Debug, Debugf, Debugln) that use the global instance. Ensure the global logger is available to all parts of the application. Add debug logging for application startup, shutdown, and key decision points following Go best practices for global state management.",
+            "testStrategy": "Test global logger accessibility from different parts of the application. Verify consistent debug output behavior across all modules. Test application lifecycle debug logging."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Create Azure DevOps REST API Client Structure",
+        "description": "Implement the basic structure for Azure DevOps REST API client with authentication using Personal Access Token, secure PAT handling, and structured error handling",
+        "status": "done",
+        "dependencies": [
+          2
+        ],
+        "priority": "high",
+        "details": "Create an AzureDevOpsClient struct containing organization, project, and PAT with secure handling. Implement authentication using Basic Auth with empty username and PAT as password (base64 encoded). Set up HTTP client with proper headers, timeouts, and connection pooling. Create structured error handling with APIError type. Implement buildURL and makeRequest helpers for endpoint construction and authenticated requests. Follow Azure DevOps API and Go HTTP client best practices as of 2025.",
+        "testStrategy": "Unit tests for client initialization and authentication header generation. Test URL construction for different organizations and projects. Mock HTTP client tests for authentication flow. Test error handling with APIError type. Test HTTP client configuration including timeouts and connection pooling.",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create AzureDevOpsClient struct and constructor",
+            "description": "Define the main AzureDevOpsClient struct with fields for organization, project, and Personal Access Token, and implement a constructor function",
+            "status": "done",
+            "dependencies": [],
+            "details": "Create a struct with fields: Organization (string), Project (string), PAT (string), and HTTPClient (*http.Client). Implement NewAzureDevOpsClient(org, project, pat string) function that initializes the struct with provided values and creates a new HTTP client with appropriate timeout settings. Include validation to ensure none of the required fields are empty.",
+            "testStrategy": "Unit tests for constructor with valid and invalid inputs. Test that struct fields are properly initialized and HTTP client is created."
+          },
+          {
+            "id": 2,
+            "title": "Implement Basic Authentication encoding with secure PAT handling",
+            "description": "Create authentication functionality that securely encodes the PAT using Basic Auth format with empty username",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement encodeBasicAuth() method that takes the PAT and creates Basic Auth credentials using empty username and PAT as password. Use base64.StdEncoding.EncodeToString() to encode the ':PAT' string. Implement secure PAT handling by avoiding PAT storage in logs and ensuring proper memory handling. Store the encoded value for reuse in HTTP requests. The format should be 'Basic ' + base64(':' + pat).",
+            "testStrategy": "Unit tests to verify correct base64 encoding of PAT. Test with different PAT values and verify the output matches expected Basic Auth format. Test that PAT is not exposed in logs or error messages."
+          },
+          {
+            "id": 3,
+            "title": "Configure HTTP client with timeouts and connection pooling",
+            "description": "Set up the HTTP client with proper timeouts, connection pooling, and default headers including Authorization and Content-Type",
+            "status": "done",
+            "dependencies": [
+              2
+            ],
+            "details": "Create configureHTTPClient() method that sets up HTTP client with appropriate timeouts (connect, request, idle). Configure connection pooling with MaxIdleConns and MaxIdleConnsPerHost for optimal performance. Set default headers: 'Authorization' header to 'Basic <encoded_pat>' and 'Content-Type' header to 'application/json-patch+json' for Azure DevOps API compatibility. Follow Go HTTP client best practices as of 2025.\n<info added on 2025-07-29T19:28:14.597Z>\nImplementation completed successfully. The configureHTTPClient method creates an http.Client with 30-second timeout and connection pooling (MaxIdleConns, MaxIdleConnsPerHost). Added RoundTripperWithHeaders custom transport to automatically inject Authorization and Content-Type headers into all requests. SetDefaultHeaders method configures the client to use these headers. NewADOClient constructor updated to call configureHTTPClient during initialization. All implementation follows Go HTTP client best practices for 2025. Next step: ensure SetDefaultHeaders is called after client creation for all requests.\n</info added on 2025-07-29T19:28:14.597Z>",
+            "testStrategy": "Test that HTTP client is configured with proper timeouts and connection pooling settings. Verify headers are correctly set on HTTP requests. Test connection reuse and pooling behavior."
+          },
+          {
+            "id": 4,
+            "title": "Implement buildURL helper for Azure DevOps endpoints",
+            "description": "Create buildURL helper function to construct proper Azure DevOps REST API URLs based on organization and project",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement buildURL(endpoint string) method that constructs URLs using format 'https://dev.azure.com/{organization}/{project}/_apis/{endpoint}'. Include URL validation and proper encoding of organization and project names to handle special characters. Create specific helper methods like buildWorkItemURL(id int) and buildWorkItemsURL() that use the base buildURL function.\n<info added on 2025-07-29T19:41:13.399Z>\nImplementation completed successfully. All three URL helper methods (buildURL, buildWorkItemURL, buildWorkItemsURL) have been implemented in the ADOClient following Azure DevOps REST API standards and Go best practices. The buildURL method properly handles URL encoding for organization and project names, while the specific helper methods provide convenient access to work item endpoints. Implementation follows the specified URL format and includes proper error handling.\n</info added on 2025-07-29T19:41:13.399Z>",
+            "testStrategy": "Unit tests for URL construction with various organization and project names. Test special characters and spaces are properly encoded. Verify different endpoint URLs are constructed correctly."
+          },
+          {
+            "id": 5,
+            "title": "Create APIError type for structured error handling",
+            "description": "Implement APIError type to provide structured error handling for Azure DevOps API responses",
+            "status": "done",
+            "dependencies": [],
+            "details": "Create APIError struct with fields: StatusCode (int), Message (string), Details (string), and RequestID (string). Implement Error() method to satisfy error interface. Add helper functions like NewAPIError() and IsAPIError() for error creation and type checking. Include methods to extract error details from Azure DevOps API error responses with proper JSON parsing.\n<info added on 2025-07-29T19:32:50.205Z>\nImplementation completed successfully. APIError type fully implemented with all required components:\n\n- APIError struct created with StatusCode, Message, Details, and RequestID fields\n- Error() method implemented to satisfy Go's error interface\n- NewAPIError() constructor function for creating errors from HTTP status codes and response bodies\n- IsAPIError() type assertion helper for error type checking\n- parseAPIErrorBody() internal helper function to extract structured error information from Azure DevOps API JSON error responses, including support for nested error structures\n- Full JSON parsing integration for processing API error responses\n\nAll functionality tested and verified. No implementation issues encountered. Ready for integration with HTTP request handling in subsequent subtasks.\n</info added on 2025-07-29T19:32:50.205Z>",
+            "testStrategy": "Unit tests for APIError creation and error interface implementation. Test error parsing from various Azure DevOps API error response formats. Verify error messages are properly formatted and informative."
+          },
+          {
+            "id": 6,
+            "title": "Create makeRequest helper for authenticated HTTP requests",
+            "description": "Implement makeRequest helper method for making authenticated HTTP requests to Azure DevOps API endpoints with structured error handling",
+            "status": "done",
+            "dependencies": [
+              3,
+              4,
+              5
+            ],
+            "details": "Create makeRequest(method, endpoint string, body io.Reader) (*http.Response, error) method that uses buildURL for endpoint construction and applies authentication headers. Implement GET, POST, PATCH convenience wrappers. Include comprehensive error handling using APIError type for HTTP status codes and response parsing. Add request logging integration with the debug logging system from task 4. Handle common Azure DevOps API error responses and rate limiting.\n<info added on 2025-07-29T19:43:17.909Z>\nImplementation completed successfully. The makeRequest helper method has been implemented with full authentication support, structured error handling using APIError type, and convenience wrappers for GET, POST, and PATCH operations. The implementation includes proper URL construction, default header management, and lint error resolution. The method is now ready for integration with Azure DevOps API endpoints and can be used by other components requiring authenticated HTTP requests.\n</info added on 2025-07-29T19:43:17.909Z>",
+            "testStrategy": "Unit tests with mock HTTP client to verify requests are properly formed using buildURL and authentication headers. Test error handling returns proper APIError types for various HTTP status codes. Integration tests with actual Azure DevOps API endpoints using test PAT."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Implement Work Item Creation API Call",
+        "description": "This task has been made obsolete by the refactoring in Task 11, which implemented work item creation using the official azure-devops-go-api library. The core functionality is now covered by the new ADOClient implementation.",
+        "status": "cancelled",
+        "dependencies": [
+          5
+        ],
+        "priority": "high",
+        "details": "Originally intended to implement createWorkItem() function with manual JSON-Patch payload construction for Azure DevOps REST API. However, Task 11 has superseded this approach by implementing a more robust solution using the official azure-devops-go-api library. The ADOClient implementation in Task 11 provides the same work item creation functionality with better error handling, type safety, and maintainability. This task is now considered fulfilled through the alternative implementation.",
+        "testStrategy": "Testing requirements have been transferred to Task 11's ADOClient implementation. The official library provides better testing capabilities and more reliable API interactions than the manual REST implementation originally planned.",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement JSON-Patch Payload Construction",
+            "description": "Create the core payload building functionality for Azure DevOps work item creation using JSON-Patch format",
+            "status": "cancelled",
+            "dependencies": [],
+            "details": "Implement buildWorkItemPayload() function that constructs JSON-Patch operations array. Create operation objects with 'op': 'add', 'path': '/fields/System.Title', 'value': title for required title field. Add conditional operations for System.Description and System.Parent when provided. Return properly formatted JSON-Patch payload as []map[string]interface{} or similar structure. Include validation to ensure title is not empty.",
+            "testStrategy": "Unit tests for payload construction with various input combinations (title only, title+description, title+parent, all fields). Verify JSON structure matches Azure DevOps JSON-Patch requirements."
+          },
+          {
+            "id": 2,
+            "title": "Implement HTTP Client and Request Setup",
+            "description": "Set up HTTP client configuration and request building for Azure DevOps API calls",
+            "status": "cancelled",
+            "dependencies": [
+              1
+            ],
+            "details": "Create HTTP client with appropriate timeout settings. Implement buildAPIRequest() function that constructs PATCH request to Azure DevOps endpoint using format '{organization}/{project}/_apis/wit/workitems/${type}?api-version=7.1'. Set required headers including 'Content-Type: application/json-patch+json' and 'Authorization: Basic {base64-encoded-PAT}'. Encode PAT using base64 encoding with format ':PAT'. Include proper URL construction and validation.",
+            "testStrategy": "Unit tests for request building with different organizations, projects, and work item types. Test header construction and PAT encoding. Verify URL format correctness."
+          },
+          {
+            "id": 3,
+            "title": "Implement API Call Execution",
+            "description": "Execute the HTTP request to Azure DevOps API and handle the raw response",
+            "status": "cancelled",
+            "dependencies": [
+              2
+            ],
+            "details": "Implement executeAPICall() function that sends the constructed HTTP request using http.Client.Do(). Handle HTTP response status codes appropriately - success (200-299), client errors (400-499), and server errors (500-599). Read response body using io.ReadAll(). Return raw response data and any HTTP-level errors. Include proper resource cleanup with defer response.Body.Close().",
+            "testStrategy": "Integration tests with test Azure DevOps instance. Test various HTTP status code scenarios. Mock HTTP client for unit testing different response conditions."
+          },
+          {
+            "id": 4,
+            "title": "Implement Response Parsing and Data Extraction",
+            "description": "Parse Azure DevOps API response and extract work item ID and URL information",
+            "status": "cancelled",
+            "dependencies": [
+              3
+            ],
+            "details": "Implement parseWorkItemResponse() function that unmarshals JSON response into appropriate struct. Extract work item ID from response.id field and work item URL from response.url field. Handle JSON parsing errors gracefully. Create WorkItemResult struct to hold extracted data including ID, URL, and any other relevant fields. Validate that required fields are present in response.",
+            "testStrategy": "Unit tests with various Azure DevOps API response formats. Test JSON parsing with malformed responses. Verify correct extraction of ID and URL fields."
+          },
+          {
+            "id": 5,
+            "title": "Implement Error Handling and Main Function Integration",
+            "description": "Add comprehensive error handling and integrate all components into the main createWorkItem() function",
+            "status": "cancelled",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "Implement createWorkItem() function that orchestrates all components: payload construction, request building, API execution, and response parsing. Add comprehensive error handling for each step with descriptive error messages. Handle specific Azure DevOps API errors (authentication failures, project not found, invalid work item type, etc.). Return structured error information that can be used by calling code. Include input validation for required parameters (organization, project, PAT, work item type, title).",
+            "testStrategy": "Integration tests covering end-to-end work item creation flow. Test error scenarios including invalid credentials, missing projects, network failures. Unit tests for error message formatting and input validation."
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Implement PAT Owner Assignment Logic",
+        "description": "Add functionality to automatically assign created work items to the PAT owner by default using the azure-devops-go-api library",
+        "status": "done",
+        "dependencies": [
+          11
+        ],
+        "priority": "medium",
+        "details": "Implement functionality to retrieve the PAT owner's identity and add the System.AssignedTo field to the JSON patch document for work item creation. Since the azure-devops-go-api library may not have a direct method to get the current user, this may require a separate API call to the connectionData endpoint or manual field addition. The assignment should be added to the JSON patch operations array that gets sent to Azure DevOps.",
+        "testStrategy": "Test PAT owner lookup and assignment with valid and invalid PATs. Verify work items are correctly assigned to PAT owner using the JSON patch format. Test graceful handling when user lookup fails.",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Research azure-devops-go-api library for user identity retrieval",
+            "description": "Investigate available methods in the azure-devops-go-api library to retrieve the current authenticated user's identity",
+            "status": "done",
+            "dependencies": [],
+            "details": "Examine the azure-devops-go-api library documentation and source code to find methods for retrieving the current user's identity. Check if there are direct methods on the client or if we need to use specific service clients. If no direct method exists, identify the appropriate endpoint (like connectionData) that can be called through the library's HTTP client or core services.",
+            "testStrategy": "Review library documentation and test available methods. Verify which approach provides the necessary user identity information."
+          },
+          {
+            "id": 2,
+            "title": "Implement user identity retrieval using azure-devops-go-api",
+            "description": "Create function to get PAT owner identity using the most appropriate method from the azure-devops-go-api library",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "details": "Based on the research from the previous subtask, implement a function to retrieve the authenticated user's identity. This may involve using a specific service client from the library or making a call to the connectionData endpoint. Create a function that returns the user's unique identifier that can be used for work item assignment. Handle authentication and API errors appropriately.",
+            "testStrategy": "Test user identity retrieval with valid PATs. Test error handling with invalid or expired PATs. Verify the returned user information contains necessary fields for assignment."
+          },
+          {
+            "id": 3,
+            "title": "Add System.AssignedTo field to JSON patch document",
+            "description": "Modify the work item creation logic to include System.AssignedTo field in the JSON patch operations",
+            "status": "done",
+            "dependencies": [
+              2
+            ],
+            "details": "Update the JSON patch document creation to include a patch operation for the System.AssignedTo field when user identity is successfully retrieved. The patch operation should follow the format: {'op': 'add', 'path': '/fields/System.AssignedTo', 'value': userIdentity}. Ensure this operation is added to the existing patch operations array used by the azure-devops-go-api library for work item creation.",
+            "testStrategy": "Test that the JSON patch document includes the assignment operation when user lookup succeeds. Verify the patch operation format is correct for Azure DevOps API. Test work item creation with the assignment field."
+          },
+          {
+            "id": 4,
+            "title": "Implement graceful error handling for assignment failures",
+            "description": "Add error handling to ensure work item creation continues even when user assignment fails",
+            "status": "done",
+            "dependencies": [
+              3
+            ],
+            "details": "Implement error handling logic that allows work item creation to proceed normally when user identity retrieval fails. Log appropriate debug information about assignment failures while ensuring the main work item creation flow is not interrupted. The System.AssignedTo field should only be added to the patch document when user lookup is successful.",
+            "testStrategy": "Test that work item creation succeeds even when user lookup fails. Verify that failed assignment attempts don't break the main workflow. Test appropriate error logging for troubleshooting."
+          },
+          {
+            "id": 5,
+            "title": "Integrate assignment logic with existing work item creation flow",
+            "description": "Integrate the PAT owner assignment functionality into the existing work item creation process",
+            "status": "done",
+            "dependencies": [
+              4
+            ],
+            "details": "Modify the existing work item creation function to call the user identity retrieval and conditionally add the assignment field to the patch document. Ensure the integration works seamlessly with the azure-devops-go-api library's work item creation methods. The assignment should be attempted before each work item creation but should not delay or complicate the creation process.",
+            "testStrategy": "Test end-to-end work item creation with assignment enabled. Verify integration doesn't affect existing functionality. Test that assignment works correctly with different work item types."
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Implement Dry-Run Mode",
+        "description": "Add --dry-run flag support to preview the API payload without making actual API calls using the azure-devops-go-api library",
+        "status": "done",
+        "dependencies": [
+          11
+        ],
+        "priority": "medium",
+        "details": "Modify createWorkItem() function to accept dry-run parameter. When --dry-run flag is set, construct the []webapi.JsonPatchOperation document that would be passed to the CreateWorkItem function and print it to stdout instead of making actual API call. Format JSON output for readability using json.MarshalIndent(). Exit successfully after printing the patch operations without making HTTP request.",
+        "testStrategy": "Test dry-run mode produces correct JsonPatchOperation array. Verify no API calls are made in dry-run mode. Test that patch operations match what would be sent to azure-devops-go-api CreateWorkItem function.",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Add dry-run flag to command line interface",
+            "description": "Implement command line flag parsing to accept --dry-run option that enables preview mode without making actual API calls",
+            "status": "done",
+            "dependencies": [],
+            "details": "Add --dry-run flag using flag package or similar CLI library. Set up boolean variable to track dry-run state. Ensure flag is properly documented in help text. Parse command line arguments and store dry-run state in accessible variable for other functions.",
+            "testStrategy": "Test flag parsing with and without --dry-run flag. Verify help text includes dry-run option description."
+          },
+          {
+            "id": 2,
+            "title": "Modify createWorkItem function signature",
+            "description": "Update the createWorkItem() function to accept a dry-run parameter and pass it through the function call chain",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "details": "Add boolean dryRun parameter to createWorkItem() function signature. Update all calls to createWorkItem() to pass the dry-run flag value. Ensure the parameter is properly propagated through any intermediate function calls that lead to API execution.",
+            "testStrategy": "Test function calls with both true and false dry-run values. Verify parameter is correctly passed through call chain."
+          },
+          {
+            "id": 3,
+            "title": "Implement JsonPatchOperation construction logic",
+            "description": "Create the complete []webapi.JsonPatchOperation array that would be passed to the azure-devops-go-api CreateWorkItem function",
+            "status": "done",
+            "dependencies": [
+              2
+            ],
+            "details": "Build the complete JsonPatchOperation array structure that would be sent to Azure DevOps API via the azure-devops-go-api library. Include all required patch operations for work item type, title, description, and any other configured fields. Ensure patch operations structure matches exactly what would be passed to the CreateWorkItem function. Use same data sources and validation as normal execution path.",
+            "testStrategy": "Compare constructed patch operations with actual CreateWorkItem function input. Verify all required operations are present and correctly formatted as JsonPatchOperation objects."
+          },
+          {
+            "id": 4,
+            "title": "Add JSON formatting and output functionality",
+            "description": "Implement pretty-printing of JsonPatchOperation array using json.MarshalIndent for readable output to stdout",
+            "status": "done",
+            "dependencies": [
+              3
+            ],
+            "details": "Use json.MarshalIndent() with appropriate indentation (2 or 4 spaces) to format JsonPatchOperation array for human readability. Output formatted JSON to stdout using fmt.Print() or similar. Handle any JSON marshaling errors gracefully with appropriate error messages.",
+            "testStrategy": "Test JSON output formatting with various patch operation structures. Verify output is valid JSON and properly indented."
+          },
+          {
+            "id": 5,
+            "title": "Implement dry-run execution path and early exit",
+            "description": "Add conditional logic to skip API call execution when in dry-run mode and exit successfully after displaying patch operations",
+            "status": "done",
+            "dependencies": [
+              4
+            ],
+            "details": "Add conditional check for dry-run mode before calling azure-devops-go-api CreateWorkItem function. When dry-run is enabled, output the formatted JsonPatchOperation array and exit with success status (exit code 0) without making any network calls. Ensure no API authentication or HTTP requests occur in dry-run mode. Maintain normal execution path when dry-run is disabled.",
+            "testStrategy": "Verify no network calls are made in dry-run mode. Test successful exit after patch operations display. Confirm normal API execution when dry-run is disabled."
+          },
+          {
+            "id": 6,
+            "title": "Add dry-run flag to CLI arguments",
+            "description": "Add --dry-run command line flag using flag package and store in global variable for access throughout application",
+            "status": "done",
+            "dependencies": [],
+            "details": "Import flag package and add dryRun boolean flag using flag.Bool(). Parse flags in main() function. Store dry-run state in accessible variable for other functions to check.",
+            "testStrategy": "Test flag parsing with and without --dry-run flag. Verify flag value is correctly set and accessible."
+          },
+          {
+            "id": 7,
+            "title": "Modify createWorkItem function signature",
+            "description": "Update createWorkItem() function to accept dry-run parameter and conditionally execute API calls",
+            "status": "done",
+            "dependencies": [],
+            "details": "Add dryRun bool parameter to createWorkItem() function signature. Update all function calls to pass the dry-run flag value. Modify function logic to check dry-run flag before making HTTP requests.",
+            "testStrategy": "Test function accepts dry-run parameter correctly. Verify function behavior changes based on dry-run flag value."
+          },
+          {
+            "id": 8,
+            "title": "Implement JSON payload construction",
+            "description": "Create complete JSON payload for work item creation that matches actual API request format",
+            "status": "done",
+            "dependencies": [],
+            "details": "Build the work item creation payload struct with all required fields (title, description, work item type, etc.). Ensure payload structure matches Azure DevOps API requirements exactly as would be sent in actual API call.",
+            "testStrategy": "Test payload construction with various input combinations. Verify payload structure matches API documentation requirements."
+          },
+          {
+            "id": 9,
+            "title": "Add JSON formatting and output",
+            "description": "Use json.MarshalIndent to format JSON payload for readable output to stdout in dry-run mode",
+            "status": "done",
+            "dependencies": [],
+            "details": "Import json package and use json.MarshalIndent() with proper indentation (2 spaces). Print formatted JSON to stdout using fmt.Print() or similar. Handle any marshaling errors gracefully.",
+            "testStrategy": "Test JSON formatting produces readable, properly indented output. Verify output goes to stdout and not stderr."
+          },
+          {
+            "id": 10,
+            "title": "Implement early exit for dry-run mode",
+            "description": "Exit successfully after printing payload without making HTTP request when in dry-run mode",
+            "status": "done",
+            "dependencies": [],
+            "details": "Add conditional logic to exit with status 0 after printing JSON payload when dry-run flag is set. Ensure no HTTP requests are made and no further processing occurs in dry-run mode.",
+            "testStrategy": "Test that dry-run mode exits successfully without making API calls. Verify no HTTP requests are attempted when dry-run flag is set."
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Implement Work Item URL Output",
+        "description": "Add functionality to output the created work item URL to stdout upon successful creation using the azure-devops-go-api library",
+        "status": "done",
+        "dependencies": [
+          11
+        ],
+        "priority": "medium",
+        "details": "Extract work item URL from the workitemtracking.WorkItem object returned by the azure-devops-go-api CreateWorkItem function. The WorkItem object contains both ID and URL fields that can be used directly. Output URL to stdout on successful work item creation. Ensure URL output is the only stdout output (except in dry-run mode) for script-friendly usage.",
+        "testStrategy": "Test URL extraction from WorkItem object with different work item types. Verify URL format matches Azure DevOps web interface URLs. Test that only URL is output to stdout on success.",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Extract Work Item URL from azure-devops-go-api Response",
+            "description": "Extract the work item URL from the workitemtracking.WorkItem object returned by CreateWorkItem function",
+            "status": "done",
+            "dependencies": [],
+            "details": "Modify the createWorkItem() function to extract the URL field from the workitemtracking.WorkItem object returned by the azure-devops-go-api CreateWorkItem function. The WorkItem object contains a URL field that provides the direct link to the work item. Handle cases where the URL field might be nil or empty. Return the extracted URL along with any errors for further processing.",
+            "testStrategy": "Test URL extraction from mock WorkItem objects. Test error handling for nil or empty URL fields. Verify extracted URLs match expected Azure DevOps format."
+          },
+          {
+            "id": 2,
+            "title": "Implement Stdout Output Control for URL",
+            "description": "Modify output handling to ensure only the work item URL is written to stdout on successful creation",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "details": "Update the main execution flow to control stdout output. Create a dedicated function for URL output that writes directly to os.Stdout. Ensure all other informational messages (debug logs, error messages) are directed to stderr. In dry-run mode, allow JSON payload output to stdout as specified. Implement a clean separation between success output (URL to stdout) and all other output (to stderr). Use fmt.Fprintln(os.Stdout, url) for the final URL output.",
+            "testStrategy": "Test that only URL appears on stdout during successful execution. Verify error messages and debug logs go to stderr. Test dry-run mode outputs JSON to stdout correctly."
+          },
+          {
+            "id": 3,
+            "title": "Integrate URL Output into Work Item Creation Flow",
+            "description": "Modify the createWorkItem() function to extract URL from WorkItem object and integrate URL output into the main execution path",
+            "status": "done",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Update the createWorkItem() function to extract the URL from the returned workitemtracking.WorkItem object when creation succeeds. Modify the main execution flow to output the URL to stdout after successful API response processing. Ensure the URL output only occurs after successful work item creation. Handle the case where work item creation succeeds but URL extraction fails. The integration should maintain the existing error handling while adding the new URL output functionality.",
+            "testStrategy": "Test complete flow from work item creation to URL output using azure-devops-go-api. Verify URL is only output on successful creation. Test error scenarios where creation succeeds but URL extraction fails."
+          },
+          {
+            "id": 4,
+            "title": "Add URL Output Validation and Error Handling",
+            "description": "Implement comprehensive error handling and validation for the URL output functionality",
+            "status": "done",
+            "dependencies": [
+              3
+            ],
+            "details": "Add validation to ensure the extracted URL from the WorkItem object is valid and properly formatted. Implement error handling for cases where URL extraction fails or the URL field is empty/nil. Add appropriate error messages that are sent to stderr while maintaining clean stdout output. Include validation that the URL follows the expected Azure DevOps format. Handle edge cases such as malformed URLs or missing URL fields. Ensure graceful degradation if URL output fails but work item creation succeeded.",
+            "testStrategy": "Test error handling for nil or empty URL fields in WorkItem objects. Test URL validation with malformed URLs. Verify appropriate error messages are sent to stderr while stdout remains clean."
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Integrate All Components and Add Error Handling",
+        "description": "Integrate the new ADOClient with the urfave/cli application, including proper error handling and validation for the complete CLI workflow",
+        "status": "done",
+        "dependencies": [
+          3,
+          8,
+          9,
+          11
+        ],
+        "priority": "high",
+        "details": "Integrate the ADOClient from Task 11 with the CLI framework from Task 3. Call NewADOClient and CreateWorkItem functions from the main command's Action handler. Handle the returned workitemtracking.WorkItem and errors properly. Add comprehensive error handling for all failure scenarios (missing env vars, invalid flags, API failures). Implement proper exit codes (0 for success, 1 for errors). Ensure error messages are clear and actionable. Add input validation for work item types and parent IDs.",
+        "testStrategy": "End-to-end testing with various input combinations using the integrated ADOClient and CLI. Test all error scenarios produce appropriate error messages and exit codes. Validate against all acceptance criteria from PRD. Test example usage scenarios from PRD documentation with the azure-devops-go-api library integration.",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Integrate ADOClient with CLI Command Action Handler",
+            "description": "Implement the main command Action handler that uses NewADOClient and CreateWorkItem functions from the ADOClient implementation",
+            "status": "done",
+            "dependencies": [],
+            "details": "Update the CLI command's Action handler to call NewADOClient() for client initialization using environment variables from config. Extract CLI flag values (type, title, description, parent) and pass them to the CreateWorkItem function. Handle the returned workitemtracking.WorkItem object and display success information. Establish proper flow: config loading -> CLI parsing -> ADOClient initialization -> work item creation -> result handling.",
+            "testStrategy": "Integration tests that verify the complete flow from CLI input to work item creation using the ADOClient. Test with valid inputs to ensure successful execution path and proper handling of workitemtracking.WorkItem response."
+          },
+          {
+            "id": 2,
+            "title": "Implement Comprehensive Error Handling for ADOClient Integration",
+            "description": "Create error handling that properly processes errors from ADOClient operations and provides clear user feedback",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "details": "Handle errors returned from NewADOClient() initialization (authentication, configuration issues). Process errors from CreateWorkItem() calls (API failures, validation errors, network issues). Implement proper error message formatting that interprets azure-devops-go-api error types. Set up exit code system: os.Exit(0) for success, os.Exit(1) for all error conditions. Create helper functions for consistent error reporting format that work with the library's error types.",
+            "testStrategy": "Test error handling for ADOClient initialization and CreateWorkItem operation failures. Verify correct exit codes are returned and error messages properly interpret azure-devops-go-api library errors. Test various API error scenarios."
+          },
+          {
+            "id": 3,
+            "title": "Add Input Validation for Work Item Parameters",
+            "description": "Implement validation for work item types, parent IDs, and other input parameters before calling ADOClient functions",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "details": "Create validation functions for work item types (validate against known Azure DevOps work item types like Task, Bug, User Story, etc.). Implement parent ID validation to ensure it's a positive integer when provided. Add title and description validation for length and content requirements. Validate that required fields are not empty after trimming whitespace. Ensure validation occurs before calling CreateWorkItem to avoid unnecessary API calls.",
+            "testStrategy": "Unit tests for each validation function with valid and invalid inputs. Test edge cases like empty strings, negative numbers, and unsupported work item types. Verify validation prevents invalid API calls to ADOClient."
+          },
+          {
+            "id": 4,
+            "title": "Handle WorkItem Response and Display Success Information",
+            "description": "Process the workitemtracking.WorkItem response from CreateWorkItem and display relevant information to the user",
+            "status": "done",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Extract relevant information from the returned workitemtracking.WorkItem object (ID, URL, title, type). Format and display success messages with work item details. Handle the case where dry-run flag is set (display what would be created without making API call). Ensure output is user-friendly and provides actionable information like work item URL for easy access.",
+            "testStrategy": "Test successful work item creation response handling. Verify proper information extraction from workitemtracking.WorkItem object. Test dry-run mode output. Check that success messages are clear and include relevant work item details."
+          },
+          {
+            "id": 5,
+            "title": "Implement End-to-End Error Scenarios with Azure DevOps API Library",
+            "description": "Handle specific error scenarios that can occur with the azure-devops-go-api library including authentication, network, and API-specific errors",
+            "status": "done",
+            "dependencies": [
+              2,
+              3,
+              4
+            ],
+            "details": "Implement specific error handling for: ADOClient initialization failures (invalid PAT, missing config), azure-devops-go-api authentication errors, network connectivity issues, invalid parent work item IDs (API validation errors), API rate limiting responses, and malformed API responses from the library. Provide actionable error messages that guide users toward resolution and properly interpret library-specific error types.",
+            "testStrategy": "End-to-end testing with various failure scenarios using the azure-devops-go-api library. Mock API responses for different error conditions. Test that error messages provide clear guidance for resolution. Verify proper exit codes for all error scenarios specific to the library integration."
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Refactor ADOClient to use Microsoft's Official azure-devops-go-api Library",
+        "description": "Replace the custom HTTP client implementation in ADOClient with Microsoft's official azure-devops-go-api library to improve reliability, maintainability, and future compatibility.",
+        "details": "Replace the existing custom HTTP client implementation with Microsoft's official azure-devops-go-api library. Install the library using 'go get github.com/microsoft/azure-devops-go-api/azuredevops'. Refactor the AzureDevOpsClient struct to use azuredevops.Connection instead of custom HTTP client. Replace manual authentication with the library's connection.NewPatConnection() method for PAT authentication. Update all API calls to use typed clients like workitemtracking.Client instead of manual HTTP requests. Replace custom URL construction with the library's built-in endpoint management. Update error handling to use the library's structured error types instead of custom APIError. Modify createWorkItem() function to use workitemtracking.Client.CreateWorkItem() with proper JsonPatchDocument operations. Update getUserFromPAT() function to use the library's profile or identity clients. Ensure all existing functionality (work item creation, user lookup, dry-run mode) continues to work with the new implementation. Update import statements and remove custom HTTP handling code. Maintain backward compatibility with existing configuration and environment variables.",
+        "testStrategy": "Update unit tests to work with the new library implementation. Test PAT authentication using the official library's connection methods. Verify work item creation functionality produces identical results to the previous implementation. Test error handling with the library's error types. Validate that all existing CLI functionality (dry-run mode, user assignment, URL output) works correctly with the refactored client. Run integration tests against test Azure DevOps instance to ensure API compatibility. Test with various work item types and parent assignments. Verify that the refactored implementation handles network failures and API errors gracefully. Compare performance and reliability with the previous custom implementation.",
+        "status": "done",
+        "dependencies": [
+          5,
+          6,
+          7
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Install and Integrate azure-devops-go-api Library",
+            "description": "Add the official azure-devops-go-api library to the project and ensure it is properly imported and available for use in the codebase.",
+            "dependencies": [],
+            "details": "Run 'go get github.com/microsoft/azure-devops-go-api/azuredevops' to install the library. Update import statements in relevant files to use the new library. Remove any unused custom HTTP client imports.\n<info added on 2025-07-29T19:50:24.243Z>\nLibrary installation completed successfully. Azure DevOps Go API v1.0.0-b5 and google/uuid dependency are now available in the project. Import statements can be updated and client refactoring can begin.\n</info added on 2025-07-29T19:50:24.243Z>",
+            "status": "done",
+            "testStrategy": "Verify that the project builds successfully and that the azure-devops-go-api package is present in go.mod and go.sum."
+          },
+          {
+            "id": 2,
+            "title": "Refactor AzureDevOpsClient Struct and Authentication",
+            "description": "Modify the AzureDevOpsClient struct to use azuredevops.Connection and implement authentication using connection.NewPatConnection().",
+            "dependencies": [
+              "11.1"
+            ],
+            "details": "Replace the custom HTTP client field in AzureDevOpsClient with an azuredevops.Connection field. Update the client initialization logic to use connection.NewPatConnection() for PAT authentication, removing manual header and base64 logic.\n<info added on 2025-07-29T19:52:10.469Z>\nSuccessfully refactored ADOClient struct and authentication to use the official azure-devops-go-api library:\n\n- Replaced custom HTTP client with azuredevops.Connection using NewPatConnection()\n- Added workitemtracking.Client field for typed work item operations\n- Removed all manual HTTP handling, authentication encoding, URL construction, and custom error types\n- Updated NewADOClient constructor to use the official library's connection management\n- Eliminated custom headers, transport, and request logic - now handled by the library\n- Code builds successfully and is ready for implementing typed API calls\n\nThe client now uses the official Microsoft library for all Azure DevOps interactions, providing better reliability and maintainability.\n</info added on 2025-07-29T19:52:10.469Z>",
+            "status": "done",
+            "testStrategy": "Test that the client initializes successfully with valid and invalid PATs, and that authentication errors are handled using the library's error types."
+          },
+          {
+            "id": 3,
+            "title": "Replace Manual API Calls with Typed Clients",
+            "description": "Update all API interactions to use the official library's typed clients (e.g., workitemtracking.Client) instead of manual HTTP requests and custom URL construction.",
+            "dependencies": [
+              "11.2"
+            ],
+            "details": "Identify all places where manual HTTP requests are made (such as work item creation and user lookup). Refactor these to use the corresponding typed clients and methods provided by azure-devops-go-api, leveraging built-in endpoint management.",
+            "status": "done",
+            "testStrategy": "Verify that all API calls (work item creation, user lookup, etc.) function correctly and produce the same results as the previous implementation."
+          },
+          {
+            "id": 4,
+            "title": "Update Error Handling to Use Library Types",
+            "description": "Refactor error handling throughout the client to use the structured error types provided by azure-devops-go-api instead of custom APIError types.",
+            "dependencies": [
+              "11.3"
+            ],
+            "details": "Replace custom error type definitions and usages with the error types returned by the official library. Ensure that error messages and codes are handled and surfaced appropriately.",
+            "status": "done",
+            "testStrategy": "Test error scenarios (e.g., invalid PAT, network failures, API errors) and confirm that errors are handled and reported using the library's structured types."
+          },
+          {
+            "id": 5,
+            "title": "Remove Legacy Code and Ensure Backward Compatibility",
+            "description": "Clean up the codebase by removing all custom HTTP handling, legacy authentication, and manual endpoint logic. Ensure that configuration and environment variable usage remains compatible with existing setups.",
+            "dependencies": [
+              "11.4"
+            ],
+            "details": "Delete unused custom HTTP client code, manual authentication, and URL construction helpers. Review configuration and environment variable handling to ensure no breaking changes are introduced. Update documentation as needed.",
+            "status": "done",
+            "testStrategy": "Run all existing unit and integration tests to confirm that all features (work item creation, user lookup, dry-run mode) continue to work as before. Validate that configuration and environment variables are still honored."
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Implement Error Classification Helpers for Azure DevOps Go SDK Integration",
+        "description": "Create error classification helper functions to categorize different types of errors from the Azure DevOps Go SDK and standard library using Go error unwrapping and type assertions.",
+        "details": "Implement five error classification helper functions in a dedicated errors.go file: isAuthError(), isNetworkError(), isValidationError(), isRateLimitError(), and isMalformedResponseError(). Each function should accept an error parameter and return a boolean indicating if the error belongs to that category. Use Go's errors.Unwrap() and errors.As() functions to traverse error chains and perform type assertions against azure-devops-go-api error types and standard library errors. For authentication errors, check for HTTP 401/403 status codes and azure-devops-go-api authentication-related error types. For network errors, detect net.Error types, context.DeadlineExceeded, and connection-related errors. For validation errors, look for HTTP 400 status codes and field validation error patterns. For rate limiting, identify HTTP 429 status codes and rate limit error messages. For malformed response errors, catch JSON unmarshaling errors and unexpected response format issues. Each helper should use a switch statement or type assertion chain to check multiple error conditions, ensuring comprehensive error detection across the SDK and standard library error hierarchy.",
+        "testStrategy": "Create comprehensive unit tests for each error classification function using table-driven tests with various error scenarios. Test each helper with: wrapped errors using fmt.Errorf(), azure-devops-go-api specific error types, standard library errors (net.Error, json.SyntaxError, etc.), HTTP status code errors, and nil error cases. Mock different error conditions including authentication failures (401/403), network timeouts, validation failures (400), rate limiting (429), and JSON parsing errors. Verify that error unwrapping works correctly through multiple error layers. Test edge cases like custom error types and ensure helpers return false for unrelated error types. Validate that the helpers can correctly identify errors in real integration scenarios with the Azure DevOps API.",
+        "status": "done",
+        "dependencies": [
+          11
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define Error Categories and Mapping Criteria",
+            "description": "Identify and document the specific error types and patterns for each classification category (authentication, network, validation, rate limit, malformed response) based on Azure DevOps Go SDK and Go standard library error types.",
+            "dependencies": [],
+            "details": "Research Azure DevOps Go SDK error types and standard library errors. Specify criteria for each helper, such as HTTP status codes, error interfaces (e.g., net.Error), and error message patterns. Document these mappings for use in implementation.",
+            "status": "done",
+            "testStrategy": "Review SDK and standard library documentation. Create a mapping table of error types and their corresponding categories."
+          },
+          {
+            "id": 2,
+            "title": "Implement isAuthError Helper Function",
+            "description": "Develop the isAuthError(error) bool function to detect authentication-related errors using error unwrapping, type assertions, and HTTP status code checks.",
+            "dependencies": [
+              "12.1"
+            ],
+            "details": "Use errors.Unwrap() and errors.As() to traverse error chains. Check for Azure DevOps SDK authentication error types and HTTP 401/403 status codes. Ensure comprehensive coverage of possible authentication error scenarios.",
+            "status": "done",
+            "testStrategy": "Write unit tests with various authentication error cases, including wrapped errors and SDK-specific types."
+          },
+          {
+            "id": 3,
+            "title": "Implement isNetworkError Helper Function",
+            "description": "Develop the isNetworkError(error) bool function to identify network-related errors, including net.Error, context.DeadlineExceeded, and connection issues.",
+            "dependencies": [
+              "12.1"
+            ],
+            "details": "Use errors.As() to check for net.Error, context.DeadlineExceeded, and connection reset errors. Traverse error chains to detect nested network errors.",
+            "status": "done",
+            "testStrategy": "Test with simulated network errors, including wrapped net.Error, context errors, and connection failures."
+          },
+          {
+            "id": 4,
+            "title": "Implement isValidationError, isRateLimitError, and isMalformedResponseError Helper Functions",
+            "description": "Develop the remaining three helper functions to classify validation, rate limit, and malformed response errors using error unwrapping, type assertions, and pattern matching.",
+            "dependencies": [
+              "12.1"
+            ],
+            "details": "For isValidationError, check for HTTP 400 status codes and validation error patterns. For isRateLimitError, detect HTTP 429 status codes and rate limit messages. For isMalformedResponseError, identify JSON unmarshaling errors and unexpected response formats.",
+            "status": "done",
+            "testStrategy": "Create unit tests for each function with relevant error scenarios, including wrapped and SDK-specific errors."
+          },
+          {
+            "id": 5,
+            "title": "Integrate and Document Error Helpers in errors.go",
+            "description": "Combine all helper functions into a dedicated errors.go file, ensure code consistency, and provide inline documentation for maintainability.",
+            "dependencies": [
+              "12.2",
+              "12.3",
+              "12.4"
+            ],
+            "details": "Place all error classification helpers in errors.go. Add comments explaining logic and usage. Ensure functions are exported or unexported as appropriate for project structure.",
+            "status": "done",
+            "testStrategy": "Run all unit tests for the helpers. Review documentation for clarity and completeness."
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "title": "Implement Unified Error Handler Function for CLI",
+        "description": "Create a centralized handleError function that uses error classification helpers to detect error types, outputs user-friendly messages to stderr, and exits with code 1 while optionally logging technical details for diagnostics.",
+        "details": "Implement a handleError(err error) function in a dedicated error_handler.go file that serves as the single point of error handling for the CLI application. The function should: 1) Use the error classification helpers from Task 12 (isAuthError, isNetworkError, isValidationError, isRateLimitError, isMalformedResponseError) to categorize the error type, 2) Map each error category to user-friendly, actionable messages that guide users toward resolution without exposing sensitive information like PAT tokens or internal API details, 3) Write all error messages to stderr using fmt.Fprintf(os.Stderr, ...), 4) Optionally log technical error details (stack traces, raw error messages) to stderr when DEBUG environment variable is set, following the debug logging patterns, 5) Always exit with os.Exit(1) after handling the error, 6) Include a fallback case for unclassified errors with a generic but helpful message. Error messages should be structured as: \"Error: [user-friendly description]\" followed by \"Suggestion: [actionable next step]\". For authentication errors, suggest checking PAT validity and permissions. For network errors, suggest checking connectivity and Azure DevOps service status. For validation errors, provide specific guidance on fixing input parameters. Ensure no sensitive data (PATs, internal URLs, stack traces) appears in user-facing messages unless DEBUG mode is enabled.",
+        "testStrategy": "Create comprehensive unit tests using table-driven tests that cover each error classification scenario. Test handleError with mock errors of each type (auth, network, validation, rate limit, malformed response) and verify correct user-friendly messages are written to stderr. Test that technical details are only logged when DEBUG environment variable is set. Verify that os.Exit(1) is called in all cases using testable exit patterns or dependency injection. Test fallback handling for unclassified errors. Verify no sensitive information leaks in error messages by testing with errors containing PAT tokens, internal URLs, and stack traces. Test integration with the CLI application by replacing direct error handling in Task 10's integration points with calls to handleError function.",
+        "status": "done",
+        "dependencies": [
+          12
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Integrate Error Classification Helpers",
+            "description": "Incorporate the error classification helpers (isAuthError, isNetworkError, isValidationError, isRateLimitError, isMalformedResponseError) from Task 12 into the handleError function to accurately categorize incoming errors.",
+            "dependencies": [],
+            "details": "Ensure handleError uses each helper to determine the error type, supporting future extensibility for new error categories.",
+            "status": "done",
+            "testStrategy": "Provide mock errors for each category and verify correct classification logic is invoked."
+          },
+          {
+            "id": 2,
+            "title": "Map Error Categories to User-Friendly Messages",
+            "description": "Define and implement mappings from each error category to a user-friendly error message and actionable suggestion, ensuring no sensitive information is exposed.",
+            "dependencies": [
+              "13.1"
+            ],
+            "details": "Craft messages that guide users toward resolution, such as checking PAT validity for authentication errors or verifying connectivity for network errors. Ensure fallback messaging for unclassified errors.",
+            "status": "done",
+            "testStrategy": "Test that each error type produces the correct message and suggestion, and that fallback messaging is used for unknown errors."
+          },
+          {
+            "id": 3,
+            "title": "Implement Structured Error Output to Stderr",
+            "description": "Write logic in handleError to output error messages and suggestions to stderr using fmt.Fprintf(os.Stderr, ...), following the required message structure.",
+            "dependencies": [
+              "13.2"
+            ],
+            "details": "Ensure all user-facing error output is consistently formatted as 'Error: [description]' and 'Suggestion: [actionable next step]'.",
+            "status": "done",
+            "testStrategy": "Capture stderr output in tests and verify message structure and content for each error scenario."
+          },
+          {
+            "id": 4,
+            "title": "Add Conditional Debug Logging for Technical Details",
+            "description": "Implement logic to optionally log technical error details (such as stack traces or raw error messages) to stderr when the DEBUG environment variable is set, following established debug logging patterns.",
+            "dependencies": [
+              "13.3"
+            ],
+            "details": "Ensure technical details are only included in stderr output when DEBUG is enabled, and that no sensitive data appears in user-facing messages.",
+            "status": "done",
+            "testStrategy": "Test with DEBUG set and unset, verifying technical details are present only when expected and that sensitive data is never leaked."
+          },
+          {
+            "id": 5,
+            "title": "Enforce Application Exit and Fallback Handling",
+            "description": "Ensure handleError always calls os.Exit(1) after handling the error, and includes a robust fallback for unclassified errors with a generic but helpful message.",
+            "dependencies": [
+              "13.4"
+            ],
+            "details": "Guarantee that all error paths result in process termination and that the fallback case provides guidance without exposing internal details.",
+            "status": "done",
+            "testStrategy": "Test that handleError always exits with code 1 and that fallback messaging is triggered for unknown error types."
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "Refactor CLI Error Handling to Use Unified Error Handler",
+        "description": "Replace all direct cli.Exit(err, 1) and similar error handling calls throughout the CLI codebase with the unified handleError(err) function to ensure consistent error handling and user experience.",
+        "details": "Systematically refactor all CLI error handling to use the unified error handler from Task 13. This involves: 1) Identifying and replacing all instances of direct cli.Exit(err, 1), os.Exit(1), log.Fatal(), and similar error handling patterns with calls to handleError(err), 2) Updating the action and actionWithClient functions in the CLI framework to use handleError() instead of returning errors directly to the CLI framework, 3) Ensuring all errors from ADOClient operations (NewADOClient, CreateWorkItem) are passed through handleError() rather than being handled inline, 4) Refactoring error handling in the main command's Action handler to use handleError() for all failure scenarios including missing environment variables, invalid flags, and API failures, 5) Removing redundant error message formatting since handleError() now provides user-friendly messages, 6) Ensuring that handleError() is called consistently across all error paths in the application, 7) Updating any custom error handling logic to leverage the error classification and unified messaging provided by handleError(). The refactoring should maintain the same exit codes (0 for success, 1 for errors) while providing more consistent and user-friendly error messages through the unified handler.",
+        "testStrategy": "Create integration tests that verify all error paths now use the unified error handler by: 1) Testing each error scenario (authentication failures, network errors, validation errors, rate limiting, malformed responses) and confirming they produce the expected user-friendly messages from handleError(), 2) Verifying that no direct cli.Exit() or os.Exit() calls remain in the codebase through static code analysis or grep searches, 3) Testing that all ADOClient errors are properly passed through handleError() by mocking various error conditions from the azure-devops-go-api library, 4) Confirming that action and actionWithClient functions no longer return errors to the CLI framework but instead call handleError() directly, 5) End-to-end testing of the complete CLI workflow to ensure error handling is consistent across all commands and scenarios, 6) Verifying that technical error details are logged appropriately while user-facing messages remain clear and actionable, 7) Testing edge cases where multiple errors might occur to ensure handleError() is called for the appropriate error in the chain.",
+        "status": "cancelled",
+        "dependencies": [
+          13,
+          10
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Identify All Direct Error Handling Calls in CLI Codebase",
+            "description": "Systematically search the CLI codebase to locate all instances of direct error handling calls such as cli.Exit(err, 1), os.Exit(1), log.Fatal(), and similar patterns that bypass the unified error handler.",
+            "dependencies": [],
+            "details": "Use code search tools or IDE features to find all direct process exit and fatal error calls. Document each instance with file and line references for targeted refactoring.",
+            "status": "cancelled",
+            "testStrategy": "Verify completeness by running static analysis or grep scripts to ensure no direct exit or fatal calls remain after refactoring."
+          },
+          {
+            "id": 2,
+            "title": "Refactor Error Handling Calls to Use handleError(err)",
+            "description": "Replace all identified direct error handling calls with calls to the unified handleError(err) function to ensure consistent error processing and messaging.",
+            "dependencies": [
+              "14.1"
+            ],
+            "details": "Update each code location to remove direct exit or fatal calls and invoke handleError(err) instead. Ensure that error propagation and exit codes remain consistent with previous behavior.",
+            "status": "cancelled",
+            "testStrategy": "Run integration tests for each CLI command to confirm that errors are routed through handleError and that exit codes are preserved."
+          },
+          {
+            "id": 3,
+            "title": "Update CLI Framework Functions to Use Unified Error Handler",
+            "description": "Modify the action and actionWithClient functions in the CLI framework to utilize handleError(err) for error handling instead of returning errors directly to the framework.",
+            "dependencies": [
+              "14.2"
+            ],
+            "details": "Refactor framework-level handlers so that all errors are passed to handleError, ensuring that user-facing error messages are consistent and technical details are logged as appropriate.",
+            "status": "cancelled",
+            "testStrategy": "Test CLI actions that previously returned errors to the framework and confirm that all errors are now processed by handleError with correct output."
+          },
+          {
+            "id": 4,
+            "title": "Refactor Main Command and ADOClient Error Handling",
+            "description": "Update the main command's Action handler and all ADOClient operation error handling (e.g., NewADOClient, CreateWorkItem) to use handleError(err) for all failure scenarios, including environment validation, flag errors, and API failures.",
+            "dependencies": [
+              "14.3"
+            ],
+            "details": "Ensure that all error paths in the main command and ADOClient logic are routed through handleError, removing any redundant error formatting or inline handling.",
+            "status": "cancelled",
+            "testStrategy": "Create and run integration tests for scenarios such as missing environment variables, invalid flags, and API errors, verifying that handleError produces the expected user-friendly messages."
+          },
+          {
+            "id": 5,
+            "title": "Remove Redundant Error Formatting and Ensure Consistency",
+            "description": "Eliminate any redundant or obsolete error message formatting now handled by handleError, and review all error paths to confirm consistent use of the unified error handler throughout the CLI application.",
+            "dependencies": [
+              "14.4"
+            ],
+            "details": "Audit the codebase for leftover custom error formatting or legacy error handling logic. Refactor or remove as needed to ensure all errors are processed by handleError and messaging is unified.",
+            "status": "cancelled",
+            "testStrategy": "Perform a final code review and run full CLI test suites to confirm that all error messages are consistent, user-friendly, and no direct exit or custom formatting remains."
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "title": "Add Unit Tests for Error Classification Helpers",
+        "description": "Create comprehensive unit tests for each error classification helper function (isAuthError, isNetworkError, isValidationError, isRateLimitError, isMalformedResponseError) with mock error scenarios and edge case coverage.",
+        "details": "Implement comprehensive unit tests for all five error classification helper functions from Task 12. Create a dedicated errors_test.go file with table-driven tests for each helper function. For each classification helper, create test cases that cover: 1) Direct error type matches (e.g., testing isAuthError with actual authentication errors from azure-devops-go-api), 2) Wrapped error scenarios using fmt.Errorf() and custom error wrapping to ensure the helpers can traverse error chains using errors.Unwrap(), 3) Standard library error types (net.Error for network errors, json.SyntaxError for malformed response errors), 4) HTTP status code based errors (401/403 for auth, 429 for rate limiting, 400/422 for validation), 5) Azure DevOps SDK specific error types and their proper identification, 6) Edge cases including nil errors, empty error messages, and deeply nested error chains. Use testify/mock or similar mocking framework to create controlled error scenarios. Each test should verify both positive cases (correct error type identification) and negative cases (ensuring helpers don't misclassify errors). Include benchmarks for performance testing of error classification logic. Add test coverage reporting to ensure all code paths in the helper functions are tested.",
+        "testStrategy": "Execute unit tests using 'go test -v ./...' and verify 100% test coverage for all error classification helpers using 'go test -cover'. Run table-driven tests for each helper function with at least 10 different error scenarios per function. Validate that each helper correctly identifies its target error type while rejecting other error types. Test error unwrapping functionality by creating nested error chains and ensuring helpers can traverse them. Use mock objects to simulate azure-devops-go-api errors and verify proper type assertion behavior. Run benchmarks to ensure error classification performance is acceptable. Verify test isolation by running tests in random order and parallel execution. Test edge cases including nil inputs, malformed error structures, and extremely deep error chains to ensure robust error handling.",
+        "status": "cancelled",
+        "dependencies": [
+          12
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set Up errors_test.go and Table-Driven Test Structure",
+            "description": "Create a new errors_test.go file and define table-driven test functions for each error classification helper (isAuthError, isNetworkError, isValidationError, isRateLimitError, isMalformedResponseError). Establish a consistent structure for test case definitions and result assertions.",
+            "dependencies": [],
+            "details": "Initialize the test file in the appropriate package. For each helper, define a table of test cases with input errors and expected boolean results. Use Go's testing framework and testify/assert for assertions.",
+            "status": "cancelled",
+            "testStrategy": "Verify that the test file compiles and runs with 'go test', and that each helper has a corresponding table-driven test function."
+          },
+          {
+            "id": 2,
+            "title": "Implement Direct and Wrapped Error Type Test Cases",
+            "description": "Add test cases for each helper covering direct error type matches and wrapped error scenarios. Use actual error types from azure-devops-go-api, standard library, and custom errors. Include cases with errors wrapped using fmt.Errorf and errors.Unwrap.",
+            "dependencies": [
+              "15.1"
+            ],
+            "details": "For each helper, create test cases with direct error instances (e.g., authentication errors for isAuthError) and errors wrapped in multiple layers. Ensure the helpers correctly traverse error chains.",
+            "status": "cancelled",
+            "testStrategy": "Run tests to confirm that helpers identify both direct and wrapped error types as expected, and do not misclassify unrelated errors."
+          },
+          {
+            "id": 3,
+            "title": "Add HTTP Status Code and SDK-Specific Error Test Cases",
+            "description": "Develop test cases for error helpers that involve HTTP status code-based errors (e.g., 401/403 for auth, 429 for rate limiting, 400/422 for validation) and Azure DevOps SDK-specific error types. Ensure correct identification and negative case coverage.",
+            "dependencies": [
+              "15.2"
+            ],
+            "details": "Simulate errors with relevant HTTP status codes and Azure DevOps SDK error types. Include both positive (should match) and negative (should not match) scenarios for each helper.",
+            "status": "cancelled",
+            "testStrategy": "Validate that helpers correctly classify errors based on status codes and SDK types, and do not misclassify unrelated status codes or error types."
+          },
+          {
+            "id": 4,
+            "title": "Test Edge Cases and Deeply Nested Error Chains",
+            "description": "Create test cases for edge conditions, including nil errors, empty error messages, and deeply nested error chains. Ensure helpers handle these scenarios gracefully and maintain correct classification.",
+            "dependencies": [
+              "15.3"
+            ],
+            "details": "Add cases where the error is nil, the error message is empty, or the error is nested several layers deep. Use testify/mock or similar to create controlled error scenarios.",
+            "status": "cancelled",
+            "testStrategy": "Confirm that helpers return false for nil and irrelevant errors, and true for deeply nested matching errors. Ensure no panics or unexpected behavior."
+          },
+          {
+            "id": 5,
+            "title": "Add Benchmarks and Test Coverage Reporting",
+            "description": "Implement benchmark tests for each error classification helper to measure performance. Integrate test coverage reporting to ensure all code paths are exercised.",
+            "dependencies": [
+              "15.4"
+            ],
+            "details": "Write benchmark functions for each helper using Go's testing.B. Run 'go test -cover' to check coverage and ensure 100% coverage for all helpers.",
+            "status": "cancelled",
+            "testStrategy": "Run benchmarks with 'go test -bench=.' and verify performance is acceptable. Use 'go test -cover' to confirm full code path coverage."
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "title": "Add Integration and Subprocess Tests for CLI Error Output and Exit Codes",
+        "description": "Create comprehensive integration and subprocess tests to verify that the CLI outputs actionable error messages to stderr and exits with code 1 for each error class, ensuring no sensitive data is leaked in error output.",
+        "details": "Implement integration and subprocess tests in a dedicated cli_error_integration_test.go file that validates the complete CLI error handling workflow. Create test scenarios for each error classification: authentication errors (invalid PAT, expired tokens), network errors (connection timeouts, DNS failures), validation errors (invalid work item types, missing required fields), rate limit errors (429 responses), and malformed response errors (invalid JSON, unexpected API responses). Use Go's os/exec package to spawn CLI subprocesses and capture both stdout, stderr, and exit codes. For each error class, create test cases that: 1) Trigger the specific error condition using mock servers or invalid inputs, 2) Verify the CLI exits with code 1, 3) Confirm error messages are written to stderr (not stdout), 4) Validate that error messages are user-friendly and actionable without exposing sensitive information like PAT tokens, internal URLs, or stack traces, 5) Test both direct SDK errors and wrapped errors to ensure proper error chain handling. Implement helper functions to set up mock Azure DevOps servers that return specific HTTP status codes and error responses. Create test utilities to validate that stderr output contains expected keywords (e.g., \"authentication failed\", \"network error\", \"invalid work item type\") while ensuring no sensitive data patterns are present. Include tests for edge cases like partial network failures, malformed JSON responses, and unexpected HTTP status codes.",
+        "testStrategy": "Execute integration tests using 'go test -v ./... -tags=integration' to run subprocess tests that spawn actual CLI instances. For each error class, verify: 1) CLI process exits with code 1 using cmd.ProcessState.ExitCode(), 2) Error messages appear on stderr using cmd.StderrPipe(), 3) No output appears on stdout except in specific scenarios, 4) Error messages contain actionable guidance without sensitive data using regex pattern matching. Create mock HTTP servers using httptest.Server to simulate Azure DevOps API error responses (401, 403, 429, 500, malformed JSON). Test error message content by searching for expected phrases and ensuring absence of sensitive patterns like PAT tokens, internal stack traces, or system paths. Validate that wrapped errors from the azure-devops-go-api library are properly handled and produce the same user-friendly output as direct errors. Run tests with various environment configurations (missing env vars, invalid URLs, network timeouts) to ensure comprehensive error scenario coverage. Use table-driven tests to systematically cover all error classifications and verify consistent error handling behavior across different failure modes.",
+        "status": "cancelled",
+        "dependencies": [
+          14,
+          13,
+          12
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Test Scenarios for Each CLI Error Classification",
+            "description": "Identify and document specific test cases for each error class: authentication errors (invalid PAT, expired tokens), network errors (timeouts, DNS failures), validation errors (invalid work item types, missing fields), rate limit errors (429 responses), and malformed response errors (invalid JSON, unexpected API responses).",
+            "dependencies": [],
+            "details": "Enumerate all error conditions to be simulated, ensuring coverage of both direct SDK errors and wrapped errors. Specify expected error messages and exit codes for each scenario.",
+            "status": "cancelled",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Mock Servers and Input Generators for Error Simulation",
+            "description": "Develop mock Azure DevOps servers and input generators to reliably trigger each error condition identified in the test scenarios.",
+            "dependencies": [
+              "16.1"
+            ],
+            "details": "Set up HTTP servers to return specific status codes and error payloads. Create utilities to generate invalid tokens, malformed requests, and simulate network failures for subprocess testing.",
+            "status": "cancelled",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Develop Integration and Subprocess Test Harness Using os/exec",
+            "description": "Create the cli_error_integration_test.go file and implement test harness logic to spawn CLI subprocesses, capture stdout, stderr, and exit codes for each scenario.",
+            "dependencies": [
+              "16.2"
+            ],
+            "details": "Use Go's os/exec package to run the CLI with various inputs and environment settings. Ensure tests can capture and analyze process output and exit status for validation.",
+            "status": "cancelled",
+            "testStrategy": "For each error scenario, run the CLI as a subprocess, capture outputs, and assert correct exit code and error stream usage."
+          },
+          {
+            "id": 4,
+            "title": "Validate Error Output for Actionability and Sensitive Data Leakage",
+            "description": "Implement assertions to verify that error messages are actionable, appear only on stderr, and do not leak sensitive information such as PAT tokens, internal URLs, or stack traces.",
+            "dependencies": [
+              "16.3"
+            ],
+            "details": "Create helper functions to scan stderr for required keywords and patterns, and to check for the absence of sensitive data using regex or string matching.",
+            "status": "cancelled",
+            "testStrategy": "For each test, assert that stderr contains expected error phrases and does not match any sensitive data patterns."
+          },
+          {
+            "id": 5,
+            "title": "Test Edge Cases and Error Chain Handling",
+            "description": "Add tests for edge cases such as partial network failures, malformed JSON responses, unexpected HTTP status codes, and ensure proper handling of both direct and wrapped errors.",
+            "dependencies": [
+              "16.4"
+            ],
+            "details": "Expand test coverage to include rare or complex failure modes and verify that error chains are correctly unwrapped and reported to the user.",
+            "status": "cancelled",
+            "testStrategy": "Simulate edge conditions and assert that the CLI's error output and exit codes remain correct and secure."
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "title": "Document CLI Error Messages and Resolutions in README and Help Output",
+        "description": "Create comprehensive documentation for all CLI error messages and their resolutions in both the README file and CLI help output, providing clear, actionable guidance for common errors without exposing sensitive information.",
+        "details": "Create comprehensive error documentation in two locations: 1) Add a \"Troubleshooting\" section to the README.md file with detailed error scenarios and resolutions, organized by error category (Authentication, Network, Validation, Rate Limiting, Malformed Responses). For each category, document common error messages users will see, root causes, and step-by-step resolution instructions. Include examples like \"Error: Authentication failed\" with solutions such as \"Verify your Personal Access Token is valid and has appropriate permissions\" and \"Check that your PAT hasn't expired in Azure DevOps settings\". 2) Enhance CLI help output by adding a --help-errors flag or similar mechanism that displays condensed troubleshooting information directly in the terminal. Ensure all documentation follows these principles: use clear, non-technical language accessible to all users; provide actionable steps rather than generic advice; include links to relevant Azure DevOps documentation; never expose sensitive data like actual PAT values, internal error codes, or system paths; organize content logically with consistent formatting; include common scenarios like network connectivity issues, permission problems, and API rate limiting. The documentation should reference the error classification system and unified error handler to ensure consistency between actual error messages and documented solutions.",
+        "testStrategy": "Verify documentation completeness by cross-referencing with error classification helpers from Task 12 to ensure all error categories are documented. Test that each documented error scenario matches the actual error messages produced by the unified error handler from Task 13. Validate that resolution steps are actionable by following them in test environments. Review documentation for sensitive data exposure using automated scanning tools and manual review. Test the CLI help output functionality (--help-errors or similar) to ensure it displays correctly formatted troubleshooting information. Conduct user testing with the documentation to verify clarity and effectiveness of resolution steps. Ensure all external links (Azure DevOps documentation) are valid and current. Verify that documentation formatting is consistent and renders properly in both README markdown and CLI terminal output.",
+        "status": "cancelled",
+        "dependencies": [
+          13,
+          12
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Gather and Categorize CLI Error Messages",
+            "description": "Collect all possible CLI error messages generated by the application, referencing the unified error handler and error classification system. Organize these errors into categories such as Authentication, Network, Validation, Rate Limiting, and Malformed Responses.",
+            "dependencies": [],
+            "details": "Review the CLI codebase and error handler to extract every user-facing error message. Assign each error to a logical category for documentation consistency.",
+            "status": "cancelled",
+            "testStrategy": "Cross-reference the collected errors with the error classification helpers and unified error handler to ensure completeness and accuracy."
+          },
+          {
+            "id": 2,
+            "title": "Draft Troubleshooting Section for README.md",
+            "description": "Create a detailed 'Troubleshooting' section in README.md, documenting each error category with common error messages, root causes, and step-by-step resolution instructions. Ensure language is clear, actionable, and non-technical.",
+            "dependencies": [
+              "17.1"
+            ],
+            "details": "For each error, provide a user-friendly explanation, actionable resolution steps, and example scenarios. Include references to relevant Azure DevOps documentation where appropriate.",
+            "status": "cancelled",
+            "testStrategy": "Review the README to confirm all error categories and messages are covered, and that instructions are clear and actionable for non-technical users."
+          },
+          {
+            "id": 3,
+            "title": "Implement --help-errors Flag in CLI",
+            "description": "Enhance the CLI help output by adding a --help-errors flag (or similar mechanism) that displays condensed troubleshooting information for common errors directly in the terminal.",
+            "dependencies": [
+              "17.1"
+            ],
+            "details": "Design the help output to summarize error categories, common messages, and concise resolution steps, ensuring consistency with the README documentation.",
+            "status": "cancelled",
+            "testStrategy": "Test the CLI with the --help-errors flag to verify that all documented errors are included, information is concise, and formatting is clear."
+          },
+          {
+            "id": 4,
+            "title": "Ensure Documentation Consistency and Security",
+            "description": "Review both the README and CLI help output to ensure error documentation is consistent, follows the error classification system, and does not expose sensitive information such as PAT values, internal codes, or system paths.",
+            "dependencies": [
+              "17.2",
+              "17.3"
+            ],
+            "details": "Perform a thorough audit of all documentation content for consistency, logical organization, and security best practices.",
+            "status": "cancelled",
+            "testStrategy": "Validate that no sensitive data is present and that all error messages and resolutions are aligned between the README and CLI help output."
+          },
+          {
+            "id": 5,
+            "title": "Validate Documentation Against Actual CLI Behavior",
+            "description": "Test the CLI to trigger each documented error scenario, confirming that the error messages and suggested resolutions in the documentation match the actual CLI output and behavior.",
+            "dependencies": [
+              "17.4"
+            ],
+            "details": "Systematically reproduce each error using the CLI, comparing the observed output to the documentation for accuracy and completeness.",
+            "status": "cancelled",
+            "testStrategy": "For each error scenario, verify that the documentation provides correct guidance and that the CLI output matches the documented messages and solutions."
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-29T13:43:10.913Z",
+      "updated": "2025-07-29T22:15:42.793Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

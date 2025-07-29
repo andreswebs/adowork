@@ -1,0 +1,115 @@
+# Product Requirements Document (PRD)
+
+## Project Title
+Azure DevOps Work Item CLI Tool (Go)
+
+<context>
+# Overview
+A command-line tool written in Go that allows users to create any type of work item in Azure DevOps Boards using the Azure DevOps REST API and a Personal Access Token (PAT). The tool is designed for automation and scripting, supporting non-interactive, flag-driven usage with robust error handling and optional debug logging.
+
+# Core Features
+- Allow users to create any Azure DevOps work item type (e.g., User Story, Bug, Task, Epic) via CLI.
+- Support specifying work item type, title, description, and parent work item ID via flags.
+- Assign new work items to the PAT owner by default.
+- Output the created work item URL on success.
+- Support a --dry-run mode to preview the payload without making an API call.
+- Enable debug logging to stderr via a DEBUG environment variable.
+- Read all Azure DevOps connection details (organization, project, PAT) from environment variables.
+- Fail fast and clearly if required input is missing.
+
+# User Experience
+- CLI built with urfave/cli.
+- Required flags: --type, --title.
+- Optional flags: --description, --parent, --dry-run.
+- Reads AZDO_ORG, AZDO_PROJECT, AZDO_PAT from environment.
+- Logging to stderr if DEBUG is set.
+- One work item per invocation.
+- Non-interactive, flag-driven usage only; fails if required fields are missing.
+- Example usage:
+  ```sh
+  AZDO_ORG=myorg AZDO_PROJECT=myproj AZDO_PAT=xxxx \
+    go run main.go --type=Bug --title="Fix login error" --description="Error on login page when..."
+
+  AZDO_ORG=myorg AZDO_PROJECT=myproj AZDO_PAT=xxxx \
+    go run main.go --type=Task --title="Write docs" --dry-run
+  ```
+</context>
+<PRD>
+# Technical Architecture
+- Written in Go, using urfave/cli for argument parsing.
+- Minimal dependencies beyond urfave/cli and Azure DevOps REST client.
+- Reads AZDO_ORG, AZDO_PROJECT, and AZDO_PAT from environment variables.
+- Assigns work items to PAT owner by default.
+- Calls Azure DevOps REST API to create work items.
+- Outputs work item URL on success.
+- Logging to stderr if DEBUG is set.
+
+# Development Roadmap
+## MVP Requirements
+- The CLI must require --type and --title flags.
+- The CLI must accept --description and --parent as optional flags.
+- The CLI must read AZDO_ORG, AZDO_PROJECT, and AZDO_PAT from environment variables and exit with an error if any are missing.
+- The CLI must assign the work item to the PAT owner by default.
+- The CLI must output the work item URL after successful creation.
+- The CLI must support a --dry-run flag to print the payload and exit without making an API call.
+- The CLI must log to stderr if DEBUG is set in the environment.
+- The CLI must create only one work item per invocation.
+- Clear error messages for missing input or API failures.
+
+## Future Enhancements
+- Support for custom fields, tags, or assignment to other users.
+- Config file or multi-item batch creation.
+- Interactive prompts for missing fields.
+
+# Logical Dependency Chain
+- Foundation: CLI argument parsing, environment variable validation, and error handling.
+- Next: Implement Azure DevOps REST API client and work item creation logic.
+- Then: Add support for --dry-run and debug logging.
+- Finalize: Output formatting and acceptance criteria validation.
+
+# Risks and Mitigations
+- Technical challenges with Azure DevOps API integration: Mitigated by using official REST API documentation and robust error handling.
+- Ensuring correct assignment to PAT owner: Validate with test PATs and user feedback.
+- Resource constraints: Keep MVP scope minimal and focused.
+- MVP definition drift: Strictly adhere to MVP requirements and acceptance criteria.
+
+# Appendix
+## User Stories
+1. As a developer, I want to create a work item of any type in Azure DevOps from the command line, so I can automate ticket creation.
+2. As a user, I want to specify the title and description of the work item via flags, so I can provide details non-interactively.
+3. As a user, I want to optionally set a parent work item ID, so I can link new items to epics or features.
+4. As a user, I want the tool to output the URL of the created work item, so I can quickly access it.
+5. As a user, I want to preview the payload with --dry-run, so I can verify input before creating tickets.
+6. As a user, I want to enable debug logging via an environment variable, so I can troubleshoot issues.
+
+## Goals
+- Allow users to create any Azure DevOps work item type (e.g., User Story, Bug, Task, Epic) via CLI.
+- Support specifying work item type, title, description, and parent work item ID via flags.
+- Assign new work items to the PAT owner by default.
+- Output the created work item URL on success.
+- Support a --dry-run mode to preview the payload without making an API call.
+- Enable debug logging to stderr via a DEBUG environment variable.
+- Read all Azure DevOps connection details (organization, project, PAT) from environment variables.
+- Fail fast and clearly if required input is missing.
+
+## Non-Goals
+- No interactive prompts or multi-item creation in MVP.
+- No support for custom fields, tags, or assignment to other users in MVP.
+- No config file support (env vars only).
+
+## Acceptance Criteria
+- [ ] CLI creates a work item of any type with required fields.
+- [ ] CLI fails with a clear error if required env vars or flags are missing.
+- [ ] CLI outputs the work item URL on success.
+- [ ] --dry-run prints the payload and does not call the API.
+- [ ] Logging to stderr is enabled only if DEBUG is set.
+- [ ] Only one work item is created per invocation.
+
+## Out of Scope
+- Interactive prompts for missing fields.
+- Support for custom fields, tags, or assignment to other users.
+- Config file or multi-item batch creation.
+
+## Open Questions
+- Should the tool support additional fields or batch creation in future versions?
+</PRD>
