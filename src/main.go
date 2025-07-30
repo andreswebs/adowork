@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 
 	"github.com/microsoft/azure-devops-go-api/azuredevops/webapi"
@@ -24,12 +25,7 @@ type ADOClientInterface interface {
 
 // containsString returns true if a string is in a slice.
 func containsString(slice []string, s string) bool {
-	for _, v := range slice {
-		if v == s {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(slice, s)
 }
 
 // isValidWorkItemType checks if the given type is a valid, common Azure DevOps work item type.
@@ -76,6 +72,7 @@ func action(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		errorHandler(FormatError(err, "creating ADO client"))
 	}
+
 	return actionWithClient(ctx, cmd, client)
 }
 
@@ -120,7 +117,7 @@ func actionWithClient(ctx context.Context, cmd *cli.Command, client ADOClientInt
 		errorHandler(fmt.Errorf("Failed to create work item: received no ID from API"))
 	}
 
-	fmt.Printf("Successfully created work item: %s\n", client.GetWorkItemURL(*workItem.Id))
+	fmt.Print(client.GetWorkItemURL(*workItem.Id))
 
 	return nil
 }
