@@ -84,7 +84,7 @@ func main() {
 }
 
 func actionDispatch(ctx context.Context, cmd *cli.Command, cfg Config) error {
-	client, err := NewADOClient(cfg.Organization, cfg.Project, cfg.PAT)
+	client, err := NewADOClient(cfg.Organization, cfg.Project, cfg.PAT, cfg.BaseURL)
 	if err != nil {
 		GetErrorHandler()(FormatError(err, "creating ADO client"))
 	}

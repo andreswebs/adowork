@@ -1607,7 +1607,7 @@
         "description": "Resolve race conditions in test code that overrides the global errorHandler variable without proper synchronization by implementing thread-safe testing mechanisms.",
         "details": "This task addresses the race condition vulnerability in test code that unsafely overrides the global errorHandler variable. The implementation should include: 1) Analyze all test files that modify the global errorHandler and identify potential race conditions when tests run in parallel. 2) Implement one of two solutions: either add t.Parallel() restrictions to prevent concurrent execution of tests that modify global state, or implement proper synchronization mechanisms using mutexes or channels. 3) If choosing synchronization, create a thread-safe wrapper around errorHandler access that uses sync.RWMutex to coordinate read/write operations. 4) For the t.Parallel() approach, mark conflicting tests with appropriate parallel execution constraints and document why certain tests cannot run concurrently. 5) Consider refactoring tests to use dependency injection instead of global state modification where feasible. 6) Add proper cleanup mechanisms in test teardown to restore original errorHandler state. 7) Implement test isolation by ensuring each test gets a clean errorHandler state regardless of execution order.",
         "testStrategy": "Testing should verify race condition elimination and maintain test reliability: 1) Run the test suite multiple times with parallel execution enabled to verify no race conditions occur during concurrent test execution. 2) Create specific race condition tests that attempt to trigger the original issue by running multiple goroutines that simultaneously access and modify the errorHandler. 3) Use Go's race detector (go test -race) to verify no data races are detected in the test suite. 4) Test both sequential and parallel test execution modes to ensure tests pass in both scenarios. 5) Verify that test isolation works correctly by running tests in random order and ensuring consistent results. 6) Mock testing scenarios where errorHandler modifications occur during concurrent operations to validate synchronization mechanisms. 7) Performance testing to ensure synchronization overhead doesn't significantly impact test execution time.",
-        "status": "in-progress",
+        "status": "done",
         "dependencies": [
           2
         ],
@@ -1629,8 +1629,8 @@
             "dependencies": [
               "6.1"
             ],
-            "details": "Review the audit results to find tests that could run concurrently and access or modify errorHandler unsafely. Use Go's race detector (`go test -race`) to confirm the presence of race conditions in these scenarios.",
-            "status": "in-progress",
+            "details": "Review the audit results to find tests that could run concurrently and access or modify errorHandler unsafely. Use Go's race detector (`go test -race`) to confirm the presence of race conditions in these scenarios.\n<info added on 2025-07-30T15:20:23.090Z>\nPlanned steps for task 6.2 (test coverage for error classification helpers):\n\n1. Review the test coverage for all error classification helpers (isAuthError, isNetworkError, isValidationError, isRateLimitError, isMalformedResponseError).\n2. Identify any missing or insufficient test cases, especially for edge cases and negative scenarios.\n3. Ensure that tests only expect type-based logic (no string-based error matching).\n4. Update or add tests in the appropriate test file(s) (likely src/errors_test.go), covering all helper functions and relevant error types.\n5. Refactor test code for clarity, maintainability, and idiomatic Go style.\n6. Run the test suite to verify all helpers are correctly tested and passing.\n7. Log this plan in the subtask's details.\n\nProceeding to implementation next.\n</info added on 2025-07-30T15:20:23.090Z>",
+            "status": "done",
             "testStrategy": "Run the test suite with the race detector enabled and document any detected race conditions."
           },
           {
@@ -1640,8 +1640,8 @@
             "dependencies": [
               "6.2"
             ],
-            "details": "Wrap all accesses and modifications to errorHandler in a thread-safe interface using sync.RWMutex. Refactor test code to use this wrapper, ensuring no unsynchronized access remains.",
-            "status": "pending",
+            "details": "Wrap all accesses and modifications to errorHandler in a thread-safe interface using sync.RWMutex. Refactor test code to use this wrapper, ensuring no unsynchronized access remains.\n<info added on 2025-07-30T15:24:19.174Z>\nPlanned steps for task 6.3 (Implement Thread-Safe Access to errorHandler):\n\n1. Identify all places in the codebase (especially tests) where the global errorHandler variable is accessed or modified.\n2. Design a thread-safe wrapper for errorHandler using sync.RWMutex to guard all reads and writes.\n3. Refactor the code and tests to use this thread-safe interface, ensuring no direct unsynchronized access remains.\n4. Update or add comments to clarify the synchronization approach.\n5. Run the test suite with the race detector (go test -race) to confirm that all race conditions are resolved.\n6. Log this plan in the subtask's details.\n\nProceeding to implementation next.\n</info added on 2025-07-30T15:24:19.174Z>",
+            "status": "done",
             "testStrategy": "Re-run the test suite with the race detector to verify that no race conditions are reported after synchronization is implemented."
           },
           {
@@ -1652,7 +1652,7 @@
               "6.3"
             ],
             "details": "Implement setup and teardown logic in each relevant test to save the original errorHandler before modification and restore it after the test completes, using defer or test cleanup hooks.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Add tests that intentionally run conflicting tests in parallel to verify that errorHandler state is correctly isolated and restored."
           },
           {
@@ -1663,7 +1663,7 @@
               "6.4"
             ],
             "details": "Update test and production code to accept errorHandler as a parameter or via dependency injection, reducing reliance on the global variable and improving testability and thread safety.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify that refactored tests pass and that errorHandler is no longer shared globally, using code review and automated tests."
           }
         ]
@@ -1674,7 +1674,7 @@
         "description": "Replace hardcoded 'https://dev.azure.com/' URL patterns throughout the codebase with configurable base URL support through environment variables or configuration files to enable support for different Azure DevOps instances.",
         "details": "This task involves making the Azure DevOps base URL configurable to support different instances (cloud, on-premises, or custom domains). The implementation should include: 1) Identify all hardcoded 'https://dev.azure.com/' occurrences in the codebase and catalog their usage patterns. 2) Add a new configuration parameter 'AZURE_DEVOPS_BASE_URL' to the configuration system with 'https://dev.azure.com/' as the default value. 3) Create a URLBuilder utility class or service that constructs Azure DevOps URLs using the configurable base URL, handling proper path concatenation and URL encoding. 4) Replace all hardcoded URL construction with calls to the URLBuilder service, ensuring consistent URL formatting across the application. 5) Update environment variable documentation and configuration examples to include the new AZURE_DEVOPS_BASE_URL parameter. 6) Implement validation for the base URL format to ensure it's a valid URL and follows expected patterns (e.g., must be HTTPS, proper domain format). 7) Consider backward compatibility by maintaining the default behavior when the configuration is not provided. The URLBuilder should handle various Azure DevOps URL patterns including organization URLs, project URLs, and API endpoints while maintaining proper URL structure and encoding.",
         "testStrategy": "Testing should verify configurable URL functionality across different scenarios: 1) Unit tests for the URLBuilder utility with various base URL configurations including default Azure DevOps cloud URL, on-premises server URLs, and custom domain scenarios. Test proper URL concatenation, encoding, and format validation. 2) Integration tests that verify the application works correctly with different base URL configurations by mocking Azure DevOps responses from alternative endpoints. 3) Configuration validation tests to ensure invalid URLs are rejected with appropriate error messages (malformed URLs, non-HTTPS URLs, empty values). 4) Environment variable tests to verify the configuration loading works correctly when AZURE_DEVOPS_BASE_URL is set, unset, or contains invalid values. 5) Regression tests to ensure all existing functionality continues to work with the default configuration. 6) End-to-end tests with a test Azure DevOps instance using a non-standard base URL to verify complete functionality. Test both successful operations and error scenarios to ensure proper URL construction in all code paths.",
-        "status": "pending",
+        "status": "in-progress",
         "dependencies": [
           3
         ],
@@ -1685,8 +1685,8 @@
             "title": "Catalog All Hardcoded Azure DevOps Base URL Usages",
             "description": "Identify and document every occurrence of the hardcoded 'https://dev.azure.com/' base URL throughout the codebase, including all usage patterns (API endpoints, organization/project URLs, etc.).",
             "dependencies": [],
-            "details": "Perform a comprehensive search for all instances of the hardcoded Azure DevOps base URL. Record the context and usage pattern for each occurrence to inform subsequent refactoring.",
-            "status": "pending",
+            "details": "Perform a comprehensive search for all instances of the hardcoded Azure DevOps base URL. Record the context and usage pattern for each occurrence to inform subsequent refactoring.\n<info added on 2025-07-30T15:30:24.605Z>\nPlan for subtask 7.1 (Catalog All Hardcoded Azure DevOps Base URL Usages):\n\n1. Search the codebase for all occurrences of the string 'https://dev.azure.com/'.\n2. For each occurrence, record the file path, line number, and code context (function or method, if applicable).\n3. Categorize each usage by type: API endpoint, organization/project URL, UI link, or other.\n4. Create a table or list summarizing all findings, to be used as a checklist for later refactoring.\n5. Review the catalog for completeness and accuracy before proceeding to implementation.\n\nNext step: perform the search and document the results in the subtask details before starting code changes.\n</info added on 2025-07-30T15:30:24.605Z>\n<info added on 2025-07-30T15:31:08.558Z>\nCatalog of hardcoded 'https://dev.azure.com/' base URL usages (2025-07-30):\n\n1. File: src/main_test.go\n   - Line 38: `return fmt.Sprintf(\"https://dev.azure.com/mock-org/mock-project/_workitems/edit/%d\", workItemID)`\n   - Context: mockADOClient.GetWorkItemURL (test mock implementation)\n   - Type: UI link (test)\n\n2. File: src/config.go\n   - Line 93: `organizationURL := \"https://dev.azure.com/\" + org`\n   - Context: NewADOClient (constructs organization URL for API connection)\n   - Type: API endpoint base\n\n   - Line 148: `\"url\": fmt.Sprintf(\"https://dev.azure.com/%s/%s/_apis/wit/workItems/%d\", ...)`\n   - Context: Patch document for parent relationship in work item creation\n   - Type: API endpoint\n\n   - Line 176: `return fmt.Sprintf(\"https://dev.azure.com/%s/%s/_workitems/edit/%d\", ...)`\n   - Context: ADOClient.GetWorkItemURL (production code)\n   - Type: UI link\n\nSummary: All hardcoded usages are in src/config.go (production) and src/main_test.go (test). These include organization URL construction, API endpoint URLs, and UI work item links. This catalog will be used as a checklist for refactoring to use a configurable base URL.\n\nNext step: proceed to implementation of configuration changes and URL builder utility.\n</info added on 2025-07-30T15:31:08.558Z>",
+            "status": "done",
             "testStrategy": "Peer review the catalog to ensure completeness and accuracy; verify that all relevant code paths are covered."
           },
           {
@@ -1696,8 +1696,8 @@
             "dependencies": [
               "7.1"
             ],
-            "details": "Update the configuration schema and environment variable documentation to support the new parameter. Ensure backward compatibility by using the default value if the parameter is not set.",
-            "status": "pending",
+            "details": "Update the configuration schema and environment variable documentation to support the new parameter. Ensure backward compatibility by using the default value if the parameter is not set.\n<info added on 2025-07-30T15:31:44.862Z>\n1. Update the configuration struct and loading logic to support a new parameter: AZURE_DEVOPS_BASE_URL.\n2. Set the default value to 'https://dev.azure.com/' if the environment variable is not set.\n3. Update environment variable documentation and configuration examples to include AZURE_DEVOPS_BASE_URL.\n4. Ensure backward compatibility: if the new variable is not set, all existing functionality should continue to work as before.\n5. Prepare unit tests to verify configuration loading with and without the environment variable set, and with custom values.\n\nNext step: implement the configuration changes in code and update documentation accordingly.\n</info added on 2025-07-30T15:31:44.862Z>",
+            "status": "in-progress",
             "testStrategy": "Unit test configuration loading with and without the environment variable set; verify default and custom values are handled correctly."
           },
           {
@@ -1937,7 +1937,7 @@
     ],
     "metadata": {
       "created": "2025-07-30T11:49:01.064Z",
-      "updated": "2025-07-30T15:19:28.468Z",
+      "updated": "2025-07-30T15:32:13.182Z",
       "description": "Sprint tag for issues found in code review on July 30, 2025"
     }
   }

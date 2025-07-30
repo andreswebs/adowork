@@ -15,20 +15,27 @@ type Config struct {
 	Organization string `validate:"required" env:"ADO_ORG"`
 	Project      string `validate:"required" env:"ADO_PROJECT"`
 	PAT          string `validate:"required" env:"ADO_PAT"`
+	BaseURL      string `env:"ADO_BASE_URL"`
 }
 
 const (
 	EnvADOOrg     = "ADO_ORG"
 	EnvADOProject = "ADO_PROJECT"
 	EnvADOPAT     = "ADO_PAT"
+	EnvADOBaseURL = "ADO_BASE_URL"
 )
 
 // readConfigFromEnv reads ADO_* environment variables and returns a Config struct.
 func readConfigFromEnv() Config {
+	baseURL := os.Getenv(EnvADOBaseURL)
+	if baseURL == "" {
+		baseURL = "https://dev.azure.com/"
+	}
 	return Config{
 		Organization: os.Getenv(EnvADOOrg),
 		Project:      os.Getenv(EnvADOProject),
 		PAT:          os.Getenv(EnvADOPAT),
+		BaseURL:      baseURL,
 	}
 }
 
@@ -79,18 +86,21 @@ type ADOClient struct {
 	Organization string
 	Project      string
 	PAT          string
+	BaseURL      string
 	Connection   *azuredevops.Connection
 	WITClient    workitemtracking.Client
 }
 
 // NewADOClient creates a new ADOClient using the official azure-devops-go-api library.
-func NewADOClient(org, project, pat string) (*ADOClient, error) {
+func NewADOClient(org, project, pat string, baseURL string) (*ADOClient, error) {
 	if org == "" || project == "" || pat == "" {
 		return nil, fmt.Errorf("organization, project, and PAT are required")
 	}
-
+	if baseURL == "" {
+		baseURL = "https://dev.azure.com/"
+	}
 	// Create connection using the official library
-	organizationURL := "https://dev.azure.com/" + org
+	organizationURL := baseURL + org
 	connection := azuredevops.NewPatConnection(organizationURL, pat)
 
 	// Create work item tracking client
@@ -104,6 +114,7 @@ func NewADOClient(org, project, pat string) (*ADOClient, error) {
 		Organization: org,
 		Project:      project,
 		PAT:          pat,
+		BaseURL:      baseURL,
 		Connection:   connection,
 		WITClient:    witClient,
 	}, nil
@@ -145,8 +156,8 @@ func (c *ADOClient) BuildWorkItemPatchDocument(title, description string, parent
 			Path: stringPtr("/relations/-"),
 			Value: map[string]interface{}{
 				"rel": "System.LinkTypes.Hierarchy-Reverse",
-				"url": fmt.Sprintf("https://dev.azure.com/%s/%s/_apis/wit/workItems/%d",
-					c.Organization, c.Project, *parentID),
+				"url": fmt.Sprintf("%s%s/%s/_apis/wit/workItems/%d",
+					c.getBaseURL(), c.Organization, c.Project, *parentID),
 			},
 		})
 	}
@@ -173,13 +184,25 @@ func (c *ADOClient) CreateWorkItem(ctx context.Context, workItemType string, pat
 
 // GetWorkItemURL returns the URL for accessing a work item in the Azure DevOps web interface.
 func (c *ADOClient) GetWorkItemURL(workItemID int) string {
-	return fmt.Sprintf("https://dev.azure.com/%s/%s/_workitems/edit/%d",
-		c.Organization, c.Project, workItemID)
+	return fmt.Sprintf("%s%s/%s/_workitems/edit/%d",
+		c.getBaseURL(), c.Organization, c.Project, workItemID)
 }
 
 // stringPtr is a helper function to return a pointer to a string.
 func stringPtr(s string) *string {
 	return &s
+}
+
+// getBaseURL returns the base URL for Azure DevOps, ensuring it ends with a slash.
+func (c *ADOClient) getBaseURL() string {
+	base := c.BaseURL
+	if base == "" {
+		base = "https://dev.azure.com/"
+	}
+	if base[len(base)-1] != '/' {
+		base += "/"
+	}
+	return base
 }
 
 // Error handling utilities for Azure DevOps API errors
