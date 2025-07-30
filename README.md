@@ -4,7 +4,7 @@ A simple CLI tool to create Azure DevOps work items.
 
 ## AI usage
 
-This repository was originally implemented from scratch with AI using GitHub Copilot in a single running session. The whole session took a full day's work (~8h).
+This repository was originally implemented from scratch with AI using GitHub Copilot in a single running session. The whole session took a full day's work (~8h) - while multi-tasking on other things :)
 
 See the following reports for more details:
 
