@@ -1,23 +1,10 @@
 package main
 
 import (
-	"context"
-	"errors"
 	"fmt"
 	"os"
 	"regexp"
-
-	"github.com/microsoft/azure-devops-go-api/azuredevops"
-	"github.com/microsoft/azure-devops-go-api/azuredevops/webapi"
-	"github.com/microsoft/azure-devops-go-api/azuredevops/workitemtracking"
 )
-
-type Config struct {
-	Organization string `validate:"required" env:"ADO_ORG"`
-	Project      string `validate:"required" env:"ADO_PROJECT"`
-	PAT          string `validate:"required" env:"ADO_PAT"`
-	BaseURL      string `env:"ADO_BASE_URL"`
-}
 
 const (
 	EnvADOOrg         string = "ADO_ORG"
@@ -27,19 +14,42 @@ const (
 	defaultADOBaseURL string = "https://dev.azure.com"
 )
 
+type Config struct {
+	Organization string `validate:"required" env:"ADO_ORG"`
+	Project      string `validate:"required" env:"ADO_PROJECT"`
+	PAT          string `validate:"required" env:"ADO_PAT"`
+	BaseURL      string `env:"ADO_BASE_URL"`
+}
+
 // readConfigFromEnv reads ADO_* environment variables and returns a Config struct.
 func readConfigFromEnv() Config {
-	return Config{
+	c := Config{
 		Organization: os.Getenv(EnvADOOrg),
 		Project:      os.Getenv(EnvADOProject),
 		PAT:          os.Getenv(EnvADOPAT),
 		BaseURL:      os.Getenv(EnvADOBaseURL),
 	}
+
+	c.BaseURL = c.normalizeBaseURL()
+
+	return c
+}
+
+// normalizeBaseURL returns the base URL for Azure DevOps, ensuring it does not end with a slash.
+func (c *Config) normalizeBaseURL() string {
+	baseURL := c.BaseURL
+	if baseURL == "" {
+		baseURL = defaultADOBaseURL
+	} else {
+		re := regexp.MustCompile(`/+$`)
+		baseURL = re.ReplaceAllString(baseURL, "")
+	}
+	return baseURL
 }
 
 // checkMissing checks that all required fields in Config are non-empty.
 // Returns an error if any are missing.
-func (c Config) checkMissing() (missing []string, err error) {
+func (c *Config) checkMissing() (missing []string, err error) {
 	if c.Organization == "" {
 		missing = append(missing, EnvADOOrg)
 	}
@@ -48,6 +58,9 @@ func (c Config) checkMissing() (missing []string, err error) {
 	}
 	if c.PAT == "" {
 		missing = append(missing, EnvADOPAT)
+	}
+	if c.BaseURL == "" {
+		missing = append(missing, EnvADOBaseURL)
 	}
 	err = formatMissingEnvError(missing)
 	return
@@ -74,179 +87,4 @@ func loadConfig() (cfg Config, err error) {
 	cfg = readConfigFromEnv()
 	_, err = cfg.checkMissing()
 	return
-}
-
-// ADOClient is the Azure DevOps API client structure using the official library.
-type ADOClient struct {
-	Organization string
-	Project      string
-	PAT          string
-	BaseURL      string
-	Connection   *azuredevops.Connection
-	WITClient    workitemtracking.Client
-}
-
-// NewADOClient creates a new ADOClient using the official azure-devops-go-api library.
-func NewADOClient(org, project, pat string, baseURL string) (*ADOClient, error) {
-	if org == "" || project == "" || pat == "" {
-		return nil, fmt.Errorf("organization, project, and PAT are required")
-	}
-
-	if baseURL == "" {
-		baseURL = defaultADOBaseURL
-	} else {
-		re := regexp.MustCompile(`/+$`)
-		baseURL = re.ReplaceAllString(baseURL, "")
-	}
-
-	organizationURL := fmt.Sprintf("%s/%s", baseURL, org)
-	connection := azuredevops.NewPatConnection(organizationURL, pat)
-	ctx := context.Background()
-	witClient, err := workitemtracking.NewClient(ctx, connection)
-	if err != nil {
-		return nil, FormatError(err, "Creating work item tracking client")
-	}
-
-	return &ADOClient{
-		Organization: org,
-		Project:      project,
-		PAT:          pat,
-		BaseURL:      baseURL,
-		Connection:   connection,
-		WITClient:    witClient,
-	}, nil
-}
-
-// BuildWorkItemPatchDocument constructs the JSON patch document for creating or updating a work item.
-func (c *ADOClient) BuildWorkItemPatchDocument(title, description string, parentID *int, assignedTo string) ([]webapi.JsonPatchOperation, error) {
-	var patchDoc []webapi.JsonPatchOperation
-
-	// Add title field
-	patchDoc = append(patchDoc, webapi.JsonPatchOperation{
-		Op:    &webapi.OperationValues.Add,
-		Path:  stringPtr("/fields/System.Title"),
-		Value: title,
-	})
-
-	// Add description field if provided
-	if description != "" {
-		patchDoc = append(patchDoc, webapi.JsonPatchOperation{
-			Op:    &webapi.OperationValues.Add,
-			Path:  stringPtr("/fields/System.Description"),
-			Value: description,
-		})
-	}
-
-	// Add assigned to field if provided
-	if assignedTo != "" {
-		patchDoc = append(patchDoc, webapi.JsonPatchOperation{
-			Op:    &webapi.OperationValues.Add,
-			Path:  stringPtr("/fields/System.AssignedTo"),
-			Value: assignedTo,
-		})
-	}
-
-	// Add parent relationship if specified
-	if parentID != nil {
-		patchDoc = append(patchDoc, webapi.JsonPatchOperation{
-			Op:   &webapi.OperationValues.Add,
-			Path: stringPtr("/relations/-"),
-			Value: map[string]interface{}{
-				"rel": "System.LinkTypes.Hierarchy-Reverse",
-				"url": fmt.Sprintf("%s%s/%s/_apis/wit/workItems/%d",
-					c.getBaseURL(), c.Organization, c.Project, *parentID),
-			},
-		})
-	}
-
-	return patchDoc, nil
-}
-
-// CreateWorkItem creates a new work item using the official Azure DevOps Go API library.
-func (c *ADOClient) CreateWorkItem(ctx context.Context, workItemType string, patchDoc []webapi.JsonPatchOperation) (*workitemtracking.WorkItem, error) {
-	// Create the work item using the typed client
-	args := workitemtracking.CreateWorkItemArgs{
-		Document: &patchDoc,
-		Project:  &c.Project,
-		Type:     &workItemType,
-	}
-
-	workItem, err := c.WITClient.CreateWorkItem(ctx, args)
-	if err != nil {
-		return nil, FormatError(err, "Creating work item")
-	}
-
-	return workItem, nil
-}
-
-// GetWorkItemURL returns the URL for accessing a work item in the Azure DevOps web interface.
-func (c *ADOClient) GetWorkItemURL(workItemID int) string {
-	return fmt.Sprintf("%s%s/%s/_workitems/edit/%d",
-		c.getBaseURL(), c.Organization, c.Project, workItemID)
-}
-
-// stringPtr is a helper function to return a pointer to a string.
-func stringPtr(s string) *string {
-	return &s
-}
-
-// getBaseURL returns the base URL for Azure DevOps, ensuring it ends with a slash.
-func (c *ADOClient) getBaseURL() string {
-	base := c.BaseURL
-	if base == "" {
-		base = "https://dev.azure.com/"
-	}
-	if base[len(base)-1] != '/' {
-		base += "/"
-	}
-	return base
-}
-
-// Error handling utilities for Azure DevOps API errors
-
-// IsArgumentError checks if an error is an argument validation error from the Azure DevOps library
-func IsArgumentError(err error) bool {
-	var argNilErr *azuredevops.ArgumentNilError
-	var argNilOrEmptyErr *azuredevops.ArgumentNilOrEmptyError
-	return errors.As(err, &argNilErr) || errors.As(err, &argNilOrEmptyErr)
-}
-
-// IsAPIError checks if an error is an API error from the Azure DevOps library
-func IsAPIError(err error) bool {
-	var wrappedErr *azuredevops.WrappedError
-	return errors.As(err, &wrappedErr)
-}
-
-// GetAPIErrorDetails extracts detailed error information from Azure DevOps API errors
-func GetAPIErrorDetails(err error) (statusCode int, message string, details map[string]interface{}) {
-	var wrappedErr *azuredevops.WrappedError
-	if errors.As(err, &wrappedErr) {
-		if wrappedErr.StatusCode != nil {
-			statusCode = *wrappedErr.StatusCode
-		}
-		if wrappedErr.Message != nil {
-			message = *wrappedErr.Message
-		}
-		if wrappedErr.CustomProperties != nil {
-			details = *wrappedErr.CustomProperties
-		}
-		return statusCode, message, details
-	}
-	return 0, "", nil
-}
-
-// FormatError provides a user-friendly error message with context from Azure DevOps API errors
-func FormatError(err error, operation string) error {
-	if IsArgumentError(err) {
-		return fmt.Errorf("%s failed due to invalid arguments: %w", operation, err)
-	}
-
-	if IsAPIError(err) {
-		statusCode, message, _ := GetAPIErrorDetails(err)
-		if statusCode != 0 && message != "" {
-			return fmt.Errorf("%s failed (HTTP %d): %s", operation, statusCode, message)
-		}
-	}
-
-	return fmt.Errorf("%s failed: %w", operation, err)
 }

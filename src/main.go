@@ -71,7 +71,7 @@ func main() {
 			&cli.BoolFlag{Name: "dry-run", Aliases: []string{"n"}},
 		},
 		Action: func(ctx context.Context, cmd *cli.Command) error {
-			return actionDispatch(ctx, cmd, cfg)
+			return actionDispatch(ctx, cmd, &cfg)
 		},
 	}
 
@@ -83,10 +83,10 @@ func main() {
 	}
 }
 
-func actionDispatch(ctx context.Context, cmd *cli.Command, cfg Config) error {
-	client, err := NewADOClient(cfg.Organization, cfg.Project, cfg.PAT, cfg.BaseURL)
+func actionDispatch(ctx context.Context, cmd *cli.Command, cfg *Config) error {
+	client, err := NewADOClient(cfg)
 	if err != nil {
-		GetErrorHandler()(FormatError(err, "creating ADO client"))
+		GetErrorHandler()(FormatADOError(err, "creating ADO client"))
 	}
 
 	return actionWithClient(ctx, cmd, client)
@@ -110,7 +110,7 @@ func actionWithClient(ctx context.Context, cmd *cli.Command, client ADOClientInt
 
 	patchDoc, err := client.BuildWorkItemPatchDocument(titleVal, descVal, parentID, assignedToVal)
 	if err != nil {
-		GetErrorHandler()(FormatError(err, "building work item patch document"))
+		GetErrorHandler()(FormatADOError(err, "building work item patch document"))
 	}
 
 	if dryRunVal {
@@ -126,7 +126,7 @@ func actionWithClient(ctx context.Context, cmd *cli.Command, client ADOClientInt
 
 	workItem, err := client.CreateWorkItem(ctx, typeVal, patchDoc)
 	if err != nil {
-		GetErrorHandler()(FormatError(err, "creating work item"))
+		GetErrorHandler()(FormatADOError(err, "creating work item"))
 	}
 
 	if workItem == nil || workItem.Id == nil {

@@ -33,6 +33,7 @@ func TestConfigValidate_AllPresent(t *testing.T) {
 		Organization: "test_org",
 		Project:      "test_proj",
 		PAT:          "test_pat",
+		BaseURL:      "test_url",
 	}
 	_, err := cfg.checkMissing()
 
@@ -44,7 +45,7 @@ func TestConfigValidate_AllPresent(t *testing.T) {
 func TestConfigValidate_MissingFields(t *testing.T) {
 	cfg := Config{}
 	missing, _ := cfg.checkMissing()
-	want := []string{EnvADOOrg, EnvADOProject, EnvADOPAT}
+	want := []string{EnvADOOrg, EnvADOProject, EnvADOPAT, EnvADOBaseURL}
 	if len(missing) != len(want) {
 		t.Errorf("Expected %d missing fields, got %d", len(want), len(missing))
 	}
@@ -59,13 +60,16 @@ func TestConfigValidate_MissingFields(t *testing.T) {
 func TestConfigValidate_SomeMissing(t *testing.T) {
 	cfg := Config{Organization: "org"}
 	missing, _ := cfg.checkMissing()
-	if len(missing) != 2 {
-		t.Errorf("Expected 2 missing fields, got %d", len(missing))
+	if len(missing) != 3 {
+		t.Errorf("Expected 3 missing fields, got %d", len(missing))
 	}
-	if missing[0] != EnvADOProject && missing[1] != EnvADOProject {
+	if !slices.Contains(missing, EnvADOProject) {
 		t.Errorf("Expected missing field %q", EnvADOProject)
 	}
-	if missing[0] != EnvADOPAT && missing[1] != EnvADOPAT {
+	if !slices.Contains(missing, EnvADOPAT) {
 		t.Errorf("Expected missing field %q", EnvADOPAT)
+	}
+	if !slices.Contains(missing, EnvADOBaseURL) {
+		t.Errorf("Expected missing field %q", EnvADOBaseURL)
 	}
 }

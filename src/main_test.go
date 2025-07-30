@@ -154,7 +154,7 @@ func TestAction_InvalidWorkItemType(t *testing.T) {
 
 // TestFormatError ensures FormatError produces the expected error message.
 func TestFormatError(t *testing.T) {
-	wrapped := FormatError(errors.New("API call failed"), "creating work item")
+	wrapped := FormatADOError(errors.New("API call failed"), "creating work item")
 	actual := wrapped.Error()
 	if !strings.Contains(actual, "API call failed") {
 		t.Errorf("Expected error message to contain 'API call failed', got '%s'", actual)
