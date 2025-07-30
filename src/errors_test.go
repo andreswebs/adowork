@@ -12,7 +12,6 @@ import (
 )
 
 func TestIsAuthError(t *testing.T) {
-	// TODO: Add tests for Azure DevOps SDK error types when available
 	tests := []struct {
 		name string
 		err  error
@@ -63,7 +62,6 @@ func TestIsNetworkError(t *testing.T) {
 }
 
 func TestIsValidationError(t *testing.T) {
-	// TODO: Add tests for Azure DevOps SDK error types when available
 	tests := []struct {
 		name string
 		err  error
@@ -88,7 +86,6 @@ func TestIsValidationError(t *testing.T) {
 }
 
 func TestIsRateLimitError(t *testing.T) {
-	// TODO: Add tests for Azure DevOps SDK error types when available
 	tests := []struct {
 		name string
 		err  error

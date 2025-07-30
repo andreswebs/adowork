@@ -39,12 +39,11 @@ func (m *mockADOClient) GetWorkItemURL(workItemID int) string {
 }
 
 func TestAction_Success(t *testing.T) {
-	// Override errorHandler to panic on error for testability
-	origHandler := errorHandler
-	errorHandler = func(err error) {
+	origHandler := GetErrorHandler()
+	SetErrorHandler(func(err error) {
 		panic(err)
-	}
-	defer func() { errorHandler = origHandler }()
+	})
+	t.Cleanup(func() { SetErrorHandler(origHandler) })
 
 	mockClient := &mockADOClient{
 		CreateWorkItemFunc: func(ctx context.Context, workItemType string, patchDoc []webapi.JsonPatchOperation) (*workitemtracking.WorkItem, error) {
@@ -74,12 +73,11 @@ func TestAction_Success(t *testing.T) {
 }
 
 func TestAction_CreateWorkItemError(t *testing.T) {
-	// Override errorHandler to return error for testability
-	origHandler := errorHandler
-	errorHandler = func(err error) {
+	origHandler := GetErrorHandler()
+	SetErrorHandler(func(err error) {
 		panic(err)
-	}
-	defer func() { errorHandler = origHandler }()
+	})
+	t.Cleanup(func() { SetErrorHandler(origHandler) })
 
 	apiError := errors.New("API call failed")
 	mockClient := &mockADOClient{
@@ -117,12 +115,11 @@ func TestAction_CreateWorkItemError(t *testing.T) {
 }
 
 func TestAction_InvalidWorkItemType(t *testing.T) {
-	// Override errorHandler to panic for testability
-	origHandler := errorHandler
-	errorHandler = func(err error) {
+	origHandler := GetErrorHandler()
+	SetErrorHandler(func(err error) {
 		panic(err)
-	}
-	defer func() { errorHandler = origHandler }()
+	})
+	t.Cleanup(func() { SetErrorHandler(origHandler) })
 
 	mockClient := &mockADOClient{} // No functions needed as it should fail before client interaction.
 

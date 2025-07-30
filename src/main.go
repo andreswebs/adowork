@@ -7,6 +7,7 @@ import (
 	"os"
 	"slices"
 	"strings"
+	"sync"
 
 	"github.com/microsoft/azure-devops-go-api/azuredevops/webapi"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/workitemtracking"
@@ -14,7 +15,24 @@ import (
 )
 
 // errorHandler is a function variable for error handling, allowing test injection.
-var errorHandler = handleError
+var (
+	errorHandlerMu sync.RWMutex
+	errorHandler   = handleError
+)
+
+// SetErrorHandler safely sets the global errorHandler.
+func SetErrorHandler(f func(error)) {
+	errorHandlerMu.Lock()
+	defer errorHandlerMu.Unlock()
+	errorHandler = f
+}
+
+// GetErrorHandler safely retrieves the global errorHandler.
+func GetErrorHandler() func(error) {
+	errorHandlerMu.RLock()
+	defer errorHandlerMu.RUnlock()
+	return errorHandler
+}
 
 // ADOClientInterface defines the methods we use from ADOClient, allowing for mocking.
 type ADOClientInterface interface {
@@ -38,9 +56,8 @@ func isValidWorkItemType(witType string) bool {
 func main() {
 	cfg, err := loadConfig()
 	if err != nil {
-		errorHandler(err)
+		GetErrorHandler()(err)
 	}
-	// Config errors are only handled here at startup. All downstream code assumes a valid config.
 	cmd := &cli.Command{
 		Name:    "adowork",
 		Usage:   "A command-line tool for creating Azure DevOps work items",
@@ -61,7 +78,7 @@ func main() {
 	if err := cmd.Run(context.Background(), os.Args); err != nil {
 		// If no arguments, display help text
 		if len(os.Args) != 1 {
-			errorHandler(err)
+			GetErrorHandler()(err)
 		}
 	}
 }
@@ -69,7 +86,7 @@ func main() {
 func actionDispatch(ctx context.Context, cmd *cli.Command, cfg Config) error {
 	client, err := NewADOClient(cfg.Organization, cfg.Project, cfg.PAT)
 	if err != nil {
-		errorHandler(FormatError(err, "creating ADO client"))
+		GetErrorHandler()(FormatError(err, "creating ADO client"))
 	}
 
 	return actionWithClient(ctx, cmd, client)
@@ -78,7 +95,7 @@ func actionDispatch(ctx context.Context, cmd *cli.Command, cfg Config) error {
 func actionWithClient(ctx context.Context, cmd *cli.Command, client ADOClientInterface) error {
 	typeVal := cmd.String("type")
 	if !isValidWorkItemType(typeVal) {
-		errorHandler(fmt.Errorf("Invalid work item type: '%s'. Please use a common type like 'Task', 'Bug', or 'User Story'.", typeVal))
+		GetErrorHandler()(fmt.Errorf("Invalid work item type: '%s'. Please use a common type like 'Task', 'Bug', or 'User Story'.", typeVal))
 	}
 	titleVal := cmd.String("title")
 	descVal := cmd.String("description")
@@ -93,14 +110,14 @@ func actionWithClient(ctx context.Context, cmd *cli.Command, client ADOClientInt
 
 	patchDoc, err := client.BuildWorkItemPatchDocument(titleVal, descVal, parentID, assignedToVal)
 	if err != nil {
-		errorHandler(FormatError(err, "building work item patch document"))
+		GetErrorHandler()(FormatError(err, "building work item patch document"))
 	}
 
 	if dryRunVal {
 		fmt.Println("--- Dry Run: Work Item Payload ---")
 		jsonBytes, err := json.MarshalIndent(patchDoc, "", "  ")
 		if err != nil {
-			errorHandler(fmt.Errorf("Error marshaling dry-run output: %v", err))
+			GetErrorHandler()(fmt.Errorf("Error marshaling dry-run output: %v", err))
 		}
 		fmt.Println(string(jsonBytes))
 		fmt.Println("------------------------------------")
@@ -109,11 +126,11 @@ func actionWithClient(ctx context.Context, cmd *cli.Command, client ADOClientInt
 
 	workItem, err := client.CreateWorkItem(ctx, typeVal, patchDoc)
 	if err != nil {
-		errorHandler(FormatError(err, "creating work item"))
+		GetErrorHandler()(FormatError(err, "creating work item"))
 	}
 
 	if workItem == nil || workItem.Id == nil {
-		errorHandler(fmt.Errorf("Failed to create work item: received no ID from API"))
+		GetErrorHandler()(fmt.Errorf("Failed to create work item: received no ID from API"))
 	}
 
 	fmt.Print(client.GetWorkItemURL(*workItem.Id))
