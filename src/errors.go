@@ -14,7 +14,6 @@ import (
 )
 
 // isAuthError returns true if the error is an authentication error (e.g., 401/403, invalid PAT).
-// Uses type-based checks: checks for azuredevops.WrappedError with 401/403 status codes.
 func isAuthError(err error) bool {
 	if err == nil {
 		return false
@@ -29,7 +28,6 @@ func isAuthError(err error) bool {
 }
 
 // isNetworkError returns true if the error is a network error (timeouts, DNS, connection reset).
-// Uses type-based checks only.
 func isNetworkError(err error) bool {
 	if err == nil {
 		return false
@@ -45,7 +43,6 @@ func isNetworkError(err error) bool {
 }
 
 // isValidationError returns true if the error is a validation error (HTTP 400/422, field validation).
-// Uses type-based checks for Azure DevOps SDK error types.
 func isValidationError(err error) bool {
 	if err == nil {
 		return false
@@ -69,7 +66,6 @@ func isValidationError(err error) bool {
 }
 
 // isRateLimitError returns true if the error is a rate limiting error (HTTP 429, rate limit messages).
-// Uses type-based checks: checks for azuredevops.WrappedError with 429 status code.
 func isRateLimitError(err error) bool {
 	if err == nil {
 		return false
@@ -84,7 +80,6 @@ func isRateLimitError(err error) bool {
 }
 
 // isMalformedResponseError returns true if the error is a malformed response error (JSON unmarshal, unexpected format).
-// Uses type-based checks only.
 func isMalformedResponseError(err error) bool {
 	if err == nil {
 		return false
@@ -96,3 +91,6 @@ func isMalformedResponseError(err error) bool {
 	}
 	return false
 }
+
+// All error classification helpers use type-based checks.
+// When Azure DevOps SDK error types are updated, revisit type assertions as needed.

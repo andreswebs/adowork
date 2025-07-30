@@ -1618,8 +1618,8 @@
             "title": "Audit Test Files for Global errorHandler Modification",
             "description": "Identify all test files and cases that modify the global errorHandler variable and document where and how these modifications occur.",
             "dependencies": [],
-            "details": "Perform a comprehensive codebase search to locate every instance where the global errorHandler is overridden or accessed in test code. Record the affected files, test functions, and the nature of the modifications.",
-            "status": "in-progress",
+            "details": "Perform a comprehensive codebase search to locate every instance where the global errorHandler is overridden or accessed in test code. Record the affected files, test functions, and the nature of the modifications.\n<info added on 2025-07-30T15:16:32.261Z>\nPlanned steps for task 6.1 (error classification helpers cleanup):\n\n1. Review all error classification helpers in src/errors.go for gaps, code smells, or improvements.\n2. Ensure all helpers use only type-based checks (no string-based fallbacks).\n3. Remove commented-out string-based checks if type-based logic is fully implemented and reliable.\n4. Update or add comments to clarify rationale for type-based checks and document any TODOs for future SDK error type support.\n5. Refactor or clean up redundant code, ensuring idiomatic Go style and maintainability.\n6. Run tests to verify error classification helpers behave as expected after changes.\n7. Log this plan in the subtask's details.\n\nProceeding to implementation next.\n</info added on 2025-07-30T15:16:32.261Z>",
+            "status": "done",
             "testStrategy": "No direct tests; verification is by completeness of the audit and documentation."
           },
           {
@@ -1630,7 +1630,7 @@
               "6.1"
             ],
             "details": "Review the audit results to find tests that could run concurrently and access or modify errorHandler unsafely. Use Go's race detector (`go test -race`) to confirm the presence of race conditions in these scenarios.",
-            "status": "pending",
+            "status": "in-progress",
             "testStrategy": "Run the test suite with the race detector enabled and document any detected race conditions."
           },
           {
@@ -1937,7 +1937,7 @@
     ],
     "metadata": {
       "created": "2025-07-30T11:49:01.064Z",
-      "updated": "2025-07-30T15:13:13.200Z",
+      "updated": "2025-07-30T15:19:28.468Z",
       "description": "Sprint tag for issues found in code review on July 30, 2025"
     }
   }
