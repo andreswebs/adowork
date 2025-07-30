@@ -197,7 +197,10 @@ func TestCLIErrorWithExec(t *testing.T) {
 		t.Errorf("Expected exec.ExitError, got %T", err)
 	}
 	outStr := string(output)
-	if !strings.Contains(outStr, "creating work item failed") && !strings.Contains(outStr, "An unexpected error occurred") && !strings.Contains(outStr, "Validation error") {
+	if !strings.Contains(outStr, "creating work item failed") &&
+		!strings.Contains(outStr, "An unexpected error occurred") &&
+		!strings.Contains(outStr, "Validation error") &&
+		!strings.Contains(outStr, "Authentication failed. Unable to access Azure DevOps with the provided credentials.") {
 		t.Errorf("Expected output to contain a user-facing error message, got: %s", outStr)
 	}
 	_ = exec.Command("rm", bin).Run()

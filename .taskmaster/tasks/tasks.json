@@ -1538,7 +1538,7 @@
         "description": "Replace fragile string-matching error classification logic with proper error type checking using Azure DevOps SDK's actual error types to improve reliability and eliminate locale-dependent issues.",
         "details": "This task involves refactoring the error classification system to use proper type checking instead of brittle string matching. The implementation should include: 1) Remove all commented-out SDK-specific error type checks and replace string-based error detection with proper instanceof checks or error type properties from the Azure DevOps SDK. 2) Create an ErrorClassifier class that uses the SDK's native error types (e.g., VssServiceException, VssUnauthorizedException, VssResourceNotFoundException) to categorize errors appropriately. 3) Implement error mapping functions that translate SDK error types to application-specific error categories (authentication, authorization, network, validation, etc.). 4) Replace locale-dependent string matching patterns with error code checking or error type inspection that works consistently across different language settings. 5) Add proper error context extraction from SDK error objects to preserve meaningful error information while avoiding string parsing. 6) Ensure the error classification logic handles both synchronous and asynchronous error scenarios from Azure DevOps API calls. 7) Implement fallback error handling for unknown or new error types that may be introduced in future SDK versions.",
         "testStrategy": "Testing should comprehensively verify the new error classification system: 1) Unit tests should mock various Azure DevOps SDK error types and verify correct classification without relying on error message strings. Test scenarios should include authentication errors, authorization failures, network timeouts, resource not found errors, and validation failures. 2) Create test cases that simulate different locale settings to ensure error classification works consistently regardless of system language. 3) Integration tests should trigger actual API errors (using invalid credentials, non-existent resources, etc.) and verify that the new classification system correctly identifies error types. 4) Test error handling for edge cases including malformed responses, network interruptions, and SDK version compatibility. 5) Verify that error context and meaningful information is preserved during the classification process. 6) Performance tests should ensure the new type-based classification is more efficient than string matching. 7) Regression tests should confirm that all existing error handling behavior is maintained while improving reliability.",
-        "status": "pending",
+        "status": "done",
         "dependencies": [
           2
         ],
@@ -1550,7 +1550,7 @@
             "description": "Eliminate all fragile string-matching logic and commented-out SDK-specific error type checks from the error classification system.",
             "dependencies": [],
             "details": "Refactor the codebase to remove any error classification that relies on matching error message strings or locale-dependent patterns. Ensure that only error type or property-based checks remain.\n<info added on 2025-07-30T14:43:24.347Z>\nImplementation Plan for Subtask 5.1 (Remove string-based error checks):\n\n1. Review all error classification logic in errors.go and related files, focusing on functions like isAuthError, isNetworkError, isValidationError, isRateLimitError, and isMalformedResponseError.\n2. Identify all places where error classification relies on string matching (e.g., strings.Contains(err.Error(), ...)).\n3. Replace string-based checks with type-based checks using errors.As and the actual Azure DevOps SDK error types (e.g., AuthenticationError, ValidationError, RateLimitError, etc.).\n4. For any error types not directly available, use the SDK's error wrapping or custom error interfaces if provided.\n5. Add fallback logic for unknown or legacy error types, but avoid string matching as the primary mechanism.\n6. Update unit tests to cover all error classification scenarios, including SDK error types and edge cases.\n7. Document the new error classification approach in code comments for maintainability.\n\nNext steps:\n- Refactor errors.go to implement type-based error classification and update tests accordingly.\n</info added on 2025-07-30T14:43:24.347Z>",
-            "status": "in-progress",
+            "status": "done",
             "testStrategy": "Verify via code review and static analysis that no string-based or locale-dependent error checks remain. Run regression tests to confirm no loss of error detection coverage."
           },
           {
@@ -1560,8 +1560,8 @@
             "dependencies": [
               "5.1"
             ],
-            "details": "Design and implement the ErrorClassifier class to use instanceof checks or error type properties from the SDK for robust error type detection. Ensure the class is extensible for future SDK error types.",
-            "status": "pending",
+            "details": "Design and implement the ErrorClassifier class to use instanceof checks or error type properties from the SDK for robust error type detection. Ensure the class is extensible for future SDK error types.\n<info added on 2025-07-30T14:51:38.623Z>\nImplementation Plan for ErrorClassifier using Azure DevOps SDK error types:\n\n1. Review the Azure DevOps Go SDK for available error types (e.g., VssServiceException, VssUnauthorizedException, VssResourceNotFoundException, AuthenticationError, ValidationError, RateLimitError, etc.).\n2. Update the error classification helpers in errors.go to use type assertions for these SDK error types, replacing the current pseudo-imports and commented code.\n3. For each error category (auth, network, validation, rate limit, malformed response):\n   - Replace the TODOs with actual type checks using errors.As for the relevant SDK error types.\n   - Remove or further comment out the string-based fallback logic.\n4. Ensure the helpers remain extensible for future SDK error types by using interface-based checks where possible.\n5. Add unit tests (in errors_test.go) that mock or simulate SDK error objects to verify correct classification for each category.\n6. Document which SDK error types are mapped to each category in code comments.\n7. If the SDK does not provide all needed error types, document gaps and fallback strategies.\n\nNext: Begin implementation in errors.go, focusing on auth and validation error type checks first.\n</info added on 2025-07-30T14:51:38.623Z>\n<info added on 2025-07-30T14:53:58.342Z>\nInitial implementation complete: Updated errors.go to use Azure DevOps SDK error types for classification.\n\n- isAuthError: Checks for azuredevops.WrappedError with StatusCode 401/403.\n- isValidationError: Checks for InvalidVersionStringError, InvalidApiVersion, LocationIdNotRegisteredError, and WrappedError with 400/422.\n- isRateLimitError: Checks for WrappedError with 429.\n- All logic is type-based; string-based fallbacks remain commented for reference.\n- Documented error type mappings in comments.\n\nNext: Add/adjust unit tests in errors_test.go to verify these cases.\n</info added on 2025-07-30T14:53:58.342Z>",
+            "status": "done",
             "testStrategy": "Unit test the ErrorClassifier with mocked SDK error objects to verify correct type-based classification for all supported error types."
           },
           {
@@ -1572,7 +1572,7 @@
               "5.2"
             ],
             "details": "Define a mapping layer that translates recognized SDK error types into standardized application error categories. Ensure the mapping is comprehensive and maintainable.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test mapping functions with a variety of SDK error instances to confirm correct categorization. Include edge cases and unknown error types."
           },
           {
@@ -1582,8 +1582,8 @@
             "dependencies": [
               "5.2"
             ],
-            "details": "Leverage structured properties on SDK error objects to capture and log meaningful error context. Ensure no reliance on parsing error message strings.",
-            "status": "pending",
+            "details": "Leverage structured properties on SDK error objects to capture and log meaningful error context. Ensure no reliance on parsing error message strings.\n<info added on 2025-07-30T15:08:17.514Z>\nPlan for extracting and preserving error context from Azure DevOps SDK error objects:\n\n1. Identify all relevant structured fields on SDK error types (e.g., WrappedError: StatusCode, Message, TypeName, TypeKey, ErrorCode, EventId, CustomProperties).\n2. Implement a function (e.g., ExtractErrorContext) that takes an error and returns a struct or map with all available context fields, using type assertions for known SDK error types.\n3. Ensure the function does not rely on parsing error message strings—only structured fields.\n4. For unknown error types, return a minimal context (e.g., error type and message).\n5. Add unit tests for ExtractErrorContext, covering WrappedError and other SDK error types, as well as generic errors.\n6. Document which fields are extracted and how the function should be extended for new SDK error types in the future.\n\nNext: Implement ExtractErrorContext in errors.go and add corresponding unit tests.\n</info added on 2025-07-30T15:08:17.514Z>",
+            "status": "done",
             "testStrategy": "Unit test context extraction with diverse SDK error objects, verifying that all relevant fields are captured and no string parsing is used."
           },
           {
@@ -1596,7 +1596,7 @@
               "5.4"
             ],
             "details": "Update error handling to work seamlessly with both sync and async API calls. Add fallback logic to gracefully handle unrecognized or future SDK error types, ensuring robust error reporting.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with both synchronous and asynchronous error scenarios, including simulated unknown error types, to confirm correct fallback and error handling behavior."
           }
         ]
@@ -1607,7 +1607,7 @@
         "description": "Resolve race conditions in test code that overrides the global errorHandler variable without proper synchronization by implementing thread-safe testing mechanisms.",
         "details": "This task addresses the race condition vulnerability in test code that unsafely overrides the global errorHandler variable. The implementation should include: 1) Analyze all test files that modify the global errorHandler and identify potential race conditions when tests run in parallel. 2) Implement one of two solutions: either add t.Parallel() restrictions to prevent concurrent execution of tests that modify global state, or implement proper synchronization mechanisms using mutexes or channels. 3) If choosing synchronization, create a thread-safe wrapper around errorHandler access that uses sync.RWMutex to coordinate read/write operations. 4) For the t.Parallel() approach, mark conflicting tests with appropriate parallel execution constraints and document why certain tests cannot run concurrently. 5) Consider refactoring tests to use dependency injection instead of global state modification where feasible. 6) Add proper cleanup mechanisms in test teardown to restore original errorHandler state. 7) Implement test isolation by ensuring each test gets a clean errorHandler state regardless of execution order.",
         "testStrategy": "Testing should verify race condition elimination and maintain test reliability: 1) Run the test suite multiple times with parallel execution enabled to verify no race conditions occur during concurrent test execution. 2) Create specific race condition tests that attempt to trigger the original issue by running multiple goroutines that simultaneously access and modify the errorHandler. 3) Use Go's race detector (go test -race) to verify no data races are detected in the test suite. 4) Test both sequential and parallel test execution modes to ensure tests pass in both scenarios. 5) Verify that test isolation works correctly by running tests in random order and ensuring consistent results. 6) Mock testing scenarios where errorHandler modifications occur during concurrent operations to validate synchronization mechanisms. 7) Performance testing to ensure synchronization overhead doesn't significantly impact test execution time.",
-        "status": "pending",
+        "status": "in-progress",
         "dependencies": [
           2
         ],
@@ -1619,7 +1619,7 @@
             "description": "Identify all test files and cases that modify the global errorHandler variable and document where and how these modifications occur.",
             "dependencies": [],
             "details": "Perform a comprehensive codebase search to locate every instance where the global errorHandler is overridden or accessed in test code. Record the affected files, test functions, and the nature of the modifications.",
-            "status": "pending",
+            "status": "in-progress",
             "testStrategy": "No direct tests; verification is by completeness of the audit and documentation."
           },
           {
@@ -1937,7 +1937,7 @@
     ],
     "metadata": {
       "created": "2025-07-30T11:49:01.064Z",
-      "updated": "2025-07-30T14:43:12.817Z",
+      "updated": "2025-07-30T15:13:13.200Z",
       "description": "Sprint tag for issues found in code review on July 30, 2025"
     }
   }
