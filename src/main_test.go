@@ -53,7 +53,7 @@ func TestAction_Success(t *testing.T) {
 		},
 	}
 
-	app := &cli.Command{
+	cmd := &cli.Command{
 		Flags: []cli.Flag{
 			&cli.StringFlag{Name: "type"},
 			&cli.StringFlag{Name: "title"},
@@ -67,7 +67,7 @@ func TestAction_Success(t *testing.T) {
 		},
 	}
 
-	err := app.Run(context.Background(), []string{"", "--type", "Task", "--title", "Test Task"})
+	err := cmd.Run(context.Background(), []string{"", "--type", "Task", "--title", "Test Task"})
 	if err != nil {
 		t.Errorf("Expected no error, but got: %v", err)
 	}
@@ -88,7 +88,7 @@ func TestAction_CreateWorkItemError(t *testing.T) {
 		},
 	}
 
-	app := &cli.Command{
+	cmd := &cli.Command{
 		Flags: []cli.Flag{
 			&cli.StringFlag{Name: "type"},
 			&cli.StringFlag{Name: "title"},
@@ -101,7 +101,7 @@ func TestAction_CreateWorkItemError(t *testing.T) {
 	var recovered any
 	func() {
 		defer func() { recovered = recover() }()
-		_ = app.Run(context.Background(), []string{"", "--type", "Bug", "--title", "Test Bug"})
+		_ = cmd.Run(context.Background(), []string{"", "--type", "Bug", "--title", "Test Bug"})
 	}()
 	if recovered == nil {
 		t.Errorf("Expected an error, but got none")
@@ -126,7 +126,7 @@ func TestAction_InvalidWorkItemType(t *testing.T) {
 
 	mockClient := &mockADOClient{} // No functions needed as it should fail before client interaction.
 
-	app := &cli.Command{
+	cmd := &cli.Command{
 		Flags: []cli.Flag{
 			&cli.StringFlag{Name: "type"},
 			&cli.StringFlag{Name: "title"},
@@ -139,7 +139,7 @@ func TestAction_InvalidWorkItemType(t *testing.T) {
 	var recovered any
 	func() {
 		defer func() { recovered = recover() }()
-		_ = app.Run(context.Background(), []string{"", "--type", "InvalidType", "--title", "Test"})
+		_ = cmd.Run(context.Background(), []string{"", "--type", "InvalidType", "--title", "Test"})
 	}()
 	if recovered == nil {
 		t.Errorf("Expected an error for invalid work item type, but got none")

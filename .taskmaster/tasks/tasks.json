@@ -1403,7 +1403,7 @@
         "description": "Eliminate duplicate configuration loading in the main function and implement consistent error handling by loading config once and passing it through the application.",
         "details": "This refactoring task addresses the architectural issues in the main function's configuration handling. The implementation should include: 1) Remove the duplicate config loading by consolidating to a single config load operation at application startup. 2) Create a proper configuration passing mechanism - either through dependency injection, a context object, or explicit parameter passing to functions that need config access. 3) Implement consistent error handling for the configuration loading process with proper error propagation and user-friendly error messages. 4) Document and clarify the len(os.Args) != 1 condition - either remove it if unnecessary or add clear documentation explaining its purpose and expected behavior. 5) Ensure that configuration validation happens early and explicitly, with clear error messages for invalid configurations. 6) Consider implementing a configuration validation layer that checks for required fields, valid formats, and logical consistency before the application proceeds with its main operations. The refactored code should follow the single responsibility principle where configuration loading, validation, and usage are clearly separated.",
         "testStrategy": "Testing should verify both the refactoring correctness and improved error handling: 1) Unit tests should verify that configuration is loaded exactly once during application startup and that the same config instance is used throughout the application lifecycle. 2) Test various error scenarios including missing config files, malformed config content, and invalid configuration values to ensure consistent error handling and meaningful error messages. 3) Integration tests should verify that the len(os.Args) condition works as expected in different invocation scenarios (with and without arguments). 4) Performance tests should confirm that eliminating duplicate config loading improves startup time. 5) Regression tests should ensure that all existing functionality continues to work with the refactored configuration handling. 6) Mock tests should verify that functions receiving configuration as parameters work correctly with both real and test configuration objects.",
-        "status": "pending",
+        "status": "done",
         "dependencies": [
           2
         ],
@@ -1414,8 +1414,8 @@
             "title": "Consolidate Configuration Loading at Startup",
             "description": "Remove all duplicate configuration loading logic from the main function and ensure configuration is loaded exactly once at application startup.",
             "dependencies": [],
-            "details": "Identify all locations in the main function where configuration is loaded, eliminate redundant calls, and centralize the loading process to a single, well-defined point at startup. Ensure that the loaded configuration instance is reused throughout the application lifecycle.",
-            "status": "pending",
+            "details": "Identify all locations in the main function where configuration is loaded, eliminate redundant calls, and centralize the loading process to a single, well-defined point at startup. Ensure that the loaded configuration instance is reused throughout the application lifecycle.\n<info added on 2025-07-30T13:58:32.633Z>\nImplementation Plan for Subtask 3.1 (Remove duplicate config loading):\n\n1. Audit the main.go file to identify all locations where loadConfig() is called. Confirm that config is loaded both in main() and in action().\n2. Refactor the code so that config is loaded only once, ideally in main(), and then passed down to action() and actionWithClient().\n3. Update the cli.Command definition to allow passing config as part of the context or as a parameter to the action function.\n4. Ensure that error handling for config loading is consistent and only occurs in one place.\n5. Update tests to reflect the new config loading flow and verify that config is not loaded redundantly.\n6. Document the new config loading pattern in code comments for maintainability.\n\nNext steps: \n- Refactor main.go to implement this plan, starting with step 1 and 2.\n</info added on 2025-07-30T13:58:32.633Z>",
+            "status": "done",
             "testStrategy": "Write unit tests to verify that configuration loading occurs only once and that no duplicate or redundant loading logic remains."
           },
           {
@@ -1425,8 +1425,8 @@
             "dependencies": [
               "3.1"
             ],
-            "details": "Refactor functions and components that require configuration access to accept the configuration object as a parameter or through a context/dependency injection system. Update function signatures and initialization logic accordingly.",
-            "status": "pending",
+            "details": "Refactor functions and components that require configuration access to accept the configuration object as a parameter or through a context/dependency injection system. Update function signatures and initialization logic accordingly.\n<info added on 2025-07-30T14:20:18.661Z>\nImplementation Plan for Subtask 3.2 (Implement config passing mechanism):\n\n1. Review the updated main.go to confirm config is loaded once and passed to the CLI action.\n2. Refactor actionWithClient to accept the config as a parameter, if any config values are needed downstream.\n3. If config is not needed in actionWithClient, document this for clarity and future maintainers.\n4. Update any other functions or modules that may require config access to accept it as a parameter, avoiding global state.\n5. Ensure all error handling and client creation continues to use the passed config instance.\n6. Update and run tests to verify that config is passed and used correctly throughout the application.\n7. Add code comments explaining the new config passing pattern for maintainability.\n\nNext steps:\n- Refactor actionWithClient and related code as needed to complete this subtask.\n</info added on 2025-07-30T14:20:18.661Z>",
+            "status": "done",
             "testStrategy": "Add unit and integration tests to confirm that all components receive the correct configuration instance and that configuration is not accessed globally or reloaded."
           },
           {
@@ -1436,8 +1436,8 @@
             "dependencies": [
               "3.1"
             ],
-            "details": "Refactor the configuration loading logic to handle all error cases consistently. Ensure that errors are not swallowed or ignored, and that meaningful, actionable error messages are provided to the user or calling code.",
-            "status": "pending",
+            "details": "Refactor the configuration loading logic to handle all error cases consistently. Ensure that errors are not swallowed or ignored, and that meaningful, actionable error messages are provided to the user or calling code.\n<info added on 2025-07-30T14:29:00.514Z>\nImplementation Plan for Subtask 3.3 (Standardize error handling for config):\n\n1. Review all error handling related to config loading and usage in main.go and related files.\n2. Ensure that config loading errors are only handled in one place (main), and that all downstream code assumes a valid config is present.\n3. Refactor any remaining error handling for config in other functions to either remove it or convert it to a panic/assert, as config should always be valid after main.\n4. Add comments to clarify that config errors are handled at startup and not expected elsewhere.\n5. Update tests to ensure that config errors are surfaced only at startup and not during normal command execution.\n6. Document the error handling pattern for config in code comments for maintainability.\n\nNext steps:\n- Audit and refactor error handling for config in the codebase as described above.\n</info added on 2025-07-30T14:29:00.514Z>",
+            "status": "done",
             "testStrategy": "Create tests that simulate various configuration loading failures (e.g., missing file, invalid format) and verify that errors are handled and reported as expected."
           },
           {
@@ -1448,7 +1448,7 @@
               "3.1"
             ],
             "details": "Analyze the logic and intent behind the len(os.Args) != 1 check. If it is not required, remove it. If it is necessary, add clear inline documentation explaining why it exists and what scenarios it covers.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test application startup with various command-line argument scenarios to ensure correct behavior and that documentation accurately reflects the logic."
           },
           {
@@ -1458,8 +1458,8 @@
             "dependencies": [
               "3.1"
             ],
-            "details": "Develop validation logic that runs immediately after configuration loading. Ensure that invalid configurations are detected early, with clear error messages, and prevent the application from continuing with bad config.",
-            "status": "pending",
+            "details": "Develop validation logic that runs immediately after configuration loading. Ensure that invalid configurations are detected early, with clear error messages, and prevent the application from continuing with bad config.\n<info added on 2025-07-30T14:39:44.674Z>\nImplementation Plan for Subtask 3.5 (Add config validation layer and tests):\n\n1. Review the current config loading logic in loadConfig() and validate() in config.go.\n2. Ensure that all required fields (organization, project, PAT) are validated for presence and correct format.\n3. Add additional validation for field formats (e.g., organization/project name patterns, PAT length/format if possible).\n4. Refactor loadConfig() to return detailed validation errors, not just missing fields.\n5. Add unit tests for config validation covering all edge cases: missing fields, invalid formats, valid config, etc.\n6. Document the validation logic and error messages for maintainability.\n7. Ensure that main.go handles and reports config validation errors clearly at startup.\n\nNext steps:\n- Update config.go to strengthen validation and add tests as described above.\n</info added on 2025-07-30T14:39:44.674Z>",
+            "status": "done",
             "testStrategy": "Write unit tests for the validation logic, covering cases of missing fields, invalid values, and logical inconsistencies. Verify that invalid configurations are rejected with appropriate errors."
           }
         ]
@@ -1470,7 +1470,7 @@
         "description": "Add comprehensive input validation for all user-provided parameters including title length limits, description content validation, parent ID existence checks, and organization/project name format validation before making API calls.",
         "details": "This task implements a robust input validation system to prevent invalid data from reaching the API layer. The implementation should include: 1) Create a ValidationService class with methods for validating different input types: validateTitle() for length limits (e.g., 1-255 characters), validateDescription() for content sanitization and length constraints, validateParentId() to verify parent work item existence, and validateOrgProject() for proper naming conventions. 2) Implement validation rules: Title validation should check for minimum/maximum length, forbidden characters, and HTML/script injection attempts. Description validation should sanitize HTML content, check for maximum length limits, and validate encoding. Parent ID validation should verify the ID exists in the target organization and is accessible. Organization/Project validation should check naming conventions, special character restrictions, and existence verification. 3) Create a centralized validation pipeline that processes all inputs before API calls, returning detailed error messages for validation failures. 4) Integrate validation with the existing error handling system to provide consistent error responses. 5) Add configuration options for validation rules (max lengths, allowed characters) to make the system flexible across different Azure DevOps instances. 6) Implement input sanitization to prevent injection attacks while preserving legitimate content formatting.",
         "testStrategy": "Testing should comprehensively verify all validation scenarios: 1) Unit tests for each validation method with boundary value testing (empty strings, maximum length strings, special characters, Unicode content). 2) Test validation failure scenarios with various invalid inputs (overly long titles, malformed parent IDs, invalid organization names, script injection attempts). 3) Integration tests that verify validation occurs before API calls and that valid inputs pass through correctly. 4) Security testing with common injection payloads (XSS, SQL injection patterns) to ensure proper sanitization. 5) Performance tests with large input datasets to ensure validation doesn't significantly impact application performance. 6) Test configuration flexibility by running validation with different rule sets. 7) Verify error message quality and consistency across different validation failures. 8) Test edge cases like Unicode characters, emoji, and different language inputs in titles and descriptions.",
-        "status": "pending",
+        "status": "cancelled",
         "dependencies": [
           3
         ],
@@ -1482,7 +1482,7 @@
             "description": "Create a ValidationService class with dedicated methods for validating each input type: validateTitle(), validateDescription(), validateParentId(), and validateOrgProject(). Ensure each method is responsible for enforcing the relevant validation logic for its input.",
             "dependencies": [],
             "details": "The ValidationService should encapsulate all input validation logic, making it reusable and testable. Each method must be clearly documented and support extension for future validation rules.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Write unit tests for each validation method, covering valid and invalid input scenarios, including boundary values and edge cases."
           },
           {
@@ -1493,7 +1493,7 @@
               "4.1"
             ],
             "details": "Validation rules must include checks for minimum/maximum lengths, forbidden characters, HTML/script injection attempts, and proper encoding. Description fields must be sanitized to prevent XSS and injection attacks while preserving legitimate formatting.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Develop unit tests for each rule, including attempts to bypass validation with malicious input (e.g., scripts, SQL injection patterns, invalid encodings)."
           },
           {
@@ -1504,7 +1504,7 @@
               "4.2"
             ],
             "details": "The pipeline should orchestrate the sequence of validations, aggregate errors, and halt processing on validation failure. It must return detailed, standardized error messages indicating which fields failed and why.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Write integration tests simulating full input payloads, verifying that all invalid inputs are caught and that error messages are clear and actionable."
           },
           {
@@ -1515,7 +1515,7 @@
               "4.3"
             ],
             "details": "Validation errors should be mapped to standardized error responses, following API best practices for error reporting. Ensure that error messages are informative but do not leak internal logic or sensitive data.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Test error propagation and formatting by triggering validation failures and verifying that error responses are consistent with the application's error handling conventions."
           },
           {
@@ -1527,7 +1527,7 @@
               "4.2"
             ],
             "details": "Expose validation parameters via configuration files or environment variables, allowing administrators to adjust rules without code changes. Ensure that the ValidationService reads and applies these settings dynamically.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Write tests to verify that changes to configuration options are correctly reflected in validation behavior, including dynamic reloads if supported."
           }
         ]
@@ -1549,8 +1549,8 @@
             "title": "Remove String-Based Error Classification Logic",
             "description": "Eliminate all fragile string-matching logic and commented-out SDK-specific error type checks from the error classification system.",
             "dependencies": [],
-            "details": "Refactor the codebase to remove any error classification that relies on matching error message strings or locale-dependent patterns. Ensure that only error type or property-based checks remain.",
-            "status": "pending",
+            "details": "Refactor the codebase to remove any error classification that relies on matching error message strings or locale-dependent patterns. Ensure that only error type or property-based checks remain.\n<info added on 2025-07-30T14:43:24.347Z>\nImplementation Plan for Subtask 5.1 (Remove string-based error checks):\n\n1. Review all error classification logic in errors.go and related files, focusing on functions like isAuthError, isNetworkError, isValidationError, isRateLimitError, and isMalformedResponseError.\n2. Identify all places where error classification relies on string matching (e.g., strings.Contains(err.Error(), ...)).\n3. Replace string-based checks with type-based checks using errors.As and the actual Azure DevOps SDK error types (e.g., AuthenticationError, ValidationError, RateLimitError, etc.).\n4. For any error types not directly available, use the SDK's error wrapping or custom error interfaces if provided.\n5. Add fallback logic for unknown or legacy error types, but avoid string matching as the primary mechanism.\n6. Update unit tests to cover all error classification scenarios, including SDK error types and edge cases.\n7. Document the new error classification approach in code comments for maintainability.\n\nNext steps:\n- Refactor errors.go to implement type-based error classification and update tests accordingly.\n</info added on 2025-07-30T14:43:24.347Z>",
+            "status": "in-progress",
             "testStrategy": "Verify via code review and static analysis that no string-based or locale-dependent error checks remain. Run regression tests to confirm no loss of error detection coverage."
           },
           {
@@ -1937,7 +1937,7 @@
     ],
     "metadata": {
       "created": "2025-07-30T11:49:01.064Z",
-      "updated": "2025-07-30T12:12:57.420Z",
+      "updated": "2025-07-30T14:43:12.817Z",
       "description": "Sprint tag for issues found in code review on July 30, 2025"
     }
   }

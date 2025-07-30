@@ -36,10 +36,11 @@ func isValidWorkItemType(witType string) bool {
 }
 
 func main() {
-	_, err := loadConfig()
+	cfg, err := loadConfig()
 	if err != nil {
 		errorHandler(err)
 	}
+	// Config errors are only handled here at startup. All downstream code assumes a valid config.
 	cmd := &cli.Command{
 		Name:    "adowork",
 		Usage:   "A command-line tool for creating Azure DevOps work items",
@@ -52,22 +53,20 @@ func main() {
 			&cli.IntFlag{Name: "parent", Aliases: []string{"p"}},
 			&cli.BoolFlag{Name: "dry-run", Aliases: []string{"n"}},
 		},
-		Action: action,
+		Action: func(ctx context.Context, cmd *cli.Command) error {
+			return actionDispatch(ctx, cmd, cfg)
+		},
 	}
 
 	if err := cmd.Run(context.Background(), os.Args); err != nil {
+		// If no arguments, display help text
 		if len(os.Args) != 1 {
 			errorHandler(err)
 		}
 	}
 }
 
-func action(ctx context.Context, cmd *cli.Command) error {
-	cfg, err := loadConfig()
-	if err != nil {
-		errorHandler(err)
-	}
-
+func actionDispatch(ctx context.Context, cmd *cli.Command, cfg Config) error {
 	client, err := NewADOClient(cfg.Organization, cfg.Project, cfg.PAT)
 	if err != nil {
 		errorHandler(FormatError(err, "creating ADO client"))
