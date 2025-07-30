@@ -1674,7 +1674,7 @@
         "description": "Replace hardcoded 'https://dev.azure.com/' URL patterns throughout the codebase with configurable base URL support through environment variables or configuration files to enable support for different Azure DevOps instances.",
         "details": "This task involves making the Azure DevOps base URL configurable to support different instances (cloud, on-premises, or custom domains). The implementation should include: 1) Identify all hardcoded 'https://dev.azure.com/' occurrences in the codebase and catalog their usage patterns. 2) Add a new configuration parameter 'AZURE_DEVOPS_BASE_URL' to the configuration system with 'https://dev.azure.com/' as the default value. 3) Create a URLBuilder utility class or service that constructs Azure DevOps URLs using the configurable base URL, handling proper path concatenation and URL encoding. 4) Replace all hardcoded URL construction with calls to the URLBuilder service, ensuring consistent URL formatting across the application. 5) Update environment variable documentation and configuration examples to include the new AZURE_DEVOPS_BASE_URL parameter. 6) Implement validation for the base URL format to ensure it's a valid URL and follows expected patterns (e.g., must be HTTPS, proper domain format). 7) Consider backward compatibility by maintaining the default behavior when the configuration is not provided. The URLBuilder should handle various Azure DevOps URL patterns including organization URLs, project URLs, and API endpoints while maintaining proper URL structure and encoding.",
         "testStrategy": "Testing should verify configurable URL functionality across different scenarios: 1) Unit tests for the URLBuilder utility with various base URL configurations including default Azure DevOps cloud URL, on-premises server URLs, and custom domain scenarios. Test proper URL concatenation, encoding, and format validation. 2) Integration tests that verify the application works correctly with different base URL configurations by mocking Azure DevOps responses from alternative endpoints. 3) Configuration validation tests to ensure invalid URLs are rejected with appropriate error messages (malformed URLs, non-HTTPS URLs, empty values). 4) Environment variable tests to verify the configuration loading works correctly when AZURE_DEVOPS_BASE_URL is set, unset, or contains invalid values. 5) Regression tests to ensure all existing functionality continues to work with the default configuration. 6) End-to-end tests with a test Azure DevOps instance using a non-standard base URL to verify complete functionality. Test both successful operations and error scenarios to ensure proper URL construction in all code paths.",
-        "status": "in-progress",
+        "status": "done",
         "dependencies": [
           3
         ],
@@ -1697,7 +1697,7 @@
               "7.1"
             ],
             "details": "Update the configuration schema and environment variable documentation to support the new parameter. Ensure backward compatibility by using the default value if the parameter is not set.\n<info added on 2025-07-30T15:31:44.862Z>\n1. Update the configuration struct and loading logic to support a new parameter: AZURE_DEVOPS_BASE_URL.\n2. Set the default value to 'https://dev.azure.com/' if the environment variable is not set.\n3. Update environment variable documentation and configuration examples to include AZURE_DEVOPS_BASE_URL.\n4. Ensure backward compatibility: if the new variable is not set, all existing functionality should continue to work as before.\n5. Prepare unit tests to verify configuration loading with and without the environment variable set, and with custom values.\n\nNext step: implement the configuration changes in code and update documentation accordingly.\n</info added on 2025-07-30T15:31:44.862Z>",
-            "status": "in-progress",
+            "status": "done",
             "testStrategy": "Unit test configuration loading with and without the environment variable set; verify default and custom values are handled correctly."
           },
           {
@@ -1708,7 +1708,7 @@
               "7.2"
             ],
             "details": "The utility should support organization URLs, project URLs, and API endpoints, handling spaces and special characters as required by Azure DevOps URL conventions.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Unit test the URLBuilder with various base URLs and path inputs, including edge cases (spaces, custom domains, on-premises URLs)."
           },
           {
@@ -1719,7 +1719,7 @@
               "7.3"
             ],
             "details": "Update all relevant code paths to use the URLBuilder, removing any remaining hardcoded base URLs. Ensure all usages are covered, including REST API calls and UI links.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Integration test all features that interact with Azure DevOps to confirm correct URL generation and system behavior across different base URL configurations."
           },
           {
@@ -1730,7 +1730,7 @@
               "7.4"
             ],
             "details": "Document the new configuration parameter in all relevant guides. Add validation checks to reject invalid or insecure base URLs (e.g., non-HTTPS, malformed domains).",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Test documentation accuracy and validation logic by providing various valid and invalid base URL values; verify that errors are handled and documented as expected."
           }
         ]
@@ -1741,7 +1741,7 @@
         "description": "Implement comprehensive test coverage for critical error scenarios including network timeouts, malformed responses, rate limiting, and authentication failures to ensure error classification works correctly across all failure modes.",
         "details": "This task involves creating a comprehensive test suite for error scenarios that are currently not covered. The implementation should include: 1) Network timeout testing - Create mock scenarios that simulate various timeout conditions (connection timeout, read timeout, request timeout) and verify that the error classification system properly identifies and categorizes these failures. Use test utilities to simulate slow network responses and connection drops. 2) Malformed response testing - Generate test cases with invalid JSON responses, incomplete data structures, missing required fields, and corrupted response bodies to ensure the application handles parsing errors gracefully and classifies them appropriately. 3) Rate limiting scenario testing - Mock HTTP 429 responses with various rate limiting headers (Retry-After, X-RateLimit-*) and verify that the error classification system correctly identifies rate limiting errors and extracts retry information. Test both temporary and quota-exceeded rate limiting scenarios. 4) Authentication failure testing - Create comprehensive tests for different authentication error types including expired tokens, invalid credentials, insufficient permissions, and token refresh failures. Mock various HTTP status codes (401, 403) with different error response formats to ensure proper classification. 5) Integration with the ErrorClassifier - Ensure all new error scenario tests work with the proper error type checking system and validate that error classification is consistent and reliable across all failure modes. 6) Error recovery testing - Verify that the application can recover gracefully from these error scenarios and that error messages are informative for debugging purposes.",
         "testStrategy": "Testing should comprehensively validate error scenario coverage and classification accuracy: 1) Create unit tests for each error scenario type using mock HTTP responses and network simulation tools. Verify that each error type is correctly identified and classified by the error handling system. 2) Integration tests should simulate real-world error conditions using test doubles and verify end-to-end error handling behavior. Test scenarios should include network instability, API service degradation, and authentication token expiration. 3) Regression testing should ensure that existing functionality continues to work correctly when new error scenarios are encountered. Run the full test suite with error injection to verify system stability. 4) Coverage analysis should confirm that all critical error paths are tested and that error classification logic has complete test coverage. Use code coverage tools to identify any untested error handling branches. 5) Performance testing should verify that error handling doesn't introduce significant latency or resource consumption during failure scenarios. 6) Manual testing should include triggering actual error conditions in a test environment to validate that mocked scenarios accurately represent real-world failures.",
-        "status": "pending",
+        "status": "cancelled",
         "dependencies": [
           5
         ],
@@ -1753,7 +1753,7 @@
             "description": "Create and execute tests that simulate various network timeout conditions, including connection timeout, read timeout, and request timeout. Use network simulation tools or mocks to induce slow responses and dropped connections. Verify that the error classification system accurately identifies and categorizes each timeout failure.",
             "dependencies": [],
             "details": "Design test cases for each type of network timeout. Integrate these tests with the error classification system to ensure correct identification and categorization. Document the scenarios and expected outcomes.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Use unit and integration tests with network simulation utilities to trigger timeouts. Assert that the error classifier assigns the correct error type for each scenario."
           },
           {
@@ -1762,7 +1762,7 @@
             "description": "Develop tests that provide invalid, incomplete, or corrupted response bodies, such as malformed JSON, missing required fields, and truncated data. Ensure the application handles parsing errors gracefully and that the error classification system categorizes them appropriately.",
             "dependencies": [],
             "details": "Generate a variety of malformed responses and inject them into the system under test. Validate that parsing errors are detected and classified as intended.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Create unit tests with mocked HTTP responses containing malformed data. Verify that the error classifier produces the expected error types and that error messages are informative."
           },
           {
@@ -1771,7 +1771,7 @@
             "description": "Simulate HTTP 429 responses with different rate limiting headers (e.g., Retry-After, X-RateLimit-*) and test both temporary and quota-exceeded scenarios. Confirm that the error classification system identifies rate limiting errors and extracts retry information correctly.",
             "dependencies": [],
             "details": "Mock HTTP responses for various rate limiting cases. Test the extraction and handling of retry headers and ensure proper error categorization.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Write unit tests for each rate limiting scenario. Assert that the error classifier recognizes rate limiting and that retry logic is triggered as appropriate."
           },
           {
@@ -1780,7 +1780,7 @@
             "description": "Create comprehensive tests for authentication failures, including expired tokens, invalid credentials, insufficient permissions, and token refresh failures. Mock HTTP 401 and 403 responses with different error formats to verify correct error classification.",
             "dependencies": [],
             "details": "Design test cases for each authentication failure type. Use mocks to simulate various authentication error responses and validate error classification.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Develop unit tests for each authentication scenario. Check that the error classifier assigns the correct error type and that error messages aid debugging."
           },
           {
@@ -1794,7 +1794,7 @@
               "8.4"
             ],
             "details": "Integrate all scenario tests with the ErrorClassifier. Test error recovery mechanisms and validate that error messages are clear and actionable.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Run the full test suite and confirm that all error scenarios are classified correctly. Test recovery logic and review error outputs for clarity and usefulness."
           }
         ]
@@ -1873,7 +1873,7 @@
         "description": "Refactor the errorHandler function to have an explicit signature that indicates it does not return, eliminating unreachable code patterns and improving code clarity.",
         "details": "This task involves refactoring the errorHandler function to address the issue where os.Exit(1) is called but some code paths expect the function might return. The implementation should include: 1) Analyze all current usages of the errorHandler function throughout the codebase to identify patterns where code expects it to return versus where it calls os.Exit(1). 2) Implement one of two solutions: Option A - Make the function signature explicit about non-returning behavior by changing the return type to indicate it never returns (e.g., using a 'never' type equivalent or panic/fatal pattern), or Option B - Modify the function to return an error instead of calling os.Exit(1) directly, allowing callers to decide whether to exit or handle the error. 3) If choosing Option A, update the function signature to func errorHandler(...) -> ! or equivalent non-returning indicator, and ensure all call sites understand this behavior. If choosing Option B, change the signature to func errorHandler(...) error and update all call sites to handle the returned error appropriately. 4) Remove any unreachable code that appears after errorHandler calls, replacing it with appropriate error handling or early returns. 5) Update any test code that mocks or overrides the errorHandler to match the new signature and behavior pattern. 6) Ensure consistency across the codebase so that error handling patterns are uniform and predictable.",
         "testStrategy": "Testing should verify the refactored error handler behavior and eliminate unreachable code issues: 1) Create unit tests that verify the new errorHandler signature behaves as expected - if it's non-returning, test that it properly terminates execution; if it returns errors, test that appropriate errors are returned for different failure scenarios. 2) Run static analysis tools or linters to verify that no unreachable code remains after errorHandler calls throughout the codebase. 3) Create integration tests that exercise error paths to ensure the new error handling pattern works correctly in realistic failure scenarios. 4) Test the interaction between the refactored errorHandler and existing error classification systems to ensure compatibility. 5) If the function now returns errors instead of exiting, create tests that verify callers properly handle the returned errors and make appropriate decisions about program termination. 6) Verify that any test mocks or overrides of the errorHandler function work correctly with the new signature and don't introduce race conditions or unexpected behavior.",
-        "status": "pending",
+        "status": "cancelled",
         "dependencies": [
           6
         ],
@@ -1885,7 +1885,7 @@
             "description": "Identify and document every location in the codebase where the errorHandler function is called, noting whether the caller expects the function to return or expects it to terminate execution (e.g., via os.Exit or panic).",
             "dependencies": [],
             "details": "Perform a comprehensive search for all errorHandler invocations. Categorize each usage based on whether subsequent code assumes errorHandler returns or not. Highlight any patterns of unreachable code or inconsistent expectations.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "No direct tests; verification is by completeness of the audit and accuracy of the categorization."
           },
           {
@@ -1896,7 +1896,7 @@
               "10.1"
             ],
             "details": "Based on the audit, decide which approach (non-returning or error-returning) best fits the codebase. Draft the new function signature and document the intended behavior for all callers.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Peer review of the proposed signature and rationale to ensure it addresses all identified usage patterns."
           },
           {
@@ -1907,7 +1907,7 @@
               "10.2"
             ],
             "details": "Change the function definition and refactor all usages. For non-returning, ensure no code follows errorHandler calls. For error-returning, ensure all callers handle the error appropriately.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Run static analysis and compilation checks to confirm all call sites are updated and no unreachable code remains."
           },
           {
@@ -1918,7 +1918,7 @@
               "10.3"
             ],
             "details": "Systematically review all locations where errorHandler is used to remove dead code and enforce the new error handling pattern. Refactor as needed for clarity and maintainability.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Code review and static analysis to verify that no unreachable code remains and error handling is consistent."
           },
           {
@@ -1929,7 +1929,7 @@
               "10.4"
             ],
             "details": "Modify existing unit and integration tests to use the new errorHandler signature. Add tests to cover both normal and edge cases, including termination and error propagation scenarios.",
-            "status": "pending",
+            "status": "cancelled",
             "testStrategy": "Run the full test suite to ensure all tests pass and add new tests to cover any previously untested scenarios introduced by the refactor."
           }
         ]
@@ -1937,7 +1937,7 @@
     ],
     "metadata": {
       "created": "2025-07-30T11:49:01.064Z",
-      "updated": "2025-07-30T15:32:13.182Z",
+      "updated": "2025-07-30T17:46:23.153Z",
       "description": "Sprint tag for issues found in code review on July 30, 2025"
     }
   }
