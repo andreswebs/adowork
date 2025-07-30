@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"regexp"
 
 	"github.com/microsoft/azure-devops-go-api/azuredevops"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/webapi"
@@ -19,30 +20,26 @@ type Config struct {
 }
 
 const (
-	EnvADOOrg     = "ADO_ORG"
-	EnvADOProject = "ADO_PROJECT"
-	EnvADOPAT     = "ADO_PAT"
-	EnvADOBaseURL = "ADO_BASE_URL"
+	EnvADOOrg         string = "ADO_ORG"
+	EnvADOProject     string = "ADO_PROJECT"
+	EnvADOPAT         string = "ADO_PAT"
+	EnvADOBaseURL     string = "ADO_BASE_URL"
+	defaultADOBaseURL string = "https://dev.azure.com"
 )
 
 // readConfigFromEnv reads ADO_* environment variables and returns a Config struct.
 func readConfigFromEnv() Config {
-	baseURL := os.Getenv(EnvADOBaseURL)
-	if baseURL == "" {
-		baseURL = "https://dev.azure.com/"
-	}
 	return Config{
 		Organization: os.Getenv(EnvADOOrg),
 		Project:      os.Getenv(EnvADOProject),
 		PAT:          os.Getenv(EnvADOPAT),
-		BaseURL:      baseURL,
+		BaseURL:      os.Getenv(EnvADOBaseURL),
 	}
 }
 
-// validate checks that all required fields in Config are non-empty.
-// Returns a slice of missing field names (if any).
-func (c Config) validate() []string {
-	var missing []string
+// checkMissing checks that all required fields in Config are non-empty.
+// Returns an error if any are missing.
+func (c Config) checkMissing() (missing []string, err error) {
 	if c.Organization == "" {
 		missing = append(missing, EnvADOOrg)
 	}
@@ -52,7 +49,8 @@ func (c Config) validate() []string {
 	if c.PAT == "" {
 		missing = append(missing, EnvADOPAT)
 	}
-	return missing
+	err = formatMissingEnvError(missing)
+	return
 }
 
 // formatMissingEnvError returns a grouped, user-friendly error message for missing env vars.
@@ -71,14 +69,11 @@ func formatMissingEnvError(missing []string) error {
 	return fmt.Errorf("%s", msg)
 }
 
-// loadConfig reads env vars, validates, and returns Config or error.
-func loadConfig() (Config, error) {
-	cfg := readConfigFromEnv()
-	missing := cfg.validate()
-	if err := formatMissingEnvError(missing); err != nil {
-		return cfg, err
-	}
-	return cfg, nil
+// loadConfig reads env vars and validates.
+func loadConfig() (cfg Config, err error) {
+	cfg = readConfigFromEnv()
+	_, err = cfg.checkMissing()
+	return
 }
 
 // ADOClient is the Azure DevOps API client structure using the official library.
@@ -96,14 +91,16 @@ func NewADOClient(org, project, pat string, baseURL string) (*ADOClient, error) 
 	if org == "" || project == "" || pat == "" {
 		return nil, fmt.Errorf("organization, project, and PAT are required")
 	}
-	if baseURL == "" {
-		baseURL = "https://dev.azure.com/"
-	}
-	// Create connection using the official library
-	organizationURL := baseURL + org
-	connection := azuredevops.NewPatConnection(organizationURL, pat)
 
-	// Create work item tracking client
+	if baseURL == "" {
+		baseURL = defaultADOBaseURL
+	} else {
+		re := regexp.MustCompile(`/+$`)
+		baseURL = re.ReplaceAllString(baseURL, "")
+	}
+
+	organizationURL := fmt.Sprintf("%s/%s", baseURL, org)
+	connection := azuredevops.NewPatConnection(organizationURL, pat)
 	ctx := context.Background()
 	witClient, err := workitemtracking.NewClient(ctx, connection)
 	if err != nil {

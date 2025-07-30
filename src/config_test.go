@@ -34,15 +34,16 @@ func TestConfigValidate_AllPresent(t *testing.T) {
 		Project:      "test_proj",
 		PAT:          "test_pat",
 	}
-	missing := cfg.validate()
-	if len(missing) != 0 {
-		t.Errorf("Expected no missing fields, got %v", missing)
+	_, err := cfg.checkMissing()
+
+	if err != nil {
+		t.Errorf("%v", err)
 	}
 }
 
 func TestConfigValidate_MissingFields(t *testing.T) {
 	cfg := Config{}
-	missing := cfg.validate()
+	missing, _ := cfg.checkMissing()
 	want := []string{EnvADOOrg, EnvADOProject, EnvADOPAT}
 	if len(missing) != len(want) {
 		t.Errorf("Expected %d missing fields, got %d", len(want), len(missing))
@@ -57,7 +58,7 @@ func TestConfigValidate_MissingFields(t *testing.T) {
 
 func TestConfigValidate_SomeMissing(t *testing.T) {
 	cfg := Config{Organization: "org"}
-	missing := cfg.validate()
+	missing, _ := cfg.checkMissing()
 	if len(missing) != 2 {
 		t.Errorf("Expected 2 missing fields, got %d", len(missing))
 	}
