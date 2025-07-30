@@ -1262,5 +1262,683 @@
       "updated": "2025-07-29T22:15:42.793Z",
       "description": "Tasks for master context"
     }
+  },
+  "sprint-2025-07-30": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Sanitize Sensitive Data in Dry Run Output",
+        "description": "Implement data sanitization for dry-run mode output to prevent exposure of sensitive information like Personal Access Tokens and user data in stdout logs.",
+        "details": "This critical security task requires implementing a comprehensive data sanitization system for dry-run output. The solution should include: 1) Create a sanitization function that identifies and redacts sensitive fields such as Personal Access Tokens (PATs), API keys, passwords, email addresses, and user identifiers in the assignedTo field. 2) Implement pattern matching to detect common sensitive data formats (e.g., GitHub tokens starting with 'ghp_', 'gho_', etc.). 3) Replace sensitive values with placeholder text like '[REDACTED]' or '[SENSITIVE_DATA_HIDDEN]' while preserving the structure for debugging purposes. 4) Add a configuration option to control sanitization level (strict/moderate/disabled) with strict as default. 5) Include a prominent warning message when dry-run mode is enabled, alerting users about potential sensitive data exposure. 6) Ensure the sanitization works across different output formats (JSON, YAML, plain text). 7) Consider implementing a whitelist approach for known safe fields to minimize false positives. The implementation should be performant and not significantly impact dry-run execution time.",
+        "testStrategy": "Testing should include: 1) Unit tests with mock patch documents containing various types of sensitive data (PATs, API keys, email addresses, user IDs) to verify proper redaction. 2) Integration tests running dry-run mode with real-world patch examples to ensure output is sanitized without breaking functionality. 3) Performance tests to measure sanitization overhead on large patch documents. 4) Security tests attempting to bypass sanitization with edge cases like encoded data, nested objects, and unusual formatting. 5) Configuration tests verifying different sanitization levels work correctly. 6) User experience tests ensuring warning messages are displayed appropriately and redacted output remains useful for debugging. 7) Regression tests to ensure existing dry-run functionality remains intact. 8) Manual testing with actual sensitive data in a controlled environment to validate real-world effectiveness.",
+        "status": "pending",
+        "dependencies": [],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design and Implement Sensitive Data Pattern Matching",
+            "description": "Develop robust pattern matching logic to identify sensitive data types such as Personal Access Tokens (PATs), API keys, passwords, email addresses, and user identifiers (e.g., assignedTo field) in dry-run output.",
+            "dependencies": [],
+            "details": "Define regular expressions and detection rules for common sensitive data formats, including but not limited to GitHub tokens (e.g., 'ghp_', 'gho_'), email patterns, and typical API key structures. Ensure extensibility for future sensitive data types.",
+            "status": "pending",
+            "testStrategy": "Create unit tests with mock outputs containing various sensitive data formats to verify accurate detection and coverage."
+          },
+          {
+            "id": 2,
+            "title": "Develop Data Sanitization and Redaction Functionality",
+            "description": "Implement a sanitization function that redacts detected sensitive data, replacing values with standardized placeholders such as '[REDACTED]' or '[SENSITIVE_DATA_HIDDEN]' while preserving output structure.",
+            "dependencies": [
+              "1.1"
+            ],
+            "details": "Ensure the sanitization logic works recursively for nested structures and supports multiple output formats (JSON, YAML, plain text). Maintain the original data structure for debugging and traceability.",
+            "status": "pending",
+            "testStrategy": "Unit test with diverse output samples to confirm that all sensitive fields are redacted and structure is preserved."
+          },
+          {
+            "id": 3,
+            "title": "Integrate Configurable Sanitization Levels",
+            "description": "Add a configuration option to control the sanitization level (strict, moderate, disabled), defaulting to strict, and ensure this setting is respected throughout the dry-run output process.",
+            "dependencies": [
+              "1.2"
+            ],
+            "details": "Define the behavior for each sanitization level, document the configuration interface, and ensure the system defaults to strict mode for maximum security.",
+            "status": "pending",
+            "testStrategy": "Test all configuration levels with sample outputs to verify correct application of sanitization rules."
+          },
+          {
+            "id": 4,
+            "title": "Implement Output Format Compatibility and Whitelist Support",
+            "description": "Ensure the sanitization system operates correctly across all supported output formats (JSON, YAML, plain text) and implement a whitelist mechanism for known safe fields to minimize false positives.",
+            "dependencies": [
+              "1.2"
+            ],
+            "details": "Test and adapt the sanitization logic for each output format. Define and maintain a whitelist of fields that should not be redacted, with clear documentation and update procedures.",
+            "status": "pending",
+            "testStrategy": "Integration tests with real-world dry-run outputs in all formats, verifying both redaction and whitelist effectiveness."
+          },
+          {
+            "id": 5,
+            "title": "Add User Warning and Documentation for Dry-Run Mode",
+            "description": "Display a prominent warning message when dry-run mode is enabled, alerting users to the risk of sensitive data exposure, and provide clear documentation on sanitization behavior and configuration.",
+            "dependencies": [
+              "1.3",
+              "1.4"
+            ],
+            "details": "Implement warning banners/messages in stdout and logs. Update user documentation to explain sanitization, configuration options, and best practices for secure usage.",
+            "status": "pending",
+            "testStrategy": "Manual verification that warnings appear in all relevant contexts and that documentation is accurate and accessible."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Refactor Global Error Handler to Use Dependency Injection",
+        "description": "Eliminate the global mutable state anti-pattern by refactoring the global errorHandler variable to use dependency injection or parameter passing for better code maintainability and thread safety.",
+        "details": "This refactoring task involves eliminating the global errorHandler variable and implementing a cleaner architecture. The implementation should include: 1) Create an ErrorHandler interface or class that can be instantiated and passed as a dependency. 2) Modify all functions that currently rely on the global errorHandler to accept it as a parameter or through constructor injection. 3) Update the main application initialization to create an ErrorHandler instance and pass it to dependent components. 4) For testing scenarios, implement a factory pattern or configuration object that allows easy injection of mock error handlers. 5) Consider using a dependency injection container if the application grows in complexity. 6) Ensure that error handling behavior remains consistent across the application while removing the global state dependency. 7) Update any existing error handling logic to work with the new injection pattern. The solution should maintain backward compatibility where possible and provide clear migration paths for existing code.",
+        "testStrategy": "Testing should verify the refactoring maintains functionality while improving architecture: 1) Unit tests should verify that all functions accepting the error handler parameter work correctly with both real and mock implementations. 2) Integration tests should confirm that error handling behavior is identical to the previous global implementation. 3) Concurrency tests should verify that multiple instances can operate safely without shared mutable state. 4) Mock injection tests should demonstrate that test scenarios can easily substitute different error handler implementations. 5) Regression tests should ensure that all existing error handling paths continue to work as expected. 6) Performance tests should confirm that the dependency injection approach doesn't introduce significant overhead compared to global variable access.",
+        "status": "pending",
+        "dependencies": [],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design ErrorHandler Interface or Class",
+            "description": "Define an ErrorHandler interface or abstract class that encapsulates error handling logic, allowing for instantiation and dependency injection.",
+            "dependencies": [],
+            "details": "Specify the required methods and behaviors for error handling, ensuring extensibility for custom implementations and testability.",
+            "status": "pending",
+            "testStrategy": "Create unit tests to verify that different implementations of the ErrorHandler interface/class conform to the expected contract."
+          },
+          {
+            "id": 2,
+            "title": "Refactor Functions to Accept ErrorHandler Dependency",
+            "description": "Modify all functions and components that currently use the global errorHandler variable to accept an ErrorHandler instance via parameter or constructor injection.",
+            "dependencies": [
+              "2.1"
+            ],
+            "details": "Update function signatures and constructors to require an ErrorHandler dependency, removing all references to the global variable.",
+            "status": "pending",
+            "testStrategy": "Ensure all affected functions are covered by unit tests that verify correct error handling with both real and mock ErrorHandler instances."
+          },
+          {
+            "id": 3,
+            "title": "Update Application Initialization for Dependency Injection",
+            "description": "Refactor the main application startup to instantiate the ErrorHandler and inject it into all dependent components.",
+            "dependencies": [
+              "2.2"
+            ],
+            "details": "Modify the application's entry point to create an ErrorHandler instance and pass it to modules, services, or controllers that require error handling.",
+            "status": "pending",
+            "testStrategy": "Write integration tests to confirm that the ErrorHandler is correctly injected and used throughout the application lifecycle."
+          },
+          {
+            "id": 4,
+            "title": "Implement Test-Friendly ErrorHandler Injection",
+            "description": "Introduce a factory pattern or configuration mechanism to allow easy injection of mock or test-specific ErrorHandler implementations.",
+            "dependencies": [
+              "2.1"
+            ],
+            "details": "Design a flexible approach for tests to provide custom ErrorHandler instances, supporting both unit and integration testing scenarios.",
+            "status": "pending",
+            "testStrategy": "Develop tests that inject mock ErrorHandler implementations and verify that error handling logic is invoked as expected in test environments."
+          },
+          {
+            "id": 5,
+            "title": "Migrate and Validate Error Handling Logic",
+            "description": "Update all existing error handling logic to use the new injection pattern, ensuring consistent behavior and removing global state dependencies.",
+            "dependencies": [
+              "2.2",
+              "2.3"
+            ],
+            "details": "Refactor legacy error handling code, validate that all error flows are preserved, and document migration steps for maintainers.",
+            "status": "pending",
+            "testStrategy": "Perform regression testing and review error handling across the application to ensure no loss of functionality or coverage."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Refactor Main Function Configuration Loading and Error Handling",
+        "description": "Eliminate duplicate configuration loading in the main function and implement consistent error handling by loading config once and passing it through the application.",
+        "details": "This refactoring task addresses the architectural issues in the main function's configuration handling. The implementation should include: 1) Remove the duplicate config loading by consolidating to a single config load operation at application startup. 2) Create a proper configuration passing mechanism - either through dependency injection, a context object, or explicit parameter passing to functions that need config access. 3) Implement consistent error handling for the configuration loading process with proper error propagation and user-friendly error messages. 4) Document and clarify the len(os.Args) != 1 condition - either remove it if unnecessary or add clear documentation explaining its purpose and expected behavior. 5) Ensure that configuration validation happens early and explicitly, with clear error messages for invalid configurations. 6) Consider implementing a configuration validation layer that checks for required fields, valid formats, and logical consistency before the application proceeds with its main operations. The refactored code should follow the single responsibility principle where configuration loading, validation, and usage are clearly separated.",
+        "testStrategy": "Testing should verify both the refactoring correctness and improved error handling: 1) Unit tests should verify that configuration is loaded exactly once during application startup and that the same config instance is used throughout the application lifecycle. 2) Test various error scenarios including missing config files, malformed config content, and invalid configuration values to ensure consistent error handling and meaningful error messages. 3) Integration tests should verify that the len(os.Args) condition works as expected in different invocation scenarios (with and without arguments). 4) Performance tests should confirm that eliminating duplicate config loading improves startup time. 5) Regression tests should ensure that all existing functionality continues to work with the refactored configuration handling. 6) Mock tests should verify that functions receiving configuration as parameters work correctly with both real and test configuration objects.",
+        "status": "pending",
+        "dependencies": [
+          2
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Consolidate Configuration Loading at Startup",
+            "description": "Remove all duplicate configuration loading logic from the main function and ensure configuration is loaded exactly once at application startup.",
+            "dependencies": [],
+            "details": "Identify all locations in the main function where configuration is loaded, eliminate redundant calls, and centralize the loading process to a single, well-defined point at startup. Ensure that the loaded configuration instance is reused throughout the application lifecycle.",
+            "status": "pending",
+            "testStrategy": "Write unit tests to verify that configuration loading occurs only once and that no duplicate or redundant loading logic remains."
+          },
+          {
+            "id": 2,
+            "title": "Implement Configuration Passing Mechanism",
+            "description": "Design and implement a mechanism to pass the loaded configuration throughout the application, using dependency injection, a context object, or explicit parameter passing.",
+            "dependencies": [
+              "3.1"
+            ],
+            "details": "Refactor functions and components that require configuration access to accept the configuration object as a parameter or through a context/dependency injection system. Update function signatures and initialization logic accordingly.",
+            "status": "pending",
+            "testStrategy": "Add unit and integration tests to confirm that all components receive the correct configuration instance and that configuration is not accessed globally or reloaded."
+          },
+          {
+            "id": 3,
+            "title": "Establish Consistent Error Handling for Configuration Loading",
+            "description": "Implement robust error handling for the configuration loading process, ensuring errors are propagated and reported with user-friendly messages.",
+            "dependencies": [
+              "3.1"
+            ],
+            "details": "Refactor the configuration loading logic to handle all error cases consistently. Ensure that errors are not swallowed or ignored, and that meaningful, actionable error messages are provided to the user or calling code.",
+            "status": "pending",
+            "testStrategy": "Create tests that simulate various configuration loading failures (e.g., missing file, invalid format) and verify that errors are handled and reported as expected."
+          },
+          {
+            "id": 4,
+            "title": "Clarify or Remove len(os.Args) != 1 Condition",
+            "description": "Review the use of the len(os.Args) != 1 condition in the main function, removing it if unnecessary or documenting its purpose and expected behavior clearly.",
+            "dependencies": [
+              "3.1"
+            ],
+            "details": "Analyze the logic and intent behind the len(os.Args) != 1 check. If it is not required, remove it. If it is necessary, add clear inline documentation explaining why it exists and what scenarios it covers.",
+            "status": "pending",
+            "testStrategy": "Test application startup with various command-line argument scenarios to ensure correct behavior and that documentation accurately reflects the logic."
+          },
+          {
+            "id": 5,
+            "title": "Implement Early and Explicit Configuration Validation",
+            "description": "Introduce a configuration validation layer that checks for required fields, valid formats, and logical consistency before the application proceeds.",
+            "dependencies": [
+              "3.1"
+            ],
+            "details": "Develop validation logic that runs immediately after configuration loading. Ensure that invalid configurations are detected early, with clear error messages, and prevent the application from continuing with bad config.",
+            "status": "pending",
+            "testStrategy": "Write unit tests for the validation logic, covering cases of missing fields, invalid values, and logical inconsistencies. Verify that invalid configurations are rejected with appropriate errors."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Implement Comprehensive Input Validation and Sanitization",
+        "description": "Add comprehensive input validation for all user-provided parameters including title length limits, description content validation, parent ID existence checks, and organization/project name format validation before making API calls.",
+        "details": "This task implements a robust input validation system to prevent invalid data from reaching the API layer. The implementation should include: 1) Create a ValidationService class with methods for validating different input types: validateTitle() for length limits (e.g., 1-255 characters), validateDescription() for content sanitization and length constraints, validateParentId() to verify parent work item existence, and validateOrgProject() for proper naming conventions. 2) Implement validation rules: Title validation should check for minimum/maximum length, forbidden characters, and HTML/script injection attempts. Description validation should sanitize HTML content, check for maximum length limits, and validate encoding. Parent ID validation should verify the ID exists in the target organization and is accessible. Organization/Project validation should check naming conventions, special character restrictions, and existence verification. 3) Create a centralized validation pipeline that processes all inputs before API calls, returning detailed error messages for validation failures. 4) Integrate validation with the existing error handling system to provide consistent error responses. 5) Add configuration options for validation rules (max lengths, allowed characters) to make the system flexible across different Azure DevOps instances. 6) Implement input sanitization to prevent injection attacks while preserving legitimate content formatting.",
+        "testStrategy": "Testing should comprehensively verify all validation scenarios: 1) Unit tests for each validation method with boundary value testing (empty strings, maximum length strings, special characters, Unicode content). 2) Test validation failure scenarios with various invalid inputs (overly long titles, malformed parent IDs, invalid organization names, script injection attempts). 3) Integration tests that verify validation occurs before API calls and that valid inputs pass through correctly. 4) Security testing with common injection payloads (XSS, SQL injection patterns) to ensure proper sanitization. 5) Performance tests with large input datasets to ensure validation doesn't significantly impact application performance. 6) Test configuration flexibility by running validation with different rule sets. 7) Verify error message quality and consistency across different validation failures. 8) Test edge cases like Unicode characters, emoji, and different language inputs in titles and descriptions.",
+        "status": "pending",
+        "dependencies": [
+          3
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design and Implement ValidationService Class",
+            "description": "Create a ValidationService class with dedicated methods for validating each input type: validateTitle(), validateDescription(), validateParentId(), and validateOrgProject(). Ensure each method is responsible for enforcing the relevant validation logic for its input.",
+            "dependencies": [],
+            "details": "The ValidationService should encapsulate all input validation logic, making it reusable and testable. Each method must be clearly documented and support extension for future validation rules.",
+            "status": "pending",
+            "testStrategy": "Write unit tests for each validation method, covering valid and invalid input scenarios, including boundary values and edge cases."
+          },
+          {
+            "id": 2,
+            "title": "Implement Comprehensive Validation Rules and Sanitization",
+            "description": "Define and enforce validation rules for all user-provided parameters, including title length and character restrictions, description content sanitization and length, parent ID existence, and organization/project name format and existence.",
+            "dependencies": [
+              "4.1"
+            ],
+            "details": "Validation rules must include checks for minimum/maximum lengths, forbidden characters, HTML/script injection attempts, and proper encoding. Description fields must be sanitized to prevent XSS and injection attacks while preserving legitimate formatting.",
+            "status": "pending",
+            "testStrategy": "Develop unit tests for each rule, including attempts to bypass validation with malicious input (e.g., scripts, SQL injection patterns, invalid encodings)."
+          },
+          {
+            "id": 3,
+            "title": "Develop Centralized Validation Pipeline",
+            "description": "Create a centralized pipeline that processes all user inputs through the ValidationService before any API calls are made, ensuring consistent validation and error handling.",
+            "dependencies": [
+              "4.2"
+            ],
+            "details": "The pipeline should orchestrate the sequence of validations, aggregate errors, and halt processing on validation failure. It must return detailed, standardized error messages indicating which fields failed and why.",
+            "status": "pending",
+            "testStrategy": "Write integration tests simulating full input payloads, verifying that all invalid inputs are caught and that error messages are clear and actionable."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Validation with Error Handling System",
+            "description": "Connect the validation pipeline to the existing error handling system to ensure that validation errors are reported consistently and do not expose sensitive implementation details.",
+            "dependencies": [
+              "4.3"
+            ],
+            "details": "Validation errors should be mapped to standardized error responses, following API best practices for error reporting. Ensure that error messages are informative but do not leak internal logic or sensitive data.",
+            "status": "pending",
+            "testStrategy": "Test error propagation and formatting by triggering validation failures and verifying that error responses are consistent with the application's error handling conventions."
+          },
+          {
+            "id": 5,
+            "title": "Implement Configurable Validation Rule Options",
+            "description": "Add configuration options for validation rules (such as maximum lengths and allowed characters) to support flexibility across different Azure DevOps instances and organizational requirements.",
+            "dependencies": [
+              "4.1",
+              "4.2"
+            ],
+            "details": "Expose validation parameters via configuration files or environment variables, allowing administrators to adjust rules without code changes. Ensure that the ValidationService reads and applies these settings dynamically.",
+            "status": "pending",
+            "testStrategy": "Write tests to verify that changes to configuration options are correctly reflected in validation behavior, including dynamic reloads if supported."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Implement Proper Error Type Checking Using Azure DevOps SDK",
+        "description": "Replace fragile string-matching error classification logic with proper error type checking using Azure DevOps SDK's actual error types to improve reliability and eliminate locale-dependent issues.",
+        "details": "This task involves refactoring the error classification system to use proper type checking instead of brittle string matching. The implementation should include: 1) Remove all commented-out SDK-specific error type checks and replace string-based error detection with proper instanceof checks or error type properties from the Azure DevOps SDK. 2) Create an ErrorClassifier class that uses the SDK's native error types (e.g., VssServiceException, VssUnauthorizedException, VssResourceNotFoundException) to categorize errors appropriately. 3) Implement error mapping functions that translate SDK error types to application-specific error categories (authentication, authorization, network, validation, etc.). 4) Replace locale-dependent string matching patterns with error code checking or error type inspection that works consistently across different language settings. 5) Add proper error context extraction from SDK error objects to preserve meaningful error information while avoiding string parsing. 6) Ensure the error classification logic handles both synchronous and asynchronous error scenarios from Azure DevOps API calls. 7) Implement fallback error handling for unknown or new error types that may be introduced in future SDK versions.",
+        "testStrategy": "Testing should comprehensively verify the new error classification system: 1) Unit tests should mock various Azure DevOps SDK error types and verify correct classification without relying on error message strings. Test scenarios should include authentication errors, authorization failures, network timeouts, resource not found errors, and validation failures. 2) Create test cases that simulate different locale settings to ensure error classification works consistently regardless of system language. 3) Integration tests should trigger actual API errors (using invalid credentials, non-existent resources, etc.) and verify that the new classification system correctly identifies error types. 4) Test error handling for edge cases including malformed responses, network interruptions, and SDK version compatibility. 5) Verify that error context and meaningful information is preserved during the classification process. 6) Performance tests should ensure the new type-based classification is more efficient than string matching. 7) Regression tests should confirm that all existing error handling behavior is maintained while improving reliability.",
+        "status": "pending",
+        "dependencies": [
+          2
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Remove String-Based Error Classification Logic",
+            "description": "Eliminate all fragile string-matching logic and commented-out SDK-specific error type checks from the error classification system.",
+            "dependencies": [],
+            "details": "Refactor the codebase to remove any error classification that relies on matching error message strings or locale-dependent patterns. Ensure that only error type or property-based checks remain.",
+            "status": "pending",
+            "testStrategy": "Verify via code review and static analysis that no string-based or locale-dependent error checks remain. Run regression tests to confirm no loss of error detection coverage."
+          },
+          {
+            "id": 2,
+            "title": "Implement ErrorClassifier Using Azure DevOps SDK Error Types",
+            "description": "Create an ErrorClassifier class that uses Azure DevOps SDK's native error types (e.g., VssServiceException, VssUnauthorizedException, VssResourceNotFoundException) for error categorization.",
+            "dependencies": [
+              "5.1"
+            ],
+            "details": "Design and implement the ErrorClassifier class to use instanceof checks or error type properties from the SDK for robust error type detection. Ensure the class is extensible for future SDK error types.",
+            "status": "pending",
+            "testStrategy": "Unit test the ErrorClassifier with mocked SDK error objects to verify correct type-based classification for all supported error types."
+          },
+          {
+            "id": 3,
+            "title": "Develop Error Mapping Functions to Application Error Categories",
+            "description": "Implement functions that map SDK error types to application-specific error categories such as authentication, authorization, network, and validation errors.",
+            "dependencies": [
+              "5.2"
+            ],
+            "details": "Define a mapping layer that translates recognized SDK error types into standardized application error categories. Ensure the mapping is comprehensive and maintainable.",
+            "status": "pending",
+            "testStrategy": "Test mapping functions with a variety of SDK error instances to confirm correct categorization. Include edge cases and unknown error types."
+          },
+          {
+            "id": 4,
+            "title": "Extract and Preserve Error Context from SDK Error Objects",
+            "description": "Implement logic to extract relevant context (e.g., error codes, correlation IDs, timestamps) from SDK error objects, avoiding string parsing.",
+            "dependencies": [
+              "5.2"
+            ],
+            "details": "Leverage structured properties on SDK error objects to capture and log meaningful error context. Ensure no reliance on parsing error message strings.",
+            "status": "pending",
+            "testStrategy": "Unit test context extraction with diverse SDK error objects, verifying that all relevant fields are captured and no string parsing is used."
+          },
+          {
+            "id": 5,
+            "title": "Handle Asynchronous and Unknown Error Scenarios",
+            "description": "Ensure error classification logic supports both synchronous and asynchronous Azure DevOps API errors, and implements fallback handling for unknown or new error types.",
+            "dependencies": [
+              "5.2",
+              "5.3",
+              "5.4"
+            ],
+            "details": "Update error handling to work seamlessly with both sync and async API calls. Add fallback logic to gracefully handle unrecognized or future SDK error types, ensuring robust error reporting.",
+            "status": "pending",
+            "testStrategy": "Test with both synchronous and asynchronous error scenarios, including simulated unknown error types, to confirm correct fallback and error handling behavior."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Fix Race Condition in Error Handler Test Override",
+        "description": "Resolve race conditions in test code that overrides the global errorHandler variable without proper synchronization by implementing thread-safe testing mechanisms.",
+        "details": "This task addresses the race condition vulnerability in test code that unsafely overrides the global errorHandler variable. The implementation should include: 1) Analyze all test files that modify the global errorHandler and identify potential race conditions when tests run in parallel. 2) Implement one of two solutions: either add t.Parallel() restrictions to prevent concurrent execution of tests that modify global state, or implement proper synchronization mechanisms using mutexes or channels. 3) If choosing synchronization, create a thread-safe wrapper around errorHandler access that uses sync.RWMutex to coordinate read/write operations. 4) For the t.Parallel() approach, mark conflicting tests with appropriate parallel execution constraints and document why certain tests cannot run concurrently. 5) Consider refactoring tests to use dependency injection instead of global state modification where feasible. 6) Add proper cleanup mechanisms in test teardown to restore original errorHandler state. 7) Implement test isolation by ensuring each test gets a clean errorHandler state regardless of execution order.",
+        "testStrategy": "Testing should verify race condition elimination and maintain test reliability: 1) Run the test suite multiple times with parallel execution enabled to verify no race conditions occur during concurrent test execution. 2) Create specific race condition tests that attempt to trigger the original issue by running multiple goroutines that simultaneously access and modify the errorHandler. 3) Use Go's race detector (go test -race) to verify no data races are detected in the test suite. 4) Test both sequential and parallel test execution modes to ensure tests pass in both scenarios. 5) Verify that test isolation works correctly by running tests in random order and ensuring consistent results. 6) Mock testing scenarios where errorHandler modifications occur during concurrent operations to validate synchronization mechanisms. 7) Performance testing to ensure synchronization overhead doesn't significantly impact test execution time.",
+        "status": "pending",
+        "dependencies": [
+          2
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Audit Test Files for Global errorHandler Modification",
+            "description": "Identify all test files and cases that modify the global errorHandler variable and document where and how these modifications occur.",
+            "dependencies": [],
+            "details": "Perform a comprehensive codebase search to locate every instance where the global errorHandler is overridden or accessed in test code. Record the affected files, test functions, and the nature of the modifications.",
+            "status": "pending",
+            "testStrategy": "No direct tests; verification is by completeness of the audit and documentation."
+          },
+          {
+            "id": 2,
+            "title": "Detect and Document Potential Race Conditions",
+            "description": "Analyze the identified test cases to determine where race conditions may occur, especially when tests are run in parallel.",
+            "dependencies": [
+              "6.1"
+            ],
+            "details": "Review the audit results to find tests that could run concurrently and access or modify errorHandler unsafely. Use Go's race detector (`go test -race`) to confirm the presence of race conditions in these scenarios.",
+            "status": "pending",
+            "testStrategy": "Run the test suite with the race detector enabled and document any detected race conditions."
+          },
+          {
+            "id": 3,
+            "title": "Implement Thread-Safe Access to errorHandler",
+            "description": "Introduce synchronization mechanisms (e.g., sync.RWMutex) to ensure thread-safe access and modification of the global errorHandler variable in tests.",
+            "dependencies": [
+              "6.2"
+            ],
+            "details": "Wrap all accesses and modifications to errorHandler in a thread-safe interface using sync.RWMutex. Refactor test code to use this wrapper, ensuring no unsynchronized access remains.",
+            "status": "pending",
+            "testStrategy": "Re-run the test suite with the race detector to verify that no race conditions are reported after synchronization is implemented."
+          },
+          {
+            "id": 4,
+            "title": "Enforce Test Isolation and Cleanup",
+            "description": "Ensure each test that modifies errorHandler restores its original state after execution, regardless of test order or parallelism.",
+            "dependencies": [
+              "6.3"
+            ],
+            "details": "Implement setup and teardown logic in each relevant test to save the original errorHandler before modification and restore it after the test completes, using defer or test cleanup hooks.",
+            "status": "pending",
+            "testStrategy": "Add tests that intentionally run conflicting tests in parallel to verify that errorHandler state is correctly isolated and restored."
+          },
+          {
+            "id": 5,
+            "title": "Refactor Tests to Minimize Global State Usage",
+            "description": "Where feasible, refactor tests to use dependency injection or local errorHandler instances instead of modifying global state.",
+            "dependencies": [
+              "6.4"
+            ],
+            "details": "Update test and production code to accept errorHandler as a parameter or via dependency injection, reducing reliance on the global variable and improving testability and thread safety.",
+            "status": "pending",
+            "testStrategy": "Verify that refactored tests pass and that errorHandler is no longer shared globally, using code review and automated tests."
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Make Azure DevOps Base URL Configurable",
+        "description": "Replace hardcoded 'https://dev.azure.com/' URL patterns throughout the codebase with configurable base URL support through environment variables or configuration files to enable support for different Azure DevOps instances.",
+        "details": "This task involves making the Azure DevOps base URL configurable to support different instances (cloud, on-premises, or custom domains). The implementation should include: 1) Identify all hardcoded 'https://dev.azure.com/' occurrences in the codebase and catalog their usage patterns. 2) Add a new configuration parameter 'AZURE_DEVOPS_BASE_URL' to the configuration system with 'https://dev.azure.com/' as the default value. 3) Create a URLBuilder utility class or service that constructs Azure DevOps URLs using the configurable base URL, handling proper path concatenation and URL encoding. 4) Replace all hardcoded URL construction with calls to the URLBuilder service, ensuring consistent URL formatting across the application. 5) Update environment variable documentation and configuration examples to include the new AZURE_DEVOPS_BASE_URL parameter. 6) Implement validation for the base URL format to ensure it's a valid URL and follows expected patterns (e.g., must be HTTPS, proper domain format). 7) Consider backward compatibility by maintaining the default behavior when the configuration is not provided. The URLBuilder should handle various Azure DevOps URL patterns including organization URLs, project URLs, and API endpoints while maintaining proper URL structure and encoding.",
+        "testStrategy": "Testing should verify configurable URL functionality across different scenarios: 1) Unit tests for the URLBuilder utility with various base URL configurations including default Azure DevOps cloud URL, on-premises server URLs, and custom domain scenarios. Test proper URL concatenation, encoding, and format validation. 2) Integration tests that verify the application works correctly with different base URL configurations by mocking Azure DevOps responses from alternative endpoints. 3) Configuration validation tests to ensure invalid URLs are rejected with appropriate error messages (malformed URLs, non-HTTPS URLs, empty values). 4) Environment variable tests to verify the configuration loading works correctly when AZURE_DEVOPS_BASE_URL is set, unset, or contains invalid values. 5) Regression tests to ensure all existing functionality continues to work with the default configuration. 6) End-to-end tests with a test Azure DevOps instance using a non-standard base URL to verify complete functionality. Test both successful operations and error scenarios to ensure proper URL construction in all code paths.",
+        "status": "pending",
+        "dependencies": [
+          3
+        ],
+        "priority": "low",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Catalog All Hardcoded Azure DevOps Base URL Usages",
+            "description": "Identify and document every occurrence of the hardcoded 'https://dev.azure.com/' base URL throughout the codebase, including all usage patterns (API endpoints, organization/project URLs, etc.).",
+            "dependencies": [],
+            "details": "Perform a comprehensive search for all instances of the hardcoded Azure DevOps base URL. Record the context and usage pattern for each occurrence to inform subsequent refactoring.",
+            "status": "pending",
+            "testStrategy": "Peer review the catalog to ensure completeness and accuracy; verify that all relevant code paths are covered."
+          },
+          {
+            "id": 2,
+            "title": "Introduce Configurable Base URL Parameter",
+            "description": "Add a new configuration parameter 'AZURE_DEVOPS_BASE_URL' to the application's configuration system, defaulting to 'https://dev.azure.com/'.",
+            "dependencies": [
+              "7.1"
+            ],
+            "details": "Update the configuration schema and environment variable documentation to support the new parameter. Ensure backward compatibility by using the default value if the parameter is not set.",
+            "status": "pending",
+            "testStrategy": "Unit test configuration loading with and without the environment variable set; verify default and custom values are handled correctly."
+          },
+          {
+            "id": 3,
+            "title": "Implement URLBuilder Utility for Azure DevOps URLs",
+            "description": "Develop a URLBuilder utility class or service that constructs all Azure DevOps URLs using the configurable base URL, ensuring correct path concatenation and URL encoding.",
+            "dependencies": [
+              "7.2"
+            ],
+            "details": "The utility should support organization URLs, project URLs, and API endpoints, handling spaces and special characters as required by Azure DevOps URL conventions.",
+            "status": "pending",
+            "testStrategy": "Unit test the URLBuilder with various base URLs and path inputs, including edge cases (spaces, custom domains, on-premises URLs)."
+          },
+          {
+            "id": 4,
+            "title": "Refactor Codebase to Use URLBuilder for All Azure DevOps URL Construction",
+            "description": "Replace all direct and hardcoded Azure DevOps URL constructions in the codebase with calls to the new URLBuilder utility, ensuring consistent and correct URL formatting.",
+            "dependencies": [
+              "7.3"
+            ],
+            "details": "Update all relevant code paths to use the URLBuilder, removing any remaining hardcoded base URLs. Ensure all usages are covered, including REST API calls and UI links.",
+            "status": "pending",
+            "testStrategy": "Integration test all features that interact with Azure DevOps to confirm correct URL generation and system behavior across different base URL configurations."
+          },
+          {
+            "id": 5,
+            "title": "Update Documentation and Validate Base URL Format",
+            "description": "Revise environment variable documentation and configuration examples to include 'AZURE_DEVOPS_BASE_URL', and implement validation logic to ensure the base URL is a valid HTTPS URL and matches expected patterns.",
+            "dependencies": [
+              "7.4"
+            ],
+            "details": "Document the new configuration parameter in all relevant guides. Add validation checks to reject invalid or insecure base URLs (e.g., non-HTTPS, malformed domains).",
+            "status": "pending",
+            "testStrategy": "Test documentation accuracy and validation logic by providing various valid and invalid base URL values; verify that errors are handled and documented as expected."
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Add Comprehensive Error Scenario Test Coverage",
+        "description": "Implement comprehensive test coverage for critical error scenarios including network timeouts, malformed responses, rate limiting, and authentication failures to ensure error classification works correctly across all failure modes.",
+        "details": "This task involves creating a comprehensive test suite for error scenarios that are currently not covered. The implementation should include: 1) Network timeout testing - Create mock scenarios that simulate various timeout conditions (connection timeout, read timeout, request timeout) and verify that the error classification system properly identifies and categorizes these failures. Use test utilities to simulate slow network responses and connection drops. 2) Malformed response testing - Generate test cases with invalid JSON responses, incomplete data structures, missing required fields, and corrupted response bodies to ensure the application handles parsing errors gracefully and classifies them appropriately. 3) Rate limiting scenario testing - Mock HTTP 429 responses with various rate limiting headers (Retry-After, X-RateLimit-*) and verify that the error classification system correctly identifies rate limiting errors and extracts retry information. Test both temporary and quota-exceeded rate limiting scenarios. 4) Authentication failure testing - Create comprehensive tests for different authentication error types including expired tokens, invalid credentials, insufficient permissions, and token refresh failures. Mock various HTTP status codes (401, 403) with different error response formats to ensure proper classification. 5) Integration with the ErrorClassifier - Ensure all new error scenario tests work with the proper error type checking system and validate that error classification is consistent and reliable across all failure modes. 6) Error recovery testing - Verify that the application can recover gracefully from these error scenarios and that error messages are informative for debugging purposes.",
+        "testStrategy": "Testing should comprehensively validate error scenario coverage and classification accuracy: 1) Create unit tests for each error scenario type using mock HTTP responses and network simulation tools. Verify that each error type is correctly identified and classified by the error handling system. 2) Integration tests should simulate real-world error conditions using test doubles and verify end-to-end error handling behavior. Test scenarios should include network instability, API service degradation, and authentication token expiration. 3) Regression testing should ensure that existing functionality continues to work correctly when new error scenarios are encountered. Run the full test suite with error injection to verify system stability. 4) Coverage analysis should confirm that all critical error paths are tested and that error classification logic has complete test coverage. Use code coverage tools to identify any untested error handling branches. 5) Performance testing should verify that error handling doesn't introduce significant latency or resource consumption during failure scenarios. 6) Manual testing should include triggering actual error conditions in a test environment to validate that mocked scenarios accurately represent real-world failures.",
+        "status": "pending",
+        "dependencies": [
+          5
+        ],
+        "priority": "low",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Network Timeout Error Scenario Tests",
+            "description": "Create and execute tests that simulate various network timeout conditions, including connection timeout, read timeout, and request timeout. Use network simulation tools or mocks to induce slow responses and dropped connections. Verify that the error classification system accurately identifies and categorizes each timeout failure.",
+            "dependencies": [],
+            "details": "Design test cases for each type of network timeout. Integrate these tests with the error classification system to ensure correct identification and categorization. Document the scenarios and expected outcomes.",
+            "status": "pending",
+            "testStrategy": "Use unit and integration tests with network simulation utilities to trigger timeouts. Assert that the error classifier assigns the correct error type for each scenario."
+          },
+          {
+            "id": 2,
+            "title": "Implement Malformed Response Error Scenario Tests",
+            "description": "Develop tests that provide invalid, incomplete, or corrupted response bodies, such as malformed JSON, missing required fields, and truncated data. Ensure the application handles parsing errors gracefully and that the error classification system categorizes them appropriately.",
+            "dependencies": [],
+            "details": "Generate a variety of malformed responses and inject them into the system under test. Validate that parsing errors are detected and classified as intended.",
+            "status": "pending",
+            "testStrategy": "Create unit tests with mocked HTTP responses containing malformed data. Verify that the error classifier produces the expected error types and that error messages are informative."
+          },
+          {
+            "id": 3,
+            "title": "Implement Rate Limiting Error Scenario Tests",
+            "description": "Simulate HTTP 429 responses with different rate limiting headers (e.g., Retry-After, X-RateLimit-*) and test both temporary and quota-exceeded scenarios. Confirm that the error classification system identifies rate limiting errors and extracts retry information correctly.",
+            "dependencies": [],
+            "details": "Mock HTTP responses for various rate limiting cases. Test the extraction and handling of retry headers and ensure proper error categorization.",
+            "status": "pending",
+            "testStrategy": "Write unit tests for each rate limiting scenario. Assert that the error classifier recognizes rate limiting and that retry logic is triggered as appropriate."
+          },
+          {
+            "id": 4,
+            "title": "Implement Authentication Failure Error Scenario Tests",
+            "description": "Create comprehensive tests for authentication failures, including expired tokens, invalid credentials, insufficient permissions, and token refresh failures. Mock HTTP 401 and 403 responses with different error formats to verify correct error classification.",
+            "dependencies": [],
+            "details": "Design test cases for each authentication failure type. Use mocks to simulate various authentication error responses and validate error classification.",
+            "status": "pending",
+            "testStrategy": "Develop unit tests for each authentication scenario. Check that the error classifier assigns the correct error type and that error messages aid debugging."
+          },
+          {
+            "id": 5,
+            "title": "Validate ErrorClassifier Integration and Error Recovery",
+            "description": "Ensure all new error scenario tests are integrated with the ErrorClassifier and that error classification is consistent and reliable across all failure modes. Verify that the application recovers gracefully from errors and provides informative error messages.",
+            "dependencies": [
+              "8.1",
+              "8.2",
+              "8.3",
+              "8.4"
+            ],
+            "details": "Integrate all scenario tests with the ErrorClassifier. Test error recovery mechanisms and validate that error messages are clear and actionable.",
+            "status": "pending",
+            "testStrategy": "Run the full test suite and confirm that all error scenarios are classified correctly. Test recovery logic and review error outputs for clarity and usefulness."
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Implement Configurable Timeout Configuration for Azure DevOps Client",
+        "description": "Replace the use of context.Background() with configurable timeout contexts for Azure DevOps API operations to prevent indefinite hangs during network issues and improve application reliability.",
+        "details": "This task involves implementing a comprehensive timeout configuration system for the Azure DevOps client to prevent network-related hangs. The implementation should include: 1) Add timeout configuration parameters to the application config system including 'AZURE_DEVOPS_REQUEST_TIMEOUT' (default: 30s), 'AZURE_DEVOPS_CONNECTION_TIMEOUT' (default: 10s), and 'AZURE_DEVOPS_DIAL_TIMEOUT' (default: 5s). 2) Create a ContextManager utility that generates appropriate context.WithTimeout() contexts based on operation type (read operations vs write operations may have different timeout requirements). 3) Replace all instances of context.Background() in Azure DevOps client operations with properly configured timeout contexts. 4) Implement timeout hierarchy where individual operation timeouts can override global defaults. 5) Add proper timeout error handling that distinguishes between timeout errors and other network failures for better error classification. 6) Create HTTP client configuration with proper timeout settings for connection, TLS handshake, and response header timeouts. 7) Implement retry logic with exponential backoff for timeout scenarios where appropriate. 8) Add logging for timeout events to help with debugging and monitoring. The solution should be backward compatible and gracefully handle timeout configuration errors by falling back to reasonable defaults.",
+        "testStrategy": "Testing should comprehensively verify timeout functionality across different scenarios: 1) Unit tests for the ContextManager utility with various timeout configurations, verifying that contexts are created with correct timeout values and that timeout hierarchy works properly. 2) Integration tests using mock HTTP servers that simulate slow responses, connection delays, and network partitions to verify that timeouts are properly enforced and don't cause indefinite hangs. 3) Test timeout error handling by creating scenarios where operations exceed configured timeouts and verify that proper timeout errors are returned and classified correctly by the error handling system. 4) Performance tests to ensure timeout configuration doesn't introduce significant overhead to normal operations. 5) Configuration validation tests to verify that invalid timeout values are handled gracefully with appropriate fallbacks. 6) Test concurrent operations with different timeout requirements to ensure no interference between operations. 7) End-to-end tests with real Azure DevOps API calls using various timeout configurations to verify production behavior. 8) Test timeout behavior during network instability scenarios using network simulation tools.",
+        "status": "pending",
+        "dependencies": [
+          3,
+          5
+        ],
+        "priority": "low",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Add Timeout Configuration Parameters to Application Config",
+            "description": "Introduce new configuration parameters for request, connection, and dial timeouts in the application's configuration system, ensuring defaults are set (e.g., AZURE_DEVOPS_REQUEST_TIMEOUT: 30s, AZURE_DEVOPS_CONNECTION_TIMEOUT: 10s, AZURE_DEVOPS_DIAL_TIMEOUT: 5s).",
+            "dependencies": [],
+            "details": "Update the configuration schema and documentation to include the new timeout parameters. Ensure backward compatibility by providing sensible defaults if configuration values are missing or invalid.",
+            "status": "pending",
+            "testStrategy": "Unit tests should verify that configuration values are correctly loaded, defaults are applied when values are missing, and invalid values are handled gracefully."
+          },
+          {
+            "id": 2,
+            "title": "Implement ContextManager Utility for Timeout Contexts",
+            "description": "Develop a ContextManager utility that generates context.WithTimeout() contexts based on operation type, supporting different timeout values for read and write operations.",
+            "dependencies": [
+              "9.1"
+            ],
+            "details": "The utility should accept operation type and configuration, returning a context with the appropriate timeout. It must support both global defaults and per-operation overrides.",
+            "status": "pending",
+            "testStrategy": "Unit tests should cover context creation for various operation types and timeout configurations, ensuring correct timeout assignment and override behavior."
+          },
+          {
+            "id": 3,
+            "title": "Replace context.Background() with Configured Timeout Contexts",
+            "description": "Refactor all Azure DevOps client operations to use the ContextManager utility instead of context.Background(), ensuring every API call is wrapped with a properly configured timeout context.",
+            "dependencies": [
+              "9.2"
+            ],
+            "details": "Identify all usages of context.Background() in the Azure DevOps client codebase and systematically replace them with contexts generated by the ContextManager.",
+            "status": "pending",
+            "testStrategy": "Integration tests should verify that all API operations respect the configured timeouts and that no operation uses an unbounded context."
+          },
+          {
+            "id": 4,
+            "title": "Implement Timeout Hierarchy and Error Handling",
+            "description": "Establish a timeout hierarchy allowing per-operation overrides of global defaults, and implement error handling that distinguishes timeout errors from other network failures.",
+            "dependencies": [
+              "9.3"
+            ],
+            "details": "Design the system so that operation-specific timeouts take precedence over global settings. Enhance error handling logic to classify and log timeout errors distinctly from other errors.",
+            "status": "pending",
+            "testStrategy": "Unit and integration tests should verify correct timeout precedence and that timeout errors are properly classified and logged."
+          },
+          {
+            "id": 5,
+            "title": "Configure HTTP Client and Add Retry, Logging, and Fallbacks",
+            "description": "Configure the HTTP client with connection, TLS handshake, and response header timeouts. Implement retry logic with exponential backoff for timeout scenarios and add logging for all timeout events.",
+            "dependencies": [
+              "9.4"
+            ],
+            "details": "Ensure the HTTP client enforces all relevant timeouts. Implement retry mechanisms for transient timeout errors, and add structured logging for all timeout and retry events. Ensure the system falls back to defaults if configuration errors occur.",
+            "status": "pending",
+            "testStrategy": "Integration tests should simulate network delays and failures to verify HTTP client timeouts, retry logic, and logging. Tests should also confirm fallback behavior when configuration is invalid."
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Refactor Error Handler Function Signature to Explicitly Handle Non-Returning Behavior",
+        "description": "Refactor the errorHandler function to have an explicit signature that indicates it does not return, eliminating unreachable code patterns and improving code clarity.",
+        "details": "This task involves refactoring the errorHandler function to address the issue where os.Exit(1) is called but some code paths expect the function might return. The implementation should include: 1) Analyze all current usages of the errorHandler function throughout the codebase to identify patterns where code expects it to return versus where it calls os.Exit(1). 2) Implement one of two solutions: Option A - Make the function signature explicit about non-returning behavior by changing the return type to indicate it never returns (e.g., using a 'never' type equivalent or panic/fatal pattern), or Option B - Modify the function to return an error instead of calling os.Exit(1) directly, allowing callers to decide whether to exit or handle the error. 3) If choosing Option A, update the function signature to func errorHandler(...) -> ! or equivalent non-returning indicator, and ensure all call sites understand this behavior. If choosing Option B, change the signature to func errorHandler(...) error and update all call sites to handle the returned error appropriately. 4) Remove any unreachable code that appears after errorHandler calls, replacing it with appropriate error handling or early returns. 5) Update any test code that mocks or overrides the errorHandler to match the new signature and behavior pattern. 6) Ensure consistency across the codebase so that error handling patterns are uniform and predictable.",
+        "testStrategy": "Testing should verify the refactored error handler behavior and eliminate unreachable code issues: 1) Create unit tests that verify the new errorHandler signature behaves as expected - if it's non-returning, test that it properly terminates execution; if it returns errors, test that appropriate errors are returned for different failure scenarios. 2) Run static analysis tools or linters to verify that no unreachable code remains after errorHandler calls throughout the codebase. 3) Create integration tests that exercise error paths to ensure the new error handling pattern works correctly in realistic failure scenarios. 4) Test the interaction between the refactored errorHandler and existing error classification systems to ensure compatibility. 5) If the function now returns errors instead of exiting, create tests that verify callers properly handle the returned errors and make appropriate decisions about program termination. 6) Verify that any test mocks or overrides of the errorHandler function work correctly with the new signature and don't introduce race conditions or unexpected behavior.",
+        "status": "pending",
+        "dependencies": [
+          6
+        ],
+        "priority": "low",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Audit All Usages of errorHandler Function",
+            "description": "Identify and document every location in the codebase where the errorHandler function is called, noting whether the caller expects the function to return or expects it to terminate execution (e.g., via os.Exit or panic).",
+            "dependencies": [],
+            "details": "Perform a comprehensive search for all errorHandler invocations. Categorize each usage based on whether subsequent code assumes errorHandler returns or not. Highlight any patterns of unreachable code or inconsistent expectations.",
+            "status": "pending",
+            "testStrategy": "No direct tests; verification is by completeness of the audit and accuracy of the categorization."
+          },
+          {
+            "id": 2,
+            "title": "Select and Design the New errorHandler Signature",
+            "description": "Choose between making errorHandler explicitly non-returning (using a 'never' type or panic/exit) or returning an error, and design the new function signature accordingly.",
+            "dependencies": [
+              "10.1"
+            ],
+            "details": "Based on the audit, decide which approach (non-returning or error-returning) best fits the codebase. Draft the new function signature and document the intended behavior for all callers.",
+            "status": "pending",
+            "testStrategy": "Peer review of the proposed signature and rationale to ensure it addresses all identified usage patterns."
+          },
+          {
+            "id": 3,
+            "title": "Refactor errorHandler Implementation and Update All Call Sites",
+            "description": "Implement the new errorHandler function signature and update every call site to match the new contract, ensuring that all code paths are consistent with the new behavior.",
+            "dependencies": [
+              "10.2"
+            ],
+            "details": "Change the function definition and refactor all usages. For non-returning, ensure no code follows errorHandler calls. For error-returning, ensure all callers handle the error appropriately.",
+            "status": "pending",
+            "testStrategy": "Run static analysis and compilation checks to confirm all call sites are updated and no unreachable code remains."
+          },
+          {
+            "id": 4,
+            "title": "Remove Unreachable Code and Enforce Consistent Error Handling",
+            "description": "Eliminate any code that is unreachable after errorHandler calls and replace it with appropriate error handling or early returns, ensuring uniformity across the codebase.",
+            "dependencies": [
+              "10.3"
+            ],
+            "details": "Systematically review all locations where errorHandler is used to remove dead code and enforce the new error handling pattern. Refactor as needed for clarity and maintainability.",
+            "status": "pending",
+            "testStrategy": "Code review and static analysis to verify that no unreachable code remains and error handling is consistent."
+          },
+          {
+            "id": 5,
+            "title": "Update and Expand Test Coverage for errorHandler Changes",
+            "description": "Revise all test code that mocks or overrides errorHandler to match the new signature and behavior, and add or update tests to verify correct error handling and termination behavior.",
+            "dependencies": [
+              "10.4"
+            ],
+            "details": "Modify existing unit and integration tests to use the new errorHandler signature. Add tests to cover both normal and edge cases, including termination and error propagation scenarios.",
+            "status": "pending",
+            "testStrategy": "Run the full test suite to ensure all tests pass and add new tests to cover any previously untested scenarios introduced by the refactor."
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-30T11:49:01.064Z",
+      "updated": "2025-07-30T11:52:16.905Z",
+      "description": "Sprint tag for issues found in code review on July 30, 2025"
+    }
   }
 }

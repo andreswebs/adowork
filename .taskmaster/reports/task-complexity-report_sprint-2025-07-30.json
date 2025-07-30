@@ -1,0 +1,93 @@
+{
+	"meta": {
+		"generatedAt": "2025-07-30T11:54:43.901Z",
+		"tasksAnalyzed": 10,
+		"totalTasks": 10,
+		"analysisCount": 10,
+		"thresholdScore": 5,
+		"projectName": "Taskmaster",
+		"usedResearch": true
+	},
+	"complexityAnalysis": [
+		{
+			"taskId": 1,
+			"taskTitle": "Sanitize Sensitive Data in Dry Run Output",
+			"complexityScore": 9,
+			"recommendedSubtasks": 8,
+			"expansionPrompt": "Break down the implementation into: (1) Sensitive data field identification and pattern matching, (2) Redaction logic for each data type, (3) Output format handling (JSON, YAML, text), (4) Configurable sanitization levels, (5) Warning message integration, (6) Whitelist/false positive minimization, (7) Performance optimization, (8) Comprehensive testing (unit, integration, security, performance, regression, UX).",
+			"reasoning": "This task is highly complex due to the need for robust pattern matching, multi-format output support, configuration flexibility, security requirements, and extensive testing. It involves both algorithmic and architectural challenges, with significant risk if not implemented correctly."
+		},
+		{
+			"taskId": 2,
+			"taskTitle": "Refactor Global Error Handler to Use Dependency Injection",
+			"complexityScore": 7,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Expand into: (1) Define ErrorHandler interface/class, (2) Refactor functions to accept error handler as dependency, (3) Update application initialization, (4) Implement test/mocking support, (5) Optional: Integrate DI container, (6) Regression and concurrency testing.",
+			"reasoning": "This refactor impacts core application architecture and requires careful migration to avoid regressions. Dependency injection patterns must be applied consistently, and thread safety must be ensured, especially for concurrent scenarios."
+		},
+		{
+			"taskId": 3,
+			"taskTitle": "Refactor Main Function Configuration Loading and Error Handling",
+			"complexityScore": 6,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Decompose into: (1) Remove duplicate config loading, (2) Implement config passing mechanism, (3) Standardize error handling for config, (4) Document/clarify argument handling, (5) Add config validation layer and tests.",
+			"reasoning": "While not algorithmically complex, this task requires careful coordination to avoid breaking application startup and to ensure all code paths use the new configuration flow. It also involves improving error handling and documentation."
+		},
+		{
+			"taskId": 4,
+			"taskTitle": "Implement Comprehensive Input Validation and Sanitization",
+			"complexityScore": 8,
+			"recommendedSubtasks": 7,
+			"expansionPrompt": "Split into: (1) ValidationService class and method design, (2) Title validation logic, (3) Description validation and sanitization, (4) Parent ID existence checks, (5) Org/project name validation, (6) Centralized validation pipeline, (7) Integration with error handling and configuration.",
+			"reasoning": "This task is complex due to the breadth of validation rules, the need for security against injection attacks, configurability, and integration with error handling. It also requires extensive and varied testing."
+		},
+		{
+			"taskId": 5,
+			"taskTitle": "Implement Proper Error Type Checking Using Azure DevOps SDK",
+			"complexityScore": 7,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Break down into: (1) Remove string-based error checks, (2) Implement ErrorClassifier using SDK types, (3) Map SDK errors to app categories, (4) Replace all error classification logic, (5) Add fallback handling for unknown types, (6) Comprehensive testing (unit, integration, locale, regression).",
+			"reasoning": "This task requires deep integration with the SDK, careful replacement of fragile logic, and robust testing to ensure reliability across locales and SDK versions. It impacts error handling throughout the application."
+		},
+		{
+			"taskId": 6,
+			"taskTitle": "Fix Race Condition in Error Handler Test Override",
+			"complexityScore": 6,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand into: (1) Analyze test files for race conditions, (2) Choose and implement synchronization or parallelization strategy, (3) Refactor tests for thread safety, (4) Add cleanup and isolation mechanisms, (5) Race detection and reliability testing.",
+			"reasoning": "This task is moderately complex due to the need for concurrency analysis, synchronization, and ensuring test isolation. It requires understanding of Go's testing and concurrency primitives."
+		},
+		{
+			"taskId": 7,
+			"taskTitle": "Make Azure DevOps Base URL Configurable",
+			"complexityScore": 5,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Decompose into: (1) Identify and catalog hardcoded URLs, (2) Add config parameter and default, (3) Implement URLBuilder utility, (4) Refactor codebase to use URLBuilder, (5) Update documentation and add validation/tests.",
+			"reasoning": "This is a standard configuration refactor with moderate complexity, mainly requiring careful search-and-replace and validation. It is less risky but must be thorough to avoid missed hardcoded URLs."
+		},
+		{
+			"taskId": 8,
+			"taskTitle": "Add Comprehensive Error Scenario Test Coverage",
+			"complexityScore": 7,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Expand into: (1) Network timeout scenario tests, (2) Malformed response tests, (3) Rate limiting scenario tests, (4) Authentication failure tests, (5) Integration with ErrorClassifier, (6) Error recovery and regression tests.",
+			"reasoning": "This task is complex due to the breadth of error scenarios, the need for realistic mocks and simulations, and the requirement for high coverage and reliability in error handling."
+		},
+		{
+			"taskId": 9,
+			"taskTitle": "Implement Configurable Timeout Configuration for Azure DevOps Client",
+			"complexityScore": 7,
+			"recommendedSubtasks": 7,
+			"expansionPrompt": "Break down into: (1) Add timeout config parameters, (2) Implement ContextManager utility, (3) Refactor client code to use timeouts, (4) Implement timeout hierarchy and overrides, (5) Add timeout error handling and logging, (6) Implement retry logic, (7) Comprehensive testing (unit, integration, performance, config validation).",
+			"reasoning": "This task involves architectural changes to client operations, careful handling of context and timeouts, and robust error handling. It also requires extensive testing to ensure reliability and backward compatibility."
+		},
+		{
+			"taskId": 10,
+			"taskTitle": "Refactor Error Handler Function Signature to Explicitly Handle Non-Returning Behavior",
+			"complexityScore": 5,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand into: (1) Analyze current errorHandler usage, (2) Decide and implement new signature (non-returning or error-returning), (3) Refactor all call sites, (4) Remove unreachable code and update tests, (5) Static analysis and regression testing.",
+			"reasoning": "This is a focused refactor with moderate complexity, requiring careful codebase-wide changes and static analysis to ensure no unreachable code remains and all error handling is consistent."
+		}
+	]
+}
